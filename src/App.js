@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Navigation from './components/Navigation';
+import { HomePage, ResumePage, ProjectsPage, ContactPage } from './components/Pages';
+import portfolioData from './data/portfolio.json';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+  const data = portfolioData;
+
+  const handleNavigate = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <HomePage data={data} />;
+      case 'resume':
+        return <ResumePage data={data} />;
+      case 'projects':
+        return <ProjectsPage data={data} />;
+      case 'contact':
+        return <ContactPage data={data} />;
+      default:
+        return <HomePage data={data} />;
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navigation
+        data={data}
+        currentPage={currentPage}
+        onNavigate={handleNavigate}
+      />
+      {renderCurrentPage()}
     </div>
   );
 }
