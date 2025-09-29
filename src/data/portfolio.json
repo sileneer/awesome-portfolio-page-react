@@ -58,7 +58,7 @@
       }
     ],
     "skills": [
-      "JavaScript", "TypeScript", "React", "Redux", "Node.js", "Express", "HTML", "CSS", "Git", "REST APIs", "MongoDB", "Jest", "Docker"
+      "JavaScript", "TypeScript", "React", "Redux", "Node.js", "Express", "HTML", "CSS", "Git", "REST APIs", "MongoDB", "Jest", "Docker", "AWS", "PostgreSQL", "GraphQL", "Material-UI", "Webpack", "ESLint", "OAuth", "Socket.io", "Redis", "Nginx", "Linux", "Python"
     ],
     "certifications": ["AWS Certified Developer", "Scrum Master"],
     "awards": ["Best Developer 2022"],
