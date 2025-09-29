@@ -1,19 +1,42 @@
 # Awesome Portfolio Page React
 
-🚀 A modern, customizable React template for developer portfolios. Built with React and featuring a clean, professional design with multiple sections to showcase your skills, experience, and projects.
+🚀 A modern, customizable React template for developer portfolios. Built with React and **Material-UI (@mui/material)** featuring a clean, professional design with multiple sections to showcase your skills, experience, and projects.
 
 ![Portfolio Screenshot](/readme-screenshot1.png)
 
 ## ✨ Features
 
-- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **🏠 Home Page**: Professional landing page with hero section and highlights
-- **📄 Resume Section**: Complete professional background with experience, education, skills, and achievements
-- **💼 Projects Showcase**: Display your projects with descriptions, technologies, screenshots, and links
-- **📞 Contact Page**: Multiple contact methods including email, phone, social links, and meeting scheduling
-- **🎨 Clean UI**: Modern, professional design with smooth navigation
+- **🎨 Material-UI Design**: Professional Material Design components with consistent theming
+- **📱 Responsive Design**: Built-in responsive breakpoints for all device sizes
+- **🏠 Home Page**: Professional landing page with hero section and highlight cards
+- **📄 Resume Section**: Complete professional background with structured experience, education, and skills
+- **💼 Projects Showcase**: Showcase projects with Material-UI cards, chips, and media components
+- **📞 Contact Page**: Multiple contact methods with icons and professional styling
+- **� Theme System**: Centralized Material-UI theme with custom color palette
+- **♿ Accessible**: Built-in accessibility features and ARIA attributes
 - **⚙️ Fully Customizable**: All content driven by a single JSON configuration file
 - **🔒 Data Validation**: Structured data format ensures consistency and prevents errors
+
+## 🎨 Material-UI Implementation
+
+This portfolio has been completely rewritten using Material-UI components:
+
+### Key Components Used
+- **Layout**: `Container`, `Grid`, `Box` for responsive layouts
+- **Navigation**: `AppBar`, `Toolbar` with Material Design principles
+- **Content**: `Card`, `CardContent`, `Paper` for elevated content sections
+- **Typography**: Consistent text hierarchy with Material-UI typography system
+- **Interactive**: `Button`, `IconButton`, `Chip` components with built-in ripple effects
+- **Media**: `Avatar`, `CardMedia` for images with proper aspect ratios
+- **Icons**: `@mui/icons-material` for professional vector icons
+
+### Theme Features
+- Custom color palette maintaining professional appearance
+- Responsive typography that scales with screen size
+- Component style overrides for consistent branding
+- Material Design elevation system for depth
+
+See [MATERIAL_UI_CONVERSION.md](./MATERIAL_UI_CONVERSION.md) for complete technical details about the Material-UI implementation.
 
 ## 🚀 Quick Start
 
