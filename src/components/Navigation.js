@@ -64,7 +64,15 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
         }}
       >
         <Container maxWidth="lg">
-          <Toolbar sx={{ justifyContent: 'space-between', py: { xs: 1, md: 1.5 } }}>
+          <Toolbar
+            sx={{
+              justifyContent: { xs: 'center', md: 'space-between' },
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { xs: 'stretch', md: 'center' },
+              gap: { xs: 1.5, md: 0 },
+              py: { xs: 1.5, md: 1.5 },
+            }}
+          >
             <Typography
               variant="h5"
               component="div"
@@ -78,6 +86,8 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
                 WebkitTextFillColor: 'transparent',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 transform: 'scale(1)',
+                textAlign: { xs: 'center', md: 'left' },
+                alignSelf: { xs: 'center', md: 'auto' },
                 '&:hover': {
                   transform: 'scale(1.05)',
                   background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 70%)`,
@@ -90,7 +100,16 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
               {brand}
             </Typography>
             
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                rowGap: { xs: 1, md: 0 },
+                flexWrap: { xs: 'wrap', md: 'nowrap' },
+                justifyContent: { xs: 'center', md: 'flex-end' },
+                width: { xs: '100%', md: 'auto' },
+              }}
+            >
               {menuItems.map((item, index) => {
                 const isActive = currentPage === item.name.toLowerCase();
                 return (
@@ -101,8 +120,8 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
                     color="primary"
                     sx={{
                       fontWeight: 600,
-                      px: 3,
-                      py: 1,
+                      px: { xs: 2.25, md: 3 },
+                      py: { xs: 0.8, md: 1 },
                       borderRadius: 3,
                       minWidth: 'auto',
                       textTransform: 'none',

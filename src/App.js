@@ -3,7 +3,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box, Fade } from '@mui/material';
 import Navigation from './components/Navigation';
 import { HomePage, ResumePage, ProjectsPage, ContactPage } from './components/Pages';
-import portfolioData from './data/portfolio.json';
+import personalInfo from './data/user/personalInfo.json';
+import navigation from './data/core/navigation.json';
+import resume from './data/user/resume.json';
+import projects from './data/user/projects.json';
+import contact from './data/user/contact.json';
 
 const theme = createTheme({
   palette: {
@@ -77,12 +81,36 @@ const theme = createTheme({
         },
       },
     },
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: 'lg',
+      },
+      styleOverrides: {
+        root: {
+          paddingLeft: '24px',
+          paddingRight: '24px',
+          '@media (max-width:600px)': {
+            paddingLeft: '16px',
+            paddingRight: '16px',
+          },
+        },
+        maxWidthLg: {
+          maxWidth: 'min(900px, calc(100vw - 48px))',
+        },
+      },
+    },
   },
 });
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const data = portfolioData;
+  const data = {
+    personalInfo,
+    navigation,
+    resume,
+    projects,
+    contact,
+  };
 
   const handleNavigate = (page) => {
     setCurrentPage(page);

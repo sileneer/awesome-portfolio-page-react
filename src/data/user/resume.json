@@ -1,0 +1,96 @@
+{
+  "summary": "Full Stack Developer with experience building scalable web applications and APIs. Passionate about clean code, UI/UX, and continuous learning.",
+  "experience": [
+    {
+      "company": "TechCorp",
+      "role": "Frontend Engineer",
+      "dates": "2023 - Present",
+      "location": "London, UK",
+      "description": "Lead development of dashboard features using React, TypeScript, and Redux. Collaborated with product managers and designers to deliver solutions for clients.",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Redux"
+      ],
+      "achievements": [
+        "Improved dashboard load time",
+        "Mentored junior engineers"
+      ]
+    },
+    {
+      "company": "WebSolutions",
+      "role": "Software Engineer",
+      "dates": "2021 - 2023",
+      "location": "Remote",
+      "description": "Worked on integrations, building RESTful APIs with Node.js and Express. Improved CI/CD pipelines and mentored developers.",
+      "technologies": [
+        "Node.js",
+        "Express"
+      ],
+      "achievements": [
+        "Reduced deployment errors"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.Sc. in Computer Science",
+      "institution": "Example University",
+      "dates": "2017 - 2021",
+      "gpa": "3.8",
+      "coursework": [
+        "Algorithms",
+        "Web Development",
+        "Databases"
+      ],
+      "extracurriculars": [
+        "Coding Club President"
+      ]
+    },
+    {
+      "degree": "Full Stack Web Development Bootcamp",
+      "institution": "Coursera",
+      "dates": "2020"
+    }
+  ],
+  "skills": [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Redux",
+    "Node.js",
+    "Express",
+    "HTML",
+    "CSS",
+    "Git",
+    "REST APIs",
+    "MongoDB",
+    "Jest",
+    "Docker",
+    "AWS",
+    "PostgreSQL",
+    "GraphQL",
+    "Material-UI",
+    "Webpack",
+    "ESLint",
+    "OAuth",
+    "Socket.io",
+    "Redis",
+    "Nginx",
+    "Linux",
+    "Python"
+  ],
+  "certifications": [
+    "AWS Certified Developer",
+    "Scrum Master"
+  ],
+  "awards": [
+    "Best Developer 2022"
+  ],
+  "interests": [
+    "Open Source",
+    "Travel",
+    "Photography"
+  ],
+  "cvDownload": "/CV.pdf"
+}

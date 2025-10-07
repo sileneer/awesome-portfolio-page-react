@@ -304,14 +304,15 @@ const ResumePage = ({ data }) => {
             <Stack spacing={4}>
               {resume.experience.map((exp, index) => (
                 <Grow key={index} in timeout={1600 + index * 200}>
-                  <Card 
-                    elevation={0}
-                    sx={{
-                      ...glowEffect,
-                      ...cardHoverEffect,
-                      borderRadius: 4,
-                    }}
-                  >
+                  <Box>
+                    <Card 
+                      elevation={0}
+                      sx={{
+                        ...glowEffect,
+                        ...cardHoverEffect,
+                        borderRadius: 4,
+                      }}
+                    >
                     <CardContent sx={{ p: 4 }}>
                       <Box sx={{ 
                         display: 'flex', 
@@ -380,23 +381,35 @@ const ResumePage = ({ data }) => {
                           Technologies & Tools:
                         </Typography>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                          {exp.technologies.map((tech, techIndex) => (
-                            <Chip
-                              key={techIndex}
-                              label={tech}
-                              size="small"
-                              variant="outlined"
-                              sx={{
-                                borderColor: 'primary.main',
-                                color: 'primary.main',
-                                '&:hover': {
+                          {exp.technologies.map((tech, techIndex) => {
+                            const IconComponent = getSkillIcon(tech);
+                            return (
+                              <Chip
+                                key={techIndex}
+                                icon={<IconComponent sx={{ fontSize: '1rem !important' }} />}
+                                label={tech}
+                                size="small"
+                                sx={{
                                   backgroundColor: 'primary.main',
                                   color: 'primary.contrastText',
-                                  transform: 'translateY(-1px)',
-                                },
-                              }}
-                            />
-                          ))}
+                                  fontWeight: 600,
+                                  px: 1.5,
+                                  py: 0.5,
+                                  height: 'auto',
+                                  borderRadius: 2,
+                                  '& .MuiChip-icon': {
+                                    color: 'primary.contrastText',
+                                    marginLeft: '6px',
+                                  },
+                                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                  '&:hover': {
+                                    transform: 'translateY(-2px) scale(1.05)',
+                                    boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                                  },
+                                }}
+                              />
+                            );
+                          })}
                         </Box>
                       </Box>
                       
@@ -419,15 +432,14 @@ const ResumePage = ({ data }) => {
                                 sx={{ 
                                   py: 0.5,
                                   display: 'flex',
-                                  alignItems: 'flex-start'
+                                  alignItems: 'center'
                                 }}
                               >
                                 <CheckCircle 
                                   sx={{ 
                                     color: 'success.main', 
                                     fontSize: 20, 
-                                    mr: 1.5, 
-                                    mt: 0.1,
+                                    mr: 1.5,
                                     flexShrink: 0
                                   }} 
                                 />
@@ -448,6 +460,7 @@ const ResumePage = ({ data }) => {
                       )}
                     </CardContent>
                   </Card>
+                  </Box>
                 </Grow>
               ))}
             </Stack>

@@ -117,10 +117,15 @@ const ProjectsPage = ({ data }) => {
   };
 
   const cardHoverEffect = {
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)',
+    transform: 'translateY(0px)',
+    boxShadow: theme.shadows[4],
+    borderRadius: 4,
+    width: '100%',
+    display: 'flex',
     '&:hover': {
-      transform: 'translateY(-8px) scale(1.02)',
-      boxShadow: `0 20px 40px ${theme.palette.primary.main}20`,
+      transform: 'translateY(-10px)',
+      boxShadow: theme.shadows[12],
     },
   };
 
@@ -191,30 +196,41 @@ const ProjectsPage = ({ data }) => {
             </Paper>
           </Fade>
         ) : (
-          <Grid container spacing={4}>
+          <Grid 
+            container 
+            spacing={4}
+            sx={{ justifyContent: 'center' }}
+          >
             {projects.map((project, index) => (
-              <Grid item xs={12} lg={6} key={index}>
-                <Fade in timeout={800 + index * 200}>
-                  <Card 
-                    elevation={0}
-                    sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      ...glowEffect,
-                      ...cardHoverEffect,
-                      borderRadius: 4,
-                      overflow: 'hidden',
-                    }}
+              <Grid 
+                item 
+                xs={12} 
+                key={index} 
+                sx={{ display: 'flex', width: '100%' }}
               >
+                <Fade in timeout={800 + index * 200}>
+                  <Box sx={cardHoverEffect}>
+                    <Card 
+                      elevation={0}
+                      sx={{
+                        width: '100%',
+                        flexGrow: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        ...glowEffect,
+                        borderRadius: 4,
+                        overflow: 'hidden',
+                      }}
+                    >
                 {project.screenshots && project.screenshots.length > 0 && (
                   <CardMedia
                     component="img"
-                    height="200"
+                    height="400"
                     image={project.screenshots[0]}
                     alt={`${project.name} screenshot`}
                     sx={{ 
                       objectFit: 'cover',
+                      width: '100%',
                       backgroundColor: 'grey.100',
                     }}
                     onError={(e) => {
@@ -255,7 +271,17 @@ const ProjectsPage = ({ data }) => {
                     )}
                   </Box>
 
-                  <Typography variant="body1" color="text.secondary" paragraph sx={{ lineHeight: 1.6 }}>
+                  <Typography 
+                    variant="body1" 
+                    color="text.secondary" 
+                    paragraph 
+                    sx={{ 
+                      lineHeight: 1.6,
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
+                      whiteSpace: 'normal'
+                    }}
+                  >
                     {project.description}
                   </Typography>
 
@@ -379,6 +405,7 @@ const ProjectsPage = ({ data }) => {
                   )}
                 </CardContent>
               </Card>
+                  </Box>
                 </Fade>
               </Grid>
             ))}

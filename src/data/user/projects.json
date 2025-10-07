@@ -1,0 +1,36 @@
+[
+  {
+    "name": "ProjectConnect",
+    "description": "A platform for developers to share projects, collaborate, and network. Features real-time chat, project boards, and authentication.",
+    "technologies": [
+      "React",
+      "Node.js",
+      "MongoDB",
+      "Socket.io",
+      "OAuth"
+    ],
+    "link": "https://www.github.com",
+    "screenshots": [
+      "/projects/connect1.png",
+      "/projects/connect2.png"
+    ],
+    "role": "Lead Developer",
+    "duration": "6 months"
+  },
+  {
+    "name": "TaskManager",
+    "description": "A productivity app for managing tasks, deadlines, and team collaboration. Includes calendar integration and notifications.",
+    "technologies": [
+      "React",
+      "Redux",
+      "Express",
+      "PostgreSQL"
+    ],
+    "link": "https://www.github.com",
+    "screenshots": [
+      "/projects/taskmanager1.png"
+    ],
+    "role": "Full Stack Developer",
+    "duration": "4 months"
+  }
+]

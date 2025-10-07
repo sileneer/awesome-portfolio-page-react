@@ -1,0 +1,16 @@
+{
+  "name": "Joke Bear",
+  "title": "Full Stack Developer",
+  "email": "example@gmail.com",
+  "phone": "+1 (123) 456-7890",
+  "location": "San Francisco, CA, USA",
+  "linkedin": "https://www.linkedin.com/in/zihao-liu-470986208/",
+  "github": "https://github.com/sileneer/awesome-portfolio-page-react",
+  "photo": "/profile_photo.png",
+  "website": "https://sileneer.github.io/",
+  "bio": "Passionate developer focused on building impactful web applications.",
+  "languages": [
+    "English",
+    "Spanish"
+  ]
+}
