@@ -66,7 +66,7 @@ const HomePage = ({ data }) => {
               spacing={{ xs: 4, md: 6 }} 
               alignItems="center" 
               justifyContent="center"
-              sx={{ maxWidth: { xs: '100%', md: 1160 }, mx: 'auto' }}
+              sx={{ width: '100%' }}
             >
               {/* Profile Image - Show first on mobile */}
               <Grid 
@@ -379,7 +379,7 @@ const HomePage = ({ data }) => {
             <Grid 
               container 
               spacing={{ xs: 3, md: 4 }}
-              sx={{ maxWidth: { xs: '100%', md: 1160 }, mx: 'auto' }}
+              sx={{ width: '100%' }}
             >
               <Grid item xs={12} md={4}>
                 <Grow in timeout={1000}>

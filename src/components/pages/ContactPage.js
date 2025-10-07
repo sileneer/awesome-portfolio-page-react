@@ -8,11 +8,9 @@ import {
   Grid,
   Button,
   IconButton,
-  Link,
   Divider,
   Fade,
   useTheme,
-  TextField,
   Grow,
 } from '@mui/material';
 import {
@@ -143,14 +141,15 @@ const ContactPage = ({ data }) => {
           {/* Contact Information */}
           <Grid item xs={12} md={6}>
             <Fade in timeout={1000}>
-              <Card 
-                elevation={0}
-                sx={{ 
-                  height: '100%',
-                  ...glowEffect,
-                  ...cardHoverEffect,
-                  borderRadius: 4,
-                }}>
+              <Box sx={{ height: '100%' }}>
+                <Card 
+                  elevation={0}
+                  sx={{ 
+                    height: '100%',
+                    ...glowEffect,
+                    ...cardHoverEffect,
+                    borderRadius: 4,
+                  }}>
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                     <ContactMail 
@@ -355,6 +354,7 @@ const ContactPage = ({ data }) => {
               </Box>
                 </CardContent>
               </Card>
+              </Box>
             </Fade>
           </Grid>
 
@@ -363,15 +363,16 @@ const ContactPage = ({ data }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: '100%' }}>
               {/* Social Links */}
               <Fade in timeout={1200}>
-                <Card 
-                  elevation={0}
-                  sx={{ 
-                    flexGrow: 1,
-                    ...glowEffect,
-                    ...cardHoverEffect,
-                    borderRadius: 4,
-                  }}
-                >
+                <Box sx={{ flexGrow: 1 }}>
+                  <Card 
+                    elevation={0}
+                    sx={{ 
+                      height: '100%',
+                      ...glowEffect,
+                      ...cardHoverEffect,
+                      borderRadius: 4,
+                    }}
+                  >
                   <CardContent sx={{ p: 4 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                       <Star 
@@ -432,19 +433,21 @@ const ContactPage = ({ data }) => {
                     </Grid>
                   </CardContent>
                 </Card>
+                </Box>
               </Fade>
 
               {/* Scheduling Section */}
               {contact.calendly && (
                 <Fade in timeout={1600}>
-                  <Card 
-                    elevation={0}
-                    sx={{
-                      ...glowEffect,
-                      ...cardHoverEffect,
-                      borderRadius: 4,
-                    }}
-                  >
+                  <Box>
+                    <Card 
+                      elevation={0}
+                      sx={{
+                        ...glowEffect,
+                        ...cardHoverEffect,
+                        borderRadius: 4,
+                      }}
+                    >
                     <CardContent sx={{ p: 4, textAlign: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                         <CalendarToday 
@@ -499,6 +502,7 @@ const ContactPage = ({ data }) => {
                       </Button>
                     </CardContent>
                   </Card>
+                  </Box>
                 </Fade>
               )}
             </Box>

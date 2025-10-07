@@ -24,3 +24,6 @@ yarn-error.log*
 
 # JetBrains
 .idea/
+
+# WARP
+WARP.md
