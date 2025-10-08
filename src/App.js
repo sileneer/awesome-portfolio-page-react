@@ -44,6 +44,8 @@ const theme = createTheme({
     h1: {
       fontWeight: 700,
       fontSize: '3rem',
+      wordWrap: 'break-word',
+      overflowWrap: 'break-word',
       '@media (max-width:768px)': {
         fontSize: '2rem',
       },
@@ -52,32 +54,86 @@ const theme = createTheme({
       fontWeight: 600,
       fontSize: '2rem',
       marginBottom: '1rem',
+      wordWrap: 'break-word',
+      overflowWrap: 'break-word',
     },
     h3: {
       fontWeight: 600,
       fontSize: '1.5rem',
+      wordWrap: 'break-word',
+      overflowWrap: 'break-word',
     },
   },
   components: {
-    MuiButton: {
+    MuiTypography: {
       styleOverrides: {
         root: {
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
           textTransform: 'none',
           borderRadius: 8,
           fontWeight: 500,
-        },
+          // Global smooth float-up hover
+          transform: 'translateY(0)',
+          transition: 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms linear',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: theme.shadows[4],
+          },
+        }),
       },
     },
     MuiCard: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           borderRadius: 12,
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: 'translateY(0)',
           '&:hover': {
-            transform: 'translateY(-5px)',
-            boxShadow: '0 8px 15px rgba(0, 0, 0, 0.15)',
+            transform: 'translateY(-8px)',
+            boxShadow: theme.shadows[8],
           },
+        }),
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          // Global smooth float-up hover for chips
+          transform: 'translateY(0)',
+          transition: 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: theme.shadows[2],
+          },
+        }),
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          // Gentle hover float for links
+          transition: 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms linear',
+          transform: 'translateY(0)',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: 'none',
+          },
+        }),
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          transition: 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms linear',
+          transform: 'translateY(0)',
         },
       },
     },

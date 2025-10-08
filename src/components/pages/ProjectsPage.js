@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Container,
   Typography,
@@ -13,14 +14,16 @@ import {
   Divider,
   Fade,
   useTheme,
+  Modal,
+  IconButton,
 } from '@mui/material';
-import { 
-  Launch, 
-  GitHub, 
-  Code, 
-  Schedule, 
-  Person, 
-  Star,
+import {
+  Launch,
+  GitHub,
+  Code,
+  Schedule,
+  Person,
+  Close,
   // Tech Icons
   Javascript,
   Web,
@@ -38,16 +41,26 @@ import {
   Computer,
   Speed,
   Security,
-  Language,
   BugReport,
   Layers,
-  Settings,
   CloudQueue
 } from '@mui/icons-material';
 
 const ProjectsPage = ({ data }) => {
-  const { projects } = data;
+  const projects = Array.isArray(data?.projects) ? data.projects : [];
   const theme = useTheme();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedImage('');
+  };
 
   // Technology icon mapping (consistent with ResumePage)
   const getSkillIcon = (skill) => {
@@ -63,7 +76,7 @@ const ProjectsPage = ({ data }) => {
       'Angular': Web,
       'Next.js': Web,
       'Gatsby': Web,
-      
+
       // Backend Technologies
       'Node.js': Terminal,
       'Express': Api,
@@ -72,7 +85,7 @@ const ProjectsPage = ({ data }) => {
       'FastAPI': Speed,
       'GraphQL': Api,
       'REST APIs': Api,
-      
+
       // Databases
       'MongoDB': Storage,
       'PostgreSQL': Storage,
@@ -81,7 +94,7 @@ const ProjectsPage = ({ data }) => {
       'Redis': Memory,
       'Firebase': Storage,
       'DynamoDB': Storage,
-      
+
       // Cloud & DevOps
       'AWS': Cloud,
       'Azure': Cloud,
@@ -90,7 +103,7 @@ const ProjectsPage = ({ data }) => {
       'Jenkins': Build,
       'GitHub Actions': GitHub,
       'Terraform': Cloud,
-      
+
       // Tools & Others
       'Git': GitHub,
       'GitHub': GitHub,
@@ -117,21 +130,21 @@ const ProjectsPage = ({ data }) => {
   };
 
   const cardHoverEffect = {
-    transition: 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: 'translateY(0px)',
     boxShadow: theme.shadows[4],
     borderRadius: 4,
     width: '100%',
     display: 'flex',
     '&:hover': {
-      transform: 'translateY(-10px)',
-      boxShadow: theme.shadows[12],
+      transform: 'translateY(-8px)',
+      boxShadow: theme.shadows[8],
     },
   };
 
   return (
-    <Box 
-      sx={{ 
+    <Box
+      sx={{
         minHeight: '100vh',
         background: `linear-gradient(135deg, ${theme.palette.background.default}95, ${theme.palette.background.paper}95)`,
         pt: { xs: 10, md: 12 },
@@ -140,50 +153,43 @@ const ProjectsPage = ({ data }) => {
     >
       <Container maxWidth="lg">
         {/* Header */}
-        <Fade in timeout={800}>
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
-            <Typography 
-              variant="h3" 
-              component="h1" 
+        <Fade in timeout={1000}>
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 6,
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 3,
+            textAlign: { xs: 'center', sm: 'left' }
+          }}>
+            <Typography
+              variant="h2"
+              component="h1"
               sx={{
-                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontWeight: 800,
+                background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 100%)`,
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                fontWeight: 700,
-                mb: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 2,
-                flexWrap: 'wrap',
+                display: 'inline-block',
+                lineHeight: 1.25,
+                paddingBottom: '0.1em',
               }}
             >
-              <Star sx={{ fontSize: { xs: '2rem', md: '3rem' }, color: theme.palette.primary.main }} />
               Featured Projects
-            </Typography>
-            <Typography 
-              variant="h6" 
-              color="text.secondary" 
-              sx={{ 
-                maxWidth: 700, 
-                mx: 'auto',
-                lineHeight: 1.6,
-                fontSize: { xs: '1.1rem', md: '1.25rem' }
-              }}
-            >
-              Explore my portfolio of innovative projects that demonstrate technical expertise, creative problem-solving, and modern development practices.
             </Typography>
           </Box>
         </Fade>
 
         {projects.length === 0 ? (
           <Fade in timeout={1200}>
-            <Paper 
+            <Paper
               elevation={0}
-              sx={{ 
+              sx={{
                 ...glowEffect,
-                p: 8, 
+                p: 8,
                 textAlign: 'center',
                 borderRadius: 4,
                 maxWidth: 600,
@@ -196,224 +202,307 @@ const ProjectsPage = ({ data }) => {
             </Paper>
           </Fade>
         ) : (
-          <Grid 
-            container 
+          <Grid
+            container
             spacing={4}
             sx={{ justifyContent: 'center' }}
           >
-            {projects.map((project, index) => (
-              <Grid 
-                item 
-                xs={12} 
-                key={index} 
-                sx={{ display: 'flex', width: '100%' }}
-              >
-                <Fade in timeout={800 + index * 200}>
-                  <Box sx={cardHoverEffect}>
-                    <Card 
-                      elevation={0}
-                      sx={{
-                        width: '100%',
-                        flexGrow: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        ...glowEffect,
-                        borderRadius: 4,
-                        overflow: 'hidden',
-                      }}
-                    >
-                {project.screenshots && project.screenshots.length > 0 && (
-                  <CardMedia
-                    component="img"
-                    height="400"
-                    image={project.screenshots[0]}
-                    alt={`${project.name} screenshot`}
-                    sx={{ 
-                      objectFit: 'cover',
-                      width: '100%',
-                      backgroundColor: 'grey.100',
-                    }}
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                )}
-                
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                    <Typography variant="h5" component="h3" color="text.primary">
-                      {project.name}
-                    </Typography>
-                    
-                    {project.link && (
-                      <Button
-                        variant="contained"
-                        size="small"
-                        startIcon={project.link.includes('github.com') ? <GitHub /> : <Launch />}
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{ 
-                          ml: 1,
-                          borderRadius: 3,
-                          textTransform: 'none',
-                          fontWeight: 600,
-                          boxShadow: `0 4px 12px ${theme.palette.primary.main}30`,
-                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                          '&:hover': {
-                            transform: 'translateY(-2px)',
-                            boxShadow: `0 8px 20px ${theme.palette.primary.main}40`,
-                          },
+            {projects.map((project, index) => {
+              const name = project?.name ?? 'Untitled Project';
+              const description = project?.description ?? '';
+              const role = project?.role ?? '';
+              const duration = project?.duration ?? '';
+              const screenshots = Array.isArray(project?.screenshots) ? project.screenshots : [];
+              const technologies = Array.isArray(project?.technologies) ? project.technologies : [];
+              const link = project?.link ?? '';
+              return (
+                <Grid
+                  item
+                  xs={12}
+                  key={index}
+                  sx={{ display: 'flex', width: '100%' }}
+                >
+                  <Fade in timeout={800 + index * 200}>
+                    <Box sx={cardHoverEffect}>
+                      <Card
+                        elevation={0}
+                        sx={{
+                          width: '100%',
+                          flexGrow: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          ...glowEffect,
+                          borderRadius: 4,
+                          overflow: 'hidden',
                         }}
                       >
-                        {project.link.includes('github.com') ? 'View Code' : 'Live Demo'}
-                      </Button>
-                    )}
-                  </Box>
-
-                  <Typography 
-                    variant="body1" 
-                    color="text.secondary" 
-                    paragraph 
-                    sx={{ 
-                      lineHeight: 1.6,
-                      wordWrap: 'break-word',
-                      overflowWrap: 'break-word',
-                      whiteSpace: 'normal'
-                    }}
-                  >
-                    {project.description}
-                  </Typography>
-
-                  <Box sx={{ mb: 3 }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <Box 
-                          sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            p: 2,
-                            borderRadius: 2,
-                            backgroundColor: `${theme.palette.primary.main}08`,
-                            border: `1px solid ${theme.palette.primary.main}20`,
-                          }}
-                        >
-                          <Person color="primary" sx={{ mr: 2, fontSize: 24 }} />
-                          <Box>
-                            <Typography variant="body2" fontWeight="bold" color="primary">
-                              Role
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {project.role}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Grid>
-                      
-                      <Grid item xs={12} sm={6}>
-                        <Box 
-                          sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            p: 2,
-                            borderRadius: 2,
-                            backgroundColor: `${theme.palette.secondary.main}08`,
-                            border: `1px solid ${theme.palette.secondary.main}20`,
-                          }}
-                        >
-                          <Schedule color="secondary" sx={{ mr: 2, fontSize: 24 }} />
-                          <Box>
-                            <Typography variant="body2" fontWeight="bold" color="secondary">
-                              Duration
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {project.duration}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-
-                  <Divider sx={{ my: 2 }} />
-
-                  <Box sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                      <Code color="primary" sx={{ mr: 1, fontSize: 20 }} />
-                      <Typography variant="body2" fontWeight="bold">
-                        Technologies:
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {project.technologies.map((tech, techIndex) => {
-                        const IconComponent = getSkillIcon(tech);
-                        return (
-                          <Chip
-                            key={techIndex}
-                            icon={<IconComponent sx={{ fontSize: '1rem !important' }} />}
-                            label={tech}
-                            size="small"
+                        {screenshots.length > 0 && (
+                          <CardMedia
+                            component="img"
+                            image={screenshots[0]}
+                            alt={`${name} screenshot`}
                             sx={{
-                              backgroundColor: 'primary.main',
-                              color: 'primary.contrastText',
-                              fontWeight: 600,
-                              borderRadius: 2,
-                              '& .MuiChip-icon': {
-                                color: 'primary.contrastText',
-                              },
-                              transition: 'all 0.2s ease',
-                              '&:hover': {
-                                transform: 'scale(1.05)',
-                                boxShadow: '0 2px 8px rgba(0, 123, 255, 0.3)',
-                              },
+                              width: '100%',
+                              height: 'auto',
+                              objectFit: 'contain',
+                              backgroundColor: 'grey.100',
+                            }}
+                            onError={(e) => {
+                              e.target.style.display = 'none';
                             }}
                           />
-                        );
-                      })}
-                    </Box>
-                  </Box>
+                        )}
 
-                  {project.screenshots && project.screenshots.length > 1 && (
-                    <Box>
-                      <Typography variant="body2" fontWeight="bold" gutterBottom>
-                        Additional Screenshots:
-                      </Typography>
-                      <Grid container spacing={1}>
-                        {project.screenshots.slice(1).map((screenshot, screenshotIndex) => (
-                          <Grid item xs={6} key={screenshotIndex}>
-                            <Box
-                              component="img"
-                              src={screenshot}
-                              alt={`${project.name} screenshot ${screenshotIndex + 2}`}
-                              sx={{
-                                width: '100%',
-                                height: 80,
-                                objectFit: 'cover',
-                                borderRadius: 1,
-                                border: 1,
-                                borderColor: 'grey.300',
-                                backgroundColor: 'grey.100',
-                              }}
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
-                          </Grid>
-                        ))}
-                      </Grid>
+                        <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                            <Typography variant="h5" component="h3" color="text.primary">
+                              {name}
+                            </Typography>
+
+                            {link && (
+                              <Button
+                                variant="contained"
+                                size="small"
+                                startIcon={link.includes('github.com') ? <GitHub /> : <Launch />}
+                                href={link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                sx={{
+                                  ml: 1,
+                                  borderRadius: 3,
+                                  textTransform: 'none',
+                                  fontWeight: 600,
+                                  boxShadow: `0 4px 12px ${theme.palette.primary.main}30`,
+                                  '&:hover': {
+                                    boxShadow: `0 8px 20px ${theme.palette.primary.main}40`,
+                                  },
+                                }}
+                              >
+                                {link.includes('github.com') ? 'View Code' : 'Live Demo'}
+                              </Button>
+                            )}
+                          </Box>
+
+                          <Typography
+                            variant="body1"
+                            color="text.secondary"
+                            paragraph
+                            sx={{
+                              lineHeight: 1.6,
+                              wordWrap: 'break-word',
+                              overflowWrap: 'break-word',
+                              whiteSpace: 'normal'
+                            }}
+                          >
+                            {description}
+                          </Typography>
+
+                          <Box sx={{ mb: 3 }}>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} sm={6}>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    p: 2,
+                                    borderRadius: 2,
+                                    backgroundColor: `${theme.palette.primary.main}08`,
+                                    border: `1px solid ${theme.palette.primary.main}20`,
+                                  }}
+                                >
+                                  <Person color="primary" sx={{ mr: 2, fontSize: 24 }} />
+                                  <Box>
+                                    <Typography variant="body2" fontWeight="bold" color="primary">
+                                      Role
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                      {role}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </Grid>
+
+                              <Grid item xs={12} sm={6}>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    p: 2,
+                                    borderRadius: 2,
+                                    backgroundColor: `${theme.palette.secondary.main}08`,
+                                    border: `1px solid ${theme.palette.secondary.main}20`,
+                                  }}
+                                >
+                                  <Schedule color="secondary" sx={{ mr: 2, fontSize: 24 }} />
+                                  <Box>
+                                    <Typography variant="body2" fontWeight="bold" color="secondary">
+                                      Duration
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                      {duration}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </Grid>
+                            </Grid>
+                          </Box>
+
+                          <Divider sx={{ my: 2 }} />
+
+                          {technologies.length > 0 && (
+                            <Box sx={{ mb: 2 }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                <Code color="primary" sx={{ mr: 1, fontSize: 20 }} />
+                                <Typography variant="body2" fontWeight="bold">
+                                  Technologies:
+                                </Typography>
+                              </Box>
+                              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                {technologies.map((tech, techIndex) => {
+                                  const IconComponent = getSkillIcon(tech);
+                                  return (
+                                    <Chip
+                                      key={techIndex}
+                                      icon={<IconComponent sx={{ fontSize: '1rem !important' }} />}
+                                      label={tech}
+                                      size="small"
+                                      sx={{
+                                        backgroundColor: 'primary.main',
+                                        color: 'primary.contrastText',
+                                        fontWeight: 600,
+                                        borderRadius: 2,
+                                        '& .MuiChip-icon': {
+                                          color: 'primary.contrastText',
+                                        },
+                                        '&:hover': {
+                                          boxShadow: '0 2px 8px rgba(0, 123, 255, 0.3)',
+                                        },
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </Box>
+                            </Box>
+                          )}
+
+                          {screenshots.length > 1 && (
+                            <Box>
+                              <Typography variant="body2" fontWeight="bold" gutterBottom>
+                                Additional Screenshots:
+                              </Typography>
+                              <Grid container spacing={1}>
+                                {screenshots.slice(1).map((screenshot, screenshotIndex) => (
+                                  <Grid item xs={6} key={screenshotIndex}>
+                                    <Box
+                                      component="img"
+                                      src={screenshot}
+                                      alt={`${name} screenshot ${screenshotIndex + 2}`}
+                                      onClick={() => handleImageClick(screenshot)}
+                                      sx={{
+                                        width: '100%',
+                                        height: 120,
+                                        objectFit: 'cover',
+                                        borderRadius: 1,
+                                        border: 1,
+                                        borderColor: 'grey.300',
+                                        backgroundColor: 'grey.100',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.3s ease',
+                                        '&:hover': {
+                                          transform: 'scale(1.05)',
+                                          boxShadow: theme.shadows[4],
+                                          borderColor: 'primary.main',
+                                        },
+                                      }}
+                                      onError={(e) => {
+                                        e.target.style.display = 'none';
+                                      }}
+                                    />
+                                  </Grid>
+                                ))}
+                              </Grid>
+                            </Box>
+                          )}
+                        </CardContent>
+                      </Card>
                     </Box>
-                  )}
-                </CardContent>
-              </Card>
-                  </Box>
-                </Fade>
-              </Grid>
-            ))}
+                  </Fade>
+                </Grid>
+              );
+            })}
           </Grid>
         )}
+
+        {/* Image Modal */}
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 2,
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              maxWidth: '95vw',
+              maxHeight: '95vh',
+              outline: 'none',
+            }}
+          >
+            <IconButton
+              onClick={handleCloseModal}
+              sx={{
+                position: 'absolute',
+                top: -8,
+                right: -8,
+                backgroundColor: 'background.paper',
+                color: 'text.primary',
+                boxShadow: theme.shadows[4],
+                zIndex: 1,
+                '&:hover': {
+                  backgroundColor: 'error.main',
+                  color: 'error.contrastText',
+                },
+              }}
+            >
+              <Close />
+            </IconButton>
+            <Box
+              component="img"
+              src={selectedImage}
+              alt="Full size screenshot"
+              sx={{
+                maxWidth: '100%',
+                maxHeight: '95vh',
+                objectFit: 'contain',
+                borderRadius: 2,
+                boxShadow: theme.shadows[24],
+              }}
+            />
+          </Box>
+        </Modal>
       </Container>
     </Box>
   );
+};
+
+ProjectsPage.propTypes = {
+  data: PropTypes.shape({
+    projects: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        description: PropTypes.string,
+        role: PropTypes.string,
+        duration: PropTypes.string,
+        screenshots: PropTypes.arrayOf(PropTypes.string),
+        technologies: PropTypes.arrayOf(PropTypes.string),
+        link: PropTypes.string,
+      })
+    ),
+  }),
 };
 
 export default ProjectsPage;

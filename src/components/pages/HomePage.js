@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Container,
   Typography,
@@ -12,7 +13,6 @@ import {
   Fade,
   Grow,
   useTheme,
-  useMediaQuery,
   Chip,
   Stack,
 } from '@mui/material';
@@ -24,21 +24,33 @@ import {
   WorkOutline,
   FolderSpecial,
   EmojiObjects,
-  ArrowDownward 
 } from '@mui/icons-material';
 
 const HomePage = ({ data }) => {
-  const { personalInfo } = data;
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Safe fallbacks for potentially missing data
+  const personalInfo = data?.personalInfo ?? {};
+  const name = personalInfo?.name ?? 'Your Name';
+  const title = personalInfo?.title ?? '';
+  const bio = personalInfo?.bio ?? '';
+  const location = personalInfo?.location ?? '';
+  const languages = Array.isArray(personalInfo?.languages) ? personalInfo.languages : [];
+  const website = personalInfo?.website ?? '';
+  const linkedin = personalInfo?.linkedin ?? '';
+  const github = personalInfo?.github ?? '';
+
+  const experienceCount = Array.isArray(data?.resume?.experience) ? data.resume.experience.length : 0;
+  const skillsCount = Array.isArray(data?.resume?.skills) ? data.resume.skills.length : 0;
+  const projectsCount = Array.isArray(data?.projects) ? data.projects.length : 0;
 
   // Animation variants for cards
   const cardHoverEffect = {
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    transform: 'translateY(0px)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important',
+    transform: 'translateY(0px) !important',
     '&:hover': {
-      transform: 'translateY(-8px)',
-      boxShadow: theme.shadows[8],
+      transform: 'translateY(-8px) !important',
+      boxShadow: `${theme.shadows[8]} !important`,
     },
   };
 
@@ -57,23 +69,21 @@ const HomePage = ({ data }) => {
         ${theme.palette.secondary.main}08 100%
       )`,
     }}>
-      <Container maxWidth="lg" sx={{ pt: { xs: 8, md: 10 }, pb: 8 }}>
+      <Container maxWidth="lg" sx={{ pt: { xs: 10, md: 12 }, pb: 8 }}>
         {/* Hero Section */}
         <Fade in timeout={1000}>
-          <Box sx={{ py: { xs: 6, md: 10 } }}>
+          <Box sx={{ pb: { xs: 6, md: 10 } }}>
             <Grid 
               container 
               spacing={{ xs: 4, md: 6 }} 
+              columns={{ xs: 12, md: 12, lg: 12 }}
               alignItems="center" 
               justifyContent="center"
               sx={{ width: '100%' }}
             >
               {/* Profile Image - Show first on mobile */}
               <Grid 
-                item 
-                xs={12} 
-                md={6}
-                lg={6} 
+                size={{ xs: 12, md: 6, lg: 6 }} 
                 sx={{ 
                   order: { xs: 1, md: 2 },
                   display: 'flex', 
@@ -103,7 +113,7 @@ const HomePage = ({ data }) => {
                   >
                     <Avatar
                       src="/profile_photo.png"
-                      alt={personalInfo.name}
+                      alt={name}
                       sx={{
                         width: { xs: 220, sm: 280, md: 300 },
                         height: { xs: 220, sm: 280, md: 300 },
@@ -122,8 +132,8 @@ const HomePage = ({ data }) => {
               </Grid>
               
               {/* Content */}
-              <Grid item xs={12} md={6} lg={6} sx={{ order: { xs: 2, md: 1 } }}>
-                <Box sx={{ textAlign: 'center', maxWidth: { xs: '100%', md: 820 }, mx: { xs: 'auto', md: 'auto' } }}>
+              <Grid size={{ xs: 12, md: 6, lg: 6 }} sx={{ order: { xs: 2, md: 1 } }}>
+                <Box sx={{ textAlign: 'left', maxWidth: { xs: '100%', md: 820 }, mx: { xs: 'auto', md: 'auto' } }}>
                   <Typography
                     variant="h6"
                     color="primary.main"
@@ -156,7 +166,7 @@ const HomePage = ({ data }) => {
                   >
                     Hello, I'm{' '}
                     <Box component="span" sx={{ display: { xs: 'block', sm: 'inline' } }}>
-                      {personalInfo.name}
+                      {name}
                     </Box>
                   </Typography>
                   
@@ -170,7 +180,7 @@ const HomePage = ({ data }) => {
                       lineHeight: 1.3,
                     }}
                   >
-                    {personalInfo.title}
+                    {title}
                   </Typography>
                   
                   <Typography
@@ -185,177 +195,160 @@ const HomePage = ({ data }) => {
                       fontWeight: 300,
                     }}
                   >
-                    {personalInfo.bio}
+                    {bio}
                   </Typography>
 
                   {/* Info Cards */}
-                  <Stack 
-                    direction={{ xs: 'column', sm: 'row' }} 
-                    spacing={2} 
-                    sx={{ 
-                      mb: 4,
-                      justifyContent: { xs: 'center', md: 'flex-start' },
-                      alignItems: { xs: 'center', sm: 'flex-start' }
-                    }}
-                  >
-                    <Chip
-                      icon={<LocationOn />}
-                      label={personalInfo.location}
-                      variant="outlined"
-                      sx={{
-                        py: 2,
-                        px: 1,
-                        fontSize: '1rem',
-                        height: 'auto',
-                        ...glowEffect,
-                        '&:hover': {
-                          transform: 'translateY(-2px)',
-                          boxShadow: theme.shadows[4],
-                        },
-                      }}
-                    />
-                    
-                    <Chip
-                      icon={<Language />}
-                      label={personalInfo.languages.join(', ')}
-                      variant="outlined"
-                      sx={{
-                        py: 2,
-                        px: 1,
-                        fontSize: '1rem',
-                        height: 'auto',
-                        ...glowEffect,
-                        '&:hover': {
-                          transform: 'translateY(-2px)',
-                          boxShadow: theme.shadows[4],
-                        },
-                      }}
-                    />
-                  </Stack>
-
-                  <Box sx={{ mb: 4, textAlign: { xs: 'center', md: 'left' } }}>
-                    <Link 
-                      href={personalInfo.website} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      sx={{
-                        color: 'primary.main',
-                        textDecoration: 'none',
-                        fontSize: '1.1rem',
-                        fontWeight: 500,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        py: 1,
-                        px: 2,
-                        borderRadius: 2,
-                        ...glowEffect,
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          transform: 'translateY(-2px)',
-                          boxShadow: theme.shadows[4],
-                        },
+                  {(location || languages.length > 0) && (
+                    <Stack 
+                      direction={{ xs: 'column', sm: 'row' }} 
+                      spacing={2} 
+                      sx={{ 
+                        mb: 4,
+                        justifyContent: 'flex-start',
+                        alignItems: { xs: 'flex-start', sm: 'flex-start' }
                       }}
                     >
-                      🌐 {personalInfo.website}
-                    </Link>
-                  </Box>
+                      {location && (
+                        <Chip
+                          icon={<LocationOn />}
+                          label={location}
+                          variant="outlined"
+                          sx={{
+                            py: 2,
+                            px: 1,
+                            fontSize: '1rem',
+                            height: 'auto',
+                            ...glowEffect,
+                            '&:hover': {
+                              boxShadow: theme.shadows[4],
+                            },
+                          }}
+                        />
+                      )}
+                      {languages.length > 0 && (
+                        <Chip
+                          icon={<Language />}
+                          label={languages.join(', ')}
+                          variant="outlined"
+                          sx={{
+                            py: 2,
+                            px: 1,
+                            fontSize: '1rem',
+                            height: 'auto',
+                            ...glowEffect,
+                            '&:hover': {
+                              boxShadow: theme.shadows[4],
+                            },
+                          }}
+                        />
+                      )}
+                    </Stack>
+                  )}
+
+                  {website && (
+                    <Box sx={{ mb: 4, textAlign: 'left' }}>
+                      <Link 
+                        href={website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        sx={{
+                          color: 'primary.main',
+                          textDecoration: 'none',
+                          fontSize: '1.1rem',
+                          fontWeight: 500,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 1,
+                          py: 1,
+                          px: 2,
+                          borderRadius: 2,
+                          ...glowEffect,
+                          '&:hover': {
+                            boxShadow: theme.shadows[4],
+                          },
+                        }}
+                      >
+                        🌐 {website}
+                      </Link>
+                    </Box>
+                  )}
 
                   {/* CTA Buttons */}
-                  <Stack 
-                    direction={{ xs: 'column', sm: 'row' }} 
-                    spacing={2} 
-                    sx={{ 
-                      justifyContent: { xs: 'center', md: 'flex-start' },
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      size="large"
-                      startIcon={<LinkedIn />}
-                      href={personalInfo.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {(linkedin || github) && (
+                    <Stack 
+                      direction={{ xs: 'column', sm: 'row' }} 
+                      spacing={2} 
                       sx={{ 
-                        px: 4, 
-                        py: 1.5,
-                        fontSize: '1.1rem',
-                        fontWeight: 600,
-                        backgroundColor: '#0077B5',
-                        borderRadius: 3,
-                        textTransform: 'none',
-                        minWidth: { xs: 200, sm: 'auto' },
-                        boxShadow: '0 4px 20px rgba(0, 119, 181, 0.3)',
-                        '&:hover': {
-                          backgroundColor: '#005885',
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 8px 25px rgba(0, 119, 181, 0.4)',
-                        },
+                        justifyContent: 'flex-start',
+                        alignItems: { xs: 'flex-start', sm: 'center' }
                       }}
                     >
-                      View LinkedIn
-                    </Button>
-                    
-                    <Button
-                      variant="contained"
-                      size="large"
-                      startIcon={<GitHub />}
-                      href={personalInfo.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ 
-                        px: 4, 
-                        py: 1.5,
-                        fontSize: '1.1rem',
-                        fontWeight: 600,
-                        backgroundColor: '#24292f',
-                        borderRadius: 3,
-                        textTransform: 'none',
-                        minWidth: { xs: 200, sm: 'auto' },
-                        boxShadow: '0 4px 20px rgba(36, 41, 47, 0.3)',
-                        '&:hover': {
-                          backgroundColor: '#3a3f44',
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 8px 25px rgba(36, 41, 47, 0.4)',
-                        },
-                      }}
-                    >
-                      View GitHub
-                    </Button>
-                  </Stack>
+                      {linkedin && (
+                        <Button
+                          variant="contained"
+                          size="large"
+                          startIcon={<LinkedIn />}
+                          href={linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{ 
+                            px: 4, 
+                            py: 1.5,
+                            fontSize: '1.1rem',
+                            fontWeight: 600,
+                            backgroundColor: '#0077B5',
+                            borderRadius: 3,
+                            textTransform: 'none',
+                            minWidth: { xs: 200, sm: 'auto' },
+                            boxShadow: '0 4px 20px rgba(0, 119, 181, 0.3)',
+                            '&:hover': {
+                              backgroundColor: '#005885',
+                              boxShadow: '0 8px 25px rgba(0, 119, 181, 0.4)',
+                            },
+                          }}
+                        >
+                          View LinkedIn
+                        </Button>
+                      )}
+                      {github && (
+                        <Button
+                          variant="contained"
+                          size="large"
+                          startIcon={<GitHub />}
+                          href={github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{ 
+                            px: 4, 
+                            py: 1.5,
+                            fontSize: '1.1rem',
+                            fontWeight: 600,
+                            backgroundColor: '#24292f',
+                            borderRadius: 3,
+                            textTransform: 'none',
+                            minWidth: { xs: 200, sm: 'auto' },
+                            boxShadow: '0 4px 20px rgba(36, 41, 47, 0.3)',
+                            '&:hover': {
+                              backgroundColor: '#3a3f44',
+                              boxShadow: '0 8px 25px rgba(36, 41, 47, 0.4)',
+                            },
+                          }}
+                        >
+                          View GitHub
+                        </Button>
+                      )}
+                    </Stack>
+                  )}
                 </Box>
               </Grid>
             </Grid>
           </Box>
         </Fade>
 
-        {/* Scroll Indicator */}
-        <Fade in timeout={2000}>
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              opacity: 0.6,
-              animation: 'bounce 2s infinite',
-              '@keyframes bounce': {
-                '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-                '40%': { transform: 'translateY(-10px)' },
-                '60%': { transform: 'translateY(-5px)' },
-              },
-            }}
-          >
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              Scroll to explore
-            </Typography>
-            <ArrowDownward color="action" />
-          </Box>
-        </Fade>
-
         {/* Highlights Section */}
         <Fade in timeout={1500}>
-          <Box sx={{ mt: { xs: 8, md: 12 } }}>
+          <Box id="highlights" sx={{ mt: { xs: 8, md: 12 } }}>
             <Typography
               variant="h3"
               component="h2"
@@ -379,14 +372,17 @@ const HomePage = ({ data }) => {
             <Grid 
               container 
               spacing={{ xs: 3, md: 4 }}
+              columns={{ xs: 12, md: 12, lg: 12 }}
               sx={{ width: '100%' }}
             >
-              <Grid item xs={12} md={4}>
-                <Grow in timeout={1000}>
+              <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', minWidth: 0 }}>
+                <Grow in timeout={1000} style={{ width: '100%' }}>
                   <Card 
                     elevation={0}
                     sx={{
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       ...glowEffect,
                       ...cardHoverEffect,
                       borderRadius: 4,
@@ -415,7 +411,7 @@ const HomePage = ({ data }) => {
                           fontSize: { xs: '1.75rem', md: '2.125rem' }
                         }}
                       >
-                        {data.resume.experience.length}+
+                        {experienceCount}+
                       </Typography>
                       <Typography 
                         variant="h6" 
@@ -423,7 +419,9 @@ const HomePage = ({ data }) => {
                         sx={{ 
                           fontWeight: 600,
                           mb: 1,
-                          fontSize: { xs: '1.1rem', md: '1.25rem' }
+                          fontSize: { xs: '1.1rem', md: '1.25rem' },
+                          wordWrap: 'break-word',
+                          overflowWrap: 'break-word',
                         }}
                       >
                         Years Experience
@@ -431,7 +429,11 @@ const HomePage = ({ data }) => {
                       <Typography 
                         variant="body1" 
                         color="text.secondary"
-                        sx={{ lineHeight: 1.6 }}
+                        sx={{ 
+                          lineHeight: 1.6,
+                          wordWrap: 'break-word',
+                          overflowWrap: 'break-word',
+                        }}
                       >
                         Professional software development experience
                       </Typography>
@@ -440,12 +442,14 @@ const HomePage = ({ data }) => {
                 </Grow>
               </Grid>
               
-              <Grid item xs={12} md={4}>
-                <Grow in timeout={1200}>
+              <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', minWidth: 0 }}>
+                <Grow in timeout={1200} style={{ width: '100%' }}>
                   <Card 
                     elevation={0}
                     sx={{
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       ...glowEffect,
                       ...cardHoverEffect,
                       borderRadius: 4,
@@ -474,7 +478,7 @@ const HomePage = ({ data }) => {
                           fontSize: { xs: '1.75rem', md: '2.125rem' }
                         }}
                       >
-                        {data.projects.length}
+                        {projectsCount}
                       </Typography>
                       <Typography 
                         variant="h6" 
@@ -482,7 +486,9 @@ const HomePage = ({ data }) => {
                         sx={{ 
                           fontWeight: 600,
                           mb: 1,
-                          fontSize: { xs: '1.1rem', md: '1.25rem' }
+                          fontSize: { xs: '1.1rem', md: '1.25rem' },
+                          wordWrap: 'break-word',
+                          overflowWrap: 'break-word',
                         }}
                       >
                         Projects Completed
@@ -490,7 +496,11 @@ const HomePage = ({ data }) => {
                       <Typography 
                         variant="body1" 
                         color="text.secondary"
-                        sx={{ lineHeight: 1.6 }}
+                        sx={{ 
+                          lineHeight: 1.6,
+                          wordWrap: 'break-word',
+                          overflowWrap: 'break-word',
+                        }}
                       >
                         Successful projects delivered with excellence
                       </Typography>
@@ -499,12 +509,14 @@ const HomePage = ({ data }) => {
                 </Grow>
               </Grid>
               
-              <Grid item xs={12} md={4}>
-                <Grow in timeout={1400}>
+              <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', minWidth: 0 }}>
+                <Grow in timeout={1400} style={{ width: '100%' }}>
                   <Card 
                     elevation={0}
                     sx={{
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       ...glowEffect,
                       ...cardHoverEffect,
                       borderRadius: 4,
@@ -533,7 +545,7 @@ const HomePage = ({ data }) => {
                           fontSize: { xs: '1.75rem', md: '2.125rem' }
                         }}
                       >
-                        {data.resume.skills.length}+
+                        {skillsCount}+
                       </Typography>
                       <Typography 
                         variant="h6" 
@@ -541,7 +553,9 @@ const HomePage = ({ data }) => {
                         sx={{ 
                           fontWeight: 600,
                           mb: 1,
-                          fontSize: { xs: '1.1rem', md: '1.25rem' }
+                          fontSize: { xs: '1.1rem', md: '1.25rem' },
+                          wordWrap: 'break-word',
+                          overflowWrap: 'break-word',
                         }}
                       >
                         Skills Mastered
@@ -549,7 +563,11 @@ const HomePage = ({ data }) => {
                       <Typography 
                         variant="body1" 
                         color="text.secondary"
-                        sx={{ lineHeight: 1.6 }}
+                        sx={{ 
+                          lineHeight: 1.6,
+                          wordWrap: 'break-word',
+                          overflowWrap: 'break-word',
+                        }}
                       >
                         Technologies and frameworks expertise
                       </Typography>
@@ -563,6 +581,26 @@ const HomePage = ({ data }) => {
       </Container>
     </Box>
   );
+};
+
+HomePage.propTypes = {
+  data: PropTypes.shape({
+    personalInfo: PropTypes.shape({
+      name: PropTypes.string,
+      title: PropTypes.string,
+      bio: PropTypes.string,
+      location: PropTypes.string,
+      languages: PropTypes.arrayOf(PropTypes.string),
+      website: PropTypes.string,
+      linkedin: PropTypes.string,
+      github: PropTypes.string,
+    }),
+    resume: PropTypes.shape({
+      experience: PropTypes.array,
+      skills: PropTypes.array,
+    }),
+    projects: PropTypes.array,
+  }),
 };
 
 export default HomePage;

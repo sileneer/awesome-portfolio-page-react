@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -9,7 +9,15 @@ import {
   useTheme,
   Slide,
   useScrollTrigger,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useMediaQuery,
 } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function HideOnScroll(props) {
   const { children } = props;
@@ -31,6 +39,8 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
     disableHysteresis: true,
     threshold: 50,
   });
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleBrandClick = () => {
     onNavigate('home');
@@ -38,6 +48,16 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
 
   const handleMenuClick = (path, pageName) => {
     onNavigate(pageName);
+    if (isMobile) {
+      setDrawerOpen(false);
+    }
+  };
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
   };
 
   // Glass morphism effect consistent with HomePage
@@ -53,126 +73,221 @@ const Navigation = ({ data, currentPage, onNavigate }) => {
   };
 
   return (
-    <HideOnScroll>
-      <AppBar 
-        position="fixed" 
-        elevation={0}
-        sx={{ 
-          ...glassEffect,
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          borderBottom: trigger ? 'none' : `1px solid ${theme.palette.divider}`,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Toolbar
-            sx={{
-              justifyContent: { xs: 'center', md: 'space-between' },
-              flexDirection: { xs: 'column', md: 'row' },
-              alignItems: { xs: 'stretch', md: 'center' },
-              gap: { xs: 1.5, md: 0 },
-              py: { xs: 1.5, md: 1.5 },
-            }}
-          >
-            <Typography
-              variant="h5"
-              component="div"
-              onClick={handleBrandClick}
+    <>
+      <HideOnScroll>
+        <AppBar 
+          position="fixed" 
+          elevation={0}
+          sx={{ 
+            ...glassEffect,
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            borderBottom: trigger ? 'none' : `1px solid ${theme.palette.divider}`,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Toolbar
               sx={{
-                fontWeight: 800,
-                cursor: 'pointer',
-                background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 70%)`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: 'scale(1)',
-                textAlign: { xs: 'center', md: 'left' },
-                alignSelf: { xs: 'center', md: 'auto' },
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 70%)`,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                py: 1.5,
+              }}
+            >
+              <Typography
+                variant="h5"
+                component="div"
+                onClick={handleBrandClick}
+                sx={{
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 70%)`,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                },
-              }}
-            >
-              {brand}
-            </Typography>
-            
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 1,
-                rowGap: { xs: 1, md: 0 },
-                flexWrap: { xs: 'wrap', md: 'nowrap' },
-                justifyContent: { xs: 'center', md: 'flex-end' },
-                width: { xs: '100%', md: 'auto' },
-              }}
-            >
-              {menuItems.map((item, index) => {
-                const isActive = currentPage === item.name.toLowerCase();
-                return (
-                  <Button
-                    key={index}
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: 'scale(1)',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 70%)`,
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  },
+                }}
+              >
+                {brand}
+              </Typography>
+              
+              {/* Desktop Navigation */}
+              <Box
+                sx={{
+                  display: { xs: 'none', md: 'flex' },
+                  gap: 1,
+                }}
+              >
+                {menuItems.map((item, index) => {
+                  const isActive = currentPage === item.name.toLowerCase();
+                  return (
+                    <Button
+                      key={index}
+                      onClick={() => handleMenuClick(item.path, item.name.toLowerCase())}
+                      variant={isActive ? 'contained' : 'text'}
+                      color="primary"
+                      sx={{
+                        fontWeight: 600,
+                        px: { xs: 2.25, md: 3 },
+                        py: { xs: 0.8, md: 1 },
+                        borderRadius: 3,
+                        minWidth: 'auto',
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        ...(isActive ? {
+                          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                          boxShadow: '0 4px 20px rgba(0, 123, 255, 0.3)',
+                          transform: 'translateY(0px)',
+                          '&:hover': {
+                            transform: 'translateY(-2px)',
+                            boxShadow: '0 8px 25px rgba(0, 123, 255, 0.4)',
+                          },
+                        } : {
+                          background: `linear-gradient(135deg, ${theme.palette.primary.main}08, ${theme.palette.secondary.main}08)`,
+                          backdropFilter: 'blur(10px)',
+                          border: `1px solid ${theme.palette.primary.main}20`,
+                          color: theme.palette.text.primary,
+                          '&:hover': {
+                            background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
+                            transform: 'translateY(-2px)',
+                            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                            border: `1px solid ${theme.palette.primary.main}40`,
+                          },
+                        }),
+                        '&::before': !isActive ? {
+                          content: '""',
+                          position: 'absolute',
+                          inset: 0,
+                          background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                          borderRadius: 'inherit',
+                          opacity: 0,
+                          transition: 'opacity 0.3s ease',
+                          zIndex: -1,
+                        } : {},
+                        '&:hover::before': !isActive ? {
+                          opacity: 0.05,
+                        } : {},
+                      }}
+                    >
+                      {item.name}
+                    </Button>
+                  );
+                })}
+              </Box>
+
+              {/* Mobile Menu Icon */}
+              <IconButton
+                edge="end"
+                color="primary"
+                aria-label="menu"
+                onClick={toggleDrawer(true)}
+                sx={{
+                  display: { xs: 'flex', md: 'none' },
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main}10, ${theme.palette.secondary.main}10)`,
+                  backdropFilter: 'blur(10px)',
+                  border: `1px solid ${theme.palette.primary.main}20`,
+                  '&:hover': {
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main}20, ${theme.palette.secondary.main}20)`,
+                  },
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </HideOnScroll>
+      
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: 280,
+            background: `linear-gradient(135deg, ${theme.palette.background.default} 0%, ${theme.palette.primary.main}05 100%)`,
+            backdropFilter: 'blur(20px)',
+            borderLeft: `1px solid ${theme.palette.primary.main}20`,
+          },
+        }}
+      >
+        <Box
+          sx={{
+            pt: 3,
+            pb: 2,
+          }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              px: 3,
+              pb: 2,
+              fontWeight: 700,
+              background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 70%)`,
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Menu
+          </Typography>
+          <List>
+            {menuItems.map((item, index) => {
+              const isActive = currentPage === item.name.toLowerCase();
+              return (
+                <ListItem key={index} disablePadding sx={{ px: 2, py: 0.5 }}>
+                  <ListItemButton
                     onClick={() => handleMenuClick(item.path, item.name.toLowerCase())}
-                    variant={isActive ? 'contained' : 'text'}
-                    color="primary"
                     sx={{
-                      fontWeight: 600,
-                      px: { xs: 2.25, md: 3 },
-                      py: { xs: 0.8, md: 1 },
-                      borderRadius: 3,
-                      minWidth: 'auto',
-                      textTransform: 'none',
-                      fontSize: '1rem',
-                      position: 'relative',
-                      overflow: 'hidden',
+                      borderRadius: 2,
+                      mb: 0.5,
+                      py: 1.5,
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       ...(isActive ? {
                         background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
                         boxShadow: '0 4px 20px rgba(0, 123, 255, 0.3)',
-                        transform: 'translateY(0px)',
                         '&:hover': {
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 8px 25px rgba(0, 123, 255, 0.4)',
+                          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                          boxShadow: '0 6px 25px rgba(0, 123, 255, 0.4)',
                         },
                       } : {
                         background: `linear-gradient(135deg, ${theme.palette.primary.main}08, ${theme.palette.secondary.main}08)`,
-                        backdropFilter: 'blur(10px)',
-                        border: `1px solid ${theme.palette.primary.main}20`,
-                        color: theme.palette.text.primary,
                         '&:hover': {
                           background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                          border: `1px solid ${theme.palette.primary.main}40`,
+                          transform: 'translateX(-4px)',
                         },
                       }),
-                      '&::before': !isActive ? {
-                        content: '""',
-                        position: 'absolute',
-                        inset: 0,
-                        background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                        borderRadius: 'inherit',
-                        opacity: 0,
-                        transition: 'opacity 0.3s ease',
-                        zIndex: -1,
-                      } : {},
-                      '&:hover::before': !isActive ? {
-                        opacity: 0.05,
-                      } : {},
                     }}
                   >
-                    {item.name}
-                  </Button>
-                );
-              })}
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </HideOnScroll>
+                    <ListItemText
+                      primary={item.name}
+                      primaryTypographyProps={{
+                        fontWeight: isActive ? 700 : 600,
+                        fontSize: '1rem',
+                        color: isActive ? 'white' : theme.palette.text.primary,
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+        </Box>
+      </Drawer>
+    </>
   );
 };
 
