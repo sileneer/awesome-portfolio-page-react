@@ -1,3 +1,23 @@
+/**
+ * ContactPage Component
+ * 
+ * Displays contact information and provides multiple ways to connect:
+ * - Email and phone contact with click-to-action functionality
+ * - Physical location information
+ * - Social media links (LinkedIn, GitHub, Twitter, Facebook, Website)
+ * - Meeting scheduling integration (Calendly)
+ * 
+ * Features:
+ * - Interactive contact cards with hover effects
+ * - Direct mailto: and tel: links for easy communication
+ * - Social media buttons with brand colors
+ * - Optional meeting scheduler integration
+ * - Responsive layout for all screen sizes
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.data - Portfolio data containing personal info and contact details
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -30,72 +50,91 @@ import {
 } from '@mui/icons-material';
 
 const ContactPage = ({ data }) => {
+  // Extract contact data with safe fallbacks
   const personalInfo = data?.personalInfo ?? {};
   const contact = data?.contact ?? {};
   const theme = useTheme();
 
-  // Glass morphism effect consistent with other pages
+  /**
+   * Glass morphism effect styling
+   * Consistent with other pages for unified design
+   */
   const glowEffect = {
     background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
     backdropFilter: 'blur(10px)',
     border: `1px solid ${theme.palette.primary.main}30`,
   };
 
+  /**
+   * Card hover effect styling
+   * Provides lift and scale animation on hover
+   */
   const cardHoverEffect = {
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
-      transform: 'translateY(-8px) scale(1.02)',
+      transform: 'translateY(-8px) scale(1.02)', // Lift and slightly enlarge
       boxShadow: `0 20px 40px ${theme.palette.primary.main}20`,
     },
   };
 
-
+  /**
+   * Handle email click - open default email client
+   */
   const handleEmailClick = () => {
     if (personalInfo?.email) {
       window.location.href = `mailto:${personalInfo.email}`;
     }
   };
 
+  /**
+   * Handle phone click - initiate phone call on mobile devices
+   */
   const handlePhoneClick = () => {
     if (personalInfo?.phone) {
       window.location.href = `tel:${personalInfo.phone}`;
     }
   };
 
+  /**
+   * Social media links configuration
+   * Each link includes name, URL, icon, and brand color
+   * Filters out links that don't have a URL
+   */
   const socialLinks = [
     {
       name: 'LinkedIn',
       url: personalInfo.linkedin,
       icon: <LinkedIn />,
-      color: '#0077b5',
+      color: '#0077b5', // LinkedIn brand color
     },
     {
       name: 'GitHub',
       url: personalInfo.github,
       icon: <GitHub />,
-      color: '#333',
+      color: '#333', // GitHub brand color
     },
     {
       name: 'Website',
       url: personalInfo.website,
       icon: <Language />,
-      color: '#007bff',
+      color: '#007bff', // Primary blue
     },
     {
       name: 'Twitter',
       url: contact.twitter,
       icon: <Twitter />,
-      color: '#1da1f2',
+      color: '#1da1f2', // Twitter brand color
     },
     {
       name: 'Facebook',
       url: contact.facebook,
       icon: <Facebook />,
-      color: '#4267b2',
+      color: '#4267b2', // Facebook brand color
     },
-  ].filter(link => !!link.url);
+  ].filter(link => !!link.url); // Only include links with valid URLs
 
   return (
+    /* Main Page Container - full viewport height with gradient background */
     <Box 
       sx={{ 
         minHeight: '100vh',
@@ -104,8 +143,11 @@ const ContactPage = ({ data }) => {
         pb: 4
       }}
     >
+      {/* Content Container - centers content */}
       <Container maxWidth="lg">
-        {/* Header */}
+        
+        {/* ========== PAGE HEADER ========== */}
+        {/* Page title and welcome message */}
         <Fade in timeout={1000}>
           <Box sx={{ mb: 6 }}>
             <Box sx={{
@@ -116,6 +158,7 @@ const ContactPage = ({ data }) => {
               gap: 3,
               textAlign: { xs: 'center', sm: 'left' }
             }}>
+              {/* Page Title - "Let's Connect" */}
               <Typography 
                 variant="h2" 
                 component="h1" 
@@ -134,6 +177,8 @@ const ContactPage = ({ data }) => {
                 Let's Connect
               </Typography>
             </Box>
+            
+            {/* Welcome Message - personalized contact message */}
             <Typography 
               variant="h6" 
               color="text.secondary" 
@@ -151,11 +196,15 @@ const ContactPage = ({ data }) => {
           </Box>
         </Fade>
 
+        {/* ========== MAIN CONTENT GRID ========== */}
+        {/* Two columns: Contact Info (left) and Social Links (right) */}
         <Grid container spacing={4}>
-          {/* Contact Information */}
+          
+          {/* === LEFT COLUMN: Contact Information Card === */}
           <Grid item xs={12} md={6}>
             <Fade in timeout={1000}>
               <Box sx={{ height: '100%' }}>
+                {/* Contact Information Card - email, phone, location */}
                 <Card 
                   elevation={0}
                   sx={{ 
@@ -165,6 +214,8 @@ const ContactPage = ({ data }) => {
                     borderRadius: 4,
                   }}>
                 <CardContent sx={{ p: 4 }}>
+                  
+                  {/* Card Header - "Get In Touch" with icon */}
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                     <ContactMail 
                       sx={{ 
@@ -187,8 +238,12 @@ const ContactPage = ({ data }) => {
                     </Typography>
                   </Box>
               
+              {/* === CONTACT METHODS === */}
+              {/* Email, Phone, and Location sections */}
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                {/* Email */}
+                
+                {/* === EMAIL SECTION === */}
+                {/* Primary and alternate email addresses */}
                 {personalInfo?.email && (
                 <Grow in timeout={1200}>
                   <Box 
@@ -207,6 +262,7 @@ const ContactPage = ({ data }) => {
                       }
                     }}
                   >
+                    {/* Email Icon Button - clickable to open email client */}
                     <IconButton 
                       color="primary" 
                       sx={{ 
@@ -225,10 +281,14 @@ const ContactPage = ({ data }) => {
                     >
                       <Email sx={{ fontSize: '1.5rem' }} />
                     </IconButton>
+                    
+                    {/* Email Text Content */}
                     <Box>
                       <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
                         Email
                       </Typography>
+                      
+                      {/* Primary Email - clickable */}
                       <Typography
                         variant="body1"
                         color="text.primary"
@@ -242,6 +302,8 @@ const ContactPage = ({ data }) => {
                       >
                         {personalInfo.email}
                       </Typography>
+                      
+                      {/* Alternate Email (if provided) */}
                       {contact.alternateEmail && (
                         <Typography
                           variant="body2"
@@ -264,7 +326,8 @@ const ContactPage = ({ data }) => {
 
                 <Divider />
 
-                {/* Phone */}
+                {/* === PHONE SECTION === */}
+                {/* Phone number with click-to-call */}
                 {personalInfo?.phone && (
                 <Grow in timeout={1400}>
                   <Box 
@@ -378,12 +441,15 @@ const ContactPage = ({ data }) => {
             </Fade>
           </Grid>
 
-          {/* Social Links & Scheduling */}
+          {/* === RIGHT COLUMN: Social Links & Scheduling === */}
           <Grid item xs={12} md={6}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: '100%' }}>
-              {/* Social Links */}
+              
+              {/* === SOCIAL LINKS CARD === */}
+              {/* LinkedIn, GitHub, Website, Twitter, Facebook */}
               <Fade in timeout={1200}>
                 <Box sx={{ flexGrow: 1 }}>
+                  {/* Social Links Card */}
                   <Card 
                     elevation={0}
                     sx={{ 
@@ -394,6 +460,8 @@ const ContactPage = ({ data }) => {
                     }}
                   >
                   <CardContent sx={{ p: 4 }}>
+                    
+                    {/* Card Header - "Connect With Me" with icon */}
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                       <Star 
                         sx={{ 
@@ -416,10 +484,13 @@ const ContactPage = ({ data }) => {
                       </Typography>
                     </Box>
                 
+                    {/* Social Links Grid - 2 columns */}
                     <Grid container spacing={2}>
+                      {/* Map through social links to create buttons */}
                       {socialLinks.map((social, index) => (
                         <Grid item xs={12} sm={6} key={index}>
                           <Grow in timeout={1400 + index * 100}>
+                            {/* Social Media Button - links to external profile */}
                             <Button
                               fullWidth
                               variant="contained"
@@ -454,10 +525,12 @@ const ContactPage = ({ data }) => {
                 </Box>
               </Fade>
 
-              {/* Scheduling Section */}
+              {/* === MEETING SCHEDULER CARD === */}
+              {/* Calendly integration for booking meetings */}
               {contact?.calendly && (
                 <Fade in timeout={1600}>
                   <Box>
+                    {/* Meeting Scheduler Card */}
                     <Card 
                       elevation={0}
                       sx={{
@@ -467,6 +540,8 @@ const ContactPage = ({ data }) => {
                       }}
                     >
                     <CardContent sx={{ p: 4, textAlign: 'center' }}>
+                      
+                      {/* Card Header - "Schedule a Meeting" with icon */}
                       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                         <CalendarToday 
                           sx={{ 
@@ -489,10 +564,12 @@ const ContactPage = ({ data }) => {
                         </Typography>
                       </Box>
                       
+                      {/* Description Text */}
                       <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 3 }}>
                         Ready for a conversation? Let's schedule a time that works for both of us.
                       </Typography>
                       
+                      {/* Book a Call Button - links to Calendly */}
                       <Button
                         variant="contained"
                         color="primary"

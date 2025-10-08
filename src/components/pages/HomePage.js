@@ -1,3 +1,19 @@
+/**
+ * HomePage Component
+ * 
+ * Landing page of the portfolio featuring:
+ * - Hero section with profile photo, name, and title
+ * - Professional bio and location information
+ * - Links to LinkedIn, GitHub, and personal website
+ * - Key highlights section showing experience, projects, and skills count
+ * 
+ * This page serves as the first impression and provides quick access
+ * to important information and external profiles.
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.data - Portfolio data containing personal info, resume, and projects
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -29,7 +45,7 @@ import {
 const HomePage = ({ data }) => {
   const theme = useTheme();
 
-  // Safe fallbacks for potentially missing data
+  // Extract personal information with safe fallbacks to prevent errors
   const personalInfo = data?.personalInfo ?? {};
   const name = personalInfo?.name ?? 'Your Name';
   const title = personalInfo?.title ?? '';
@@ -40,20 +56,28 @@ const HomePage = ({ data }) => {
   const linkedin = personalInfo?.linkedin ?? '';
   const github = personalInfo?.github ?? '';
 
+  // Calculate statistics for highlight cards
   const experienceCount = Array.isArray(data?.resume?.experience) ? data.resume.experience.length : 0;
   const skillsCount = Array.isArray(data?.resume?.skills) ? data.resume.skills.length : 0;
   const projectsCount = Array.isArray(data?.projects) ? data.projects.length : 0;
 
-  // Animation variants for cards
+  /**
+   * Card hover effect styling
+   * Provides smooth lift animation on hover
+   */
   const cardHoverEffect = {
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important',
     transform: 'translateY(0px) !important',
     '&:hover': {
-      transform: 'translateY(-8px) !important',
+      transform: 'translateY(-8px) !important', // Lift card 8px on hover
       boxShadow: `${theme.shadows[8]} !important`,
     },
   };
 
+  /**
+   * Glass morphism effect styling
+   * Creates a frosted glass appearance with blur
+   */
   const glowEffect = {
     background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
     backdropFilter: 'blur(10px)',
@@ -61,6 +85,7 @@ const HomePage = ({ data }) => {
   };
 
   return (
+    /* Main Page Container - full viewport height with gradient background */
     <Box sx={{ 
       minHeight: '100vh',
       background: `linear-gradient(135deg, 
@@ -69,10 +94,14 @@ const HomePage = ({ data }) => {
         ${theme.palette.secondary.main}08 100%
       )`,
     }}>
+      {/* Content Container - centers content and adds padding */}
       <Container maxWidth="lg" sx={{ pt: { xs: 10, md: 12 }, pb: 8 }}>
-        {/* Hero Section */}
+        
+        {/* ========== HERO SECTION ========== */}
+        {/* Contains profile photo, name, title, bio, and CTA buttons */}
         <Fade in timeout={1000}>
           <Box sx={{ pb: { xs: 6, md: 10 } }}>
+            {/* Hero Grid - 2 columns on desktop, stacked on mobile */}
             <Grid 
               container 
               spacing={{ xs: 4, md: 6 }} 
@@ -81,7 +110,7 @@ const HomePage = ({ data }) => {
               justifyContent="center"
               sx={{ width: '100%' }}
             >
-              {/* Profile Image - Show first on mobile */}
+              {/* === LEFT COLUMN (Desktop) / TOP (Mobile): Profile Photo === */}
               <Grid 
                 size={{ xs: 12, md: 6, lg: 6 }} 
                 sx={{ 
@@ -91,10 +120,12 @@ const HomePage = ({ data }) => {
                   mb: { xs: 4, md: 0 }
                 }}
               >
+                {/* Profile Photo with Animated Border */}
                 <Grow in timeout={1200}>
                   <Box
                     sx={{
                       position: 'relative',
+                      /* Animated spinning gradient border effect */
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -111,6 +142,7 @@ const HomePage = ({ data }) => {
                       },
                     }}
                   >
+                    {/* Profile Photo Avatar - displays your photo from public folder */}
                     <Avatar
                       src="/profile_photo.png"
                       alt={name}
@@ -131,9 +163,11 @@ const HomePage = ({ data }) => {
                 </Grow>
               </Grid>
               
-              {/* Content */}
+              {/* === RIGHT COLUMN (Desktop) / BOTTOM (Mobile): Text Content === */}
               <Grid size={{ xs: 12, md: 6, lg: 6 }} sx={{ order: { xs: 2, md: 1 } }}>
                 <Box sx={{ textAlign: 'left', maxWidth: { xs: '100%', md: 820 }, mx: { xs: 'auto', md: 'auto' } }}>
+                  
+                  {/* Welcome Message - small text above name */}
                   <Typography
                     variant="h6"
                     color="primary.main"
@@ -148,6 +182,7 @@ const HomePage = ({ data }) => {
                     Welcome to my portfolio
                   </Typography>
                   
+                  {/* Main Heading - "Hello, I'm [Your Name]" with gradient text */}
                   <Typography
                     variant="h1"
                     component="h1"
@@ -170,6 +205,7 @@ const HomePage = ({ data }) => {
                     </Box>
                   </Typography>
                   
+                  {/* Professional Title - your job title/role */}
                   <Typography
                     variant="h4"
                     sx={{ 
@@ -183,6 +219,7 @@ const HomePage = ({ data }) => {
                     {title}
                   </Typography>
                   
+                  {/* Bio/Tagline - professional summary or tagline */}
                   <Typography
                     variant="h6"
                     color="text.secondary"
@@ -198,7 +235,8 @@ const HomePage = ({ data }) => {
                     {bio}
                   </Typography>
 
-                  {/* Info Cards */}
+                  {/* === Info Chips Section === */}
+                  {/* Displays location and languages as chips */}
                   {(location || languages.length > 0) && (
                     <Stack 
                       direction={{ xs: 'column', sm: 'row' }} 
@@ -209,6 +247,7 @@ const HomePage = ({ data }) => {
                         alignItems: { xs: 'flex-start', sm: 'flex-start' }
                       }}
                     >
+                      {/* Location Chip - shows your location */}
                       {location && (
                         <Chip
                           icon={<LocationOn />}
@@ -226,6 +265,8 @@ const HomePage = ({ data }) => {
                           }}
                         />
                       )}
+                      
+                      {/* Languages Chip - shows languages you speak */}
                       {languages.length > 0 && (
                         <Chip
                           icon={<Language />}
@@ -246,6 +287,8 @@ const HomePage = ({ data }) => {
                     </Stack>
                   )}
 
+                  {/* === Website Link === */}
+                  {/* Displays your personal website link */}
                   {website && (
                     <Box sx={{ mb: 4, textAlign: 'left' }}>
                       <Link 
@@ -274,7 +317,8 @@ const HomePage = ({ data }) => {
                     </Box>
                   )}
 
-                  {/* CTA Buttons */}
+                  {/* === Call-to-Action Buttons === */}
+                  {/* LinkedIn and GitHub buttons for external profiles */}
                   {(linkedin || github) && (
                     <Stack 
                       direction={{ xs: 'column', sm: 'row' }} 
@@ -284,6 +328,7 @@ const HomePage = ({ data }) => {
                         alignItems: { xs: 'flex-start', sm: 'center' }
                       }}
                     >
+                      {/* LinkedIn Button - links to your LinkedIn profile */}
                       {linkedin && (
                         <Button
                           variant="contained"
@@ -311,6 +356,8 @@ const HomePage = ({ data }) => {
                           View LinkedIn
                         </Button>
                       )}
+                      
+                      {/* GitHub Button - links to your GitHub profile */}
                       {github && (
                         <Button
                           variant="contained"
@@ -346,9 +393,12 @@ const HomePage = ({ data }) => {
           </Box>
         </Fade>
 
-        {/* Highlights Section */}
+        {/* ========== HIGHLIGHTS SECTION ========== */}
+        {/* Shows statistics: years of experience, projects count, skills count */}
         <Fade in timeout={1500}>
           <Box id="highlights" sx={{ mt: { xs: 8, md: 12 } }}>
+            
+            {/* Section Title - "Key Highlights" */}
             <Typography
               variant="h3"
               component="h2"
@@ -369,14 +419,17 @@ const HomePage = ({ data }) => {
               Key Highlights
             </Typography>
             
+            {/* Highlights Grid - 3 cards showing statistics */}
             <Grid 
               container 
               spacing={{ xs: 3, md: 4 }}
               columns={{ xs: 12, md: 12, lg: 12 }}
               sx={{ width: '100%' }}
             >
+              {/* === CARD 1: Years of Experience === */}
               <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', minWidth: 0 }}>
                 <Grow in timeout={1000} style={{ width: '100%' }}>
+                  {/* Experience Card - shows number of work experiences */}
                   <Card 
                     elevation={0}
                     sx={{
@@ -389,6 +442,7 @@ const HomePage = ({ data }) => {
                     }}
                   >
                     <CardContent sx={{ textAlign: 'center', py: { xs: 4, md: 6 } }}>
+                      {/* Icon Circle - briefcase icon */}
                       <Box
                         sx={{
                           mb: 3,
@@ -401,6 +455,8 @@ const HomePage = ({ data }) => {
                       >
                         <WorkOutline sx={{ fontSize: { xs: 30, md: 40 } }} />
                       </Box>
+                      
+                      {/* Experience Count Number */}
                       <Typography 
                         variant="h4" 
                         component="h3"
@@ -413,6 +469,8 @@ const HomePage = ({ data }) => {
                       >
                         {experienceCount}+
                       </Typography>
+                      
+                      {/* Card Title */}
                       <Typography 
                         variant="h6" 
                         color="text.primary"
@@ -426,6 +484,8 @@ const HomePage = ({ data }) => {
                       >
                         Years Experience
                       </Typography>
+                      
+                      {/* Card Description */}
                       <Typography 
                         variant="body1" 
                         color="text.secondary"
@@ -442,8 +502,10 @@ const HomePage = ({ data }) => {
                 </Grow>
               </Grid>
               
+              {/* === CARD 2: Projects Completed === */}
               <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', minWidth: 0 }}>
                 <Grow in timeout={1200} style={{ width: '100%' }}>
+                  {/* Projects Card - shows number of projects */}
                   <Card 
                     elevation={0}
                     sx={{
@@ -456,6 +518,7 @@ const HomePage = ({ data }) => {
                     }}
                   >
                     <CardContent sx={{ textAlign: 'center', py: { xs: 4, md: 6 } }}>
+                      {/* Icon Circle - folder icon */}
                       <Box
                         sx={{
                           mb: 3,
@@ -468,6 +531,8 @@ const HomePage = ({ data }) => {
                       >
                         <FolderSpecial sx={{ fontSize: { xs: 30, md: 40 } }} />
                       </Box>
+                      
+                      {/* Projects Count Number */}
                       <Typography 
                         variant="h4" 
                         component="h3"
@@ -480,6 +545,8 @@ const HomePage = ({ data }) => {
                       >
                         {projectsCount}
                       </Typography>
+                      
+                      {/* Card Title */}
                       <Typography 
                         variant="h6" 
                         color="text.primary"
@@ -493,6 +560,8 @@ const HomePage = ({ data }) => {
                       >
                         Projects Completed
                       </Typography>
+                      
+                      {/* Card Description */}
                       <Typography 
                         variant="body1" 
                         color="text.secondary"
@@ -509,8 +578,10 @@ const HomePage = ({ data }) => {
                 </Grow>
               </Grid>
               
+              {/* === CARD 3: Skills Mastered === */}
               <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', minWidth: 0 }}>
                 <Grow in timeout={1400} style={{ width: '100%' }}>
+                  {/* Skills Card - shows number of skills */}
                   <Card 
                     elevation={0}
                     sx={{
@@ -523,6 +594,7 @@ const HomePage = ({ data }) => {
                     }}
                   >
                     <CardContent sx={{ textAlign: 'center', py: { xs: 4, md: 6 } }}>
+                      {/* Icon Circle - lightbulb icon */}
                       <Box
                         sx={{
                           mb: 3,
@@ -535,6 +607,8 @@ const HomePage = ({ data }) => {
                       >
                         <EmojiObjects sx={{ fontSize: { xs: 30, md: 40 } }} />
                       </Box>
+                      
+                      {/* Skills Count Number */}
                       <Typography 
                         variant="h4" 
                         component="h3"
@@ -547,6 +621,8 @@ const HomePage = ({ data }) => {
                       >
                         {skillsCount}+
                       </Typography>
+                      
+                      {/* Card Title */}
                       <Typography 
                         variant="h6" 
                         color="text.primary"
@@ -560,6 +636,8 @@ const HomePage = ({ data }) => {
                       >
                         Skills Mastered
                       </Typography>
+                      
+                      {/* Card Description */}
                       <Typography 
                         variant="body1" 
                         color="text.secondary"
