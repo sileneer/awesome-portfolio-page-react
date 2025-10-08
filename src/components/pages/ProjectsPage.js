@@ -1,3 +1,25 @@
+/**
+ * ProjectsPage Component
+ * 
+ * Displays a portfolio of completed projects with:
+ * - Project cards showing screenshots, descriptions, and details
+ * - Technology tags with icons
+ * - Role and duration information
+ * - Links to live demos and source code
+ * - Image modal for viewing screenshots in full size
+ * 
+ * Each project card includes:
+ * - Main screenshot (clickable for full view)
+ * - Project name and description
+ * - Role and duration badges
+ * - Technology stack with icons
+ * - Additional screenshots (if available)
+ * - Links to GitHub or live demo
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.data - Portfolio data containing projects array
+ */
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -24,7 +46,7 @@ import {
   Schedule,
   Person,
   Close,
-  // Tech Icons
+  // Technology Icons - Used for technology tags
   Javascript,
   Web,
   Storage,
@@ -47,22 +69,38 @@ import {
 } from '@mui/icons-material';
 
 const ProjectsPage = ({ data }) => {
+  // Extract projects data with safe fallback
   const projects = Array.isArray(data?.projects) ? data.projects : [];
   const theme = useTheme();
+  
+  // State for image modal (full-size screenshot viewer)
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
 
+  /**
+   * Handle screenshot click - open modal with full-size image
+   * @param {string} imageUrl - URL of the image to display
+   */
   const handleImageClick = (imageUrl) => {
     setSelectedImage(imageUrl);
     setModalOpen(true);
   };
 
+  /**
+   * Close the image modal
+   */
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedImage('');
   };
 
-  // Technology icon mapping (consistent with ResumePage)
+  /**
+   * Get appropriate icon for a technology/skill
+   * Maps technology names to Material-UI icons
+   * 
+   * @param {string} skill - Technology name
+   * @returns {React.Component} Material-UI icon component
+   */
   const getSkillIcon = (skill) => {
     const skillIconMap = {
       // Frontend Technologies
@@ -122,13 +160,20 @@ const ProjectsPage = ({ data }) => {
     return skillIconMap[skill] || Code;
   };
 
-  // Glass morphism effect consistent with HomePage and ResumePage
+  /**
+   * Glass morphism effect styling
+   * Consistent with HomePage and ResumePage for unified design
+   */
   const glowEffect = {
     background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
     backdropFilter: 'blur(10px)',
     border: `1px solid ${theme.palette.primary.main}30`,
   };
 
+  /**
+   * Card hover effect styling
+   * Provides smooth lift animation when hovering over project cards
+   */
   const cardHoverEffect = {
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: 'translateY(0px)',
@@ -137,12 +182,13 @@ const ProjectsPage = ({ data }) => {
     width: '100%',
     display: 'flex',
     '&:hover': {
-      transform: 'translateY(-8px)',
-      boxShadow: theme.shadows[8],
+      transform: 'translateY(-8px)', // Lift card on hover
+      boxShadow: theme.shadows[8],   // Increase shadow on hover
     },
   };
 
   return (
+    /* Main Page Container - full viewport height with gradient background */
     <Box
       sx={{
         minHeight: '100vh',
@@ -151,8 +197,11 @@ const ProjectsPage = ({ data }) => {
         pb: 4
       }}
     >
+      {/* Content Container - centers content */}
       <Container maxWidth="lg">
-        {/* Header */}
+        
+        {/* ========== PAGE HEADER ========== */}
+        {/* Page title section */}
         <Fade in timeout={1000}>
           <Box sx={{
             display: 'flex',
@@ -163,6 +212,7 @@ const ProjectsPage = ({ data }) => {
             gap: 3,
             textAlign: { xs: 'center', sm: 'left' }
           }}>
+            {/* Page Title - "Featured Projects" */}
             <Typography
               variant="h2"
               component="h1"
@@ -183,7 +233,10 @@ const ProjectsPage = ({ data }) => {
           </Box>
         </Fade>
 
+        {/* ========== PROJECTS DISPLAY ========== */}
+        {/* Show message if no projects, otherwise display project cards */}
         {projects.length === 0 ? (
+          /* Empty State - shown when no projects are added */
           <Fade in timeout={1200}>
             <Paper
               elevation={0}
@@ -202,11 +255,13 @@ const ProjectsPage = ({ data }) => {
             </Paper>
           </Fade>
         ) : (
+          /* Projects Grid - displays all projects */
           <Grid
             container
             spacing={4}
             sx={{ justifyContent: 'center' }}
           >
+            {/* Map through projects array to create project cards */}
             {projects.map((project, index) => {
               const name = project?.name ?? 'Untitled Project';
               const description = project?.description ?? '';
@@ -216,6 +271,7 @@ const ProjectsPage = ({ data }) => {
               const technologies = Array.isArray(project?.technologies) ? project.technologies : [];
               const link = project?.link ?? '';
               return (
+                /* Project Card Container - full width grid item */
                 <Grid
                   item
                   xs={12}
@@ -224,6 +280,8 @@ const ProjectsPage = ({ data }) => {
                 >
                   <Fade in timeout={800 + index * 200}>
                     <Box sx={cardHoverEffect}>
+                      {/* === PROJECT CARD === */}
+                      {/* Contains screenshot, details, technologies, and links */}
                       <Card
                         elevation={0}
                         sx={{
@@ -236,6 +294,7 @@ const ProjectsPage = ({ data }) => {
                           overflow: 'hidden',
                         }}
                       >
+                        {/* Main Project Screenshot - first image from screenshots array */}
                         {screenshots.length > 0 && (
                           <CardMedia
                             component="img"
@@ -253,12 +312,18 @@ const ProjectsPage = ({ data }) => {
                           />
                         )}
 
+                        {/* === CARD CONTENT === */}
+                        {/* Project details, role, duration, technologies */}
                         <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                          
+                          {/* Project Header - name and link button */}
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                            {/* Project Name */}
                             <Typography variant="h5" component="h3" color="text.primary">
                               {name}
                             </Typography>
 
+                            {/* Link Button - GitHub or Live Demo */}
                             {link && (
                               <Button
                                 variant="contained"
@@ -283,6 +348,7 @@ const ProjectsPage = ({ data }) => {
                             )}
                           </Box>
 
+                          {/* Project Description - detailed explanation */}
                           <Typography
                             variant="body1"
                             color="text.secondary"
@@ -297,8 +363,11 @@ const ProjectsPage = ({ data }) => {
                             {description}
                           </Typography>
 
+                          {/* === INFO BADGES SECTION === */}
+                          {/* Role and Duration displayed in cards */}
                           <Box sx={{ mb: 3 }}>
                             <Grid container spacing={2}>
+                              {/* Role Badge */}
                               <Grid item xs={12} sm={6}>
                                 <Box
                                   sx={{
@@ -322,6 +391,7 @@ const ProjectsPage = ({ data }) => {
                                 </Box>
                               </Grid>
 
+                              {/* Duration Badge */}
                               <Grid item xs={12} sm={6}>
                                 <Box
                                   sx={{
@@ -349,14 +419,19 @@ const ProjectsPage = ({ data }) => {
 
                           <Divider sx={{ my: 2 }} />
 
+                          {/* === TECHNOLOGIES SECTION === */}
+                          {/* Technology chips with icons */}
                           {technologies.length > 0 && (
                             <Box sx={{ mb: 2 }}>
+                              {/* Section Header */}
                               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <Code color="primary" sx={{ mr: 1, fontSize: 20 }} />
                                 <Typography variant="body2" fontWeight="bold">
                                   Technologies:
                                 </Typography>
                               </Box>
+                              
+                              {/* Technology Chips - each tech with icon */}
                               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                                 {technologies.map((tech, techIndex) => {
                                   const IconComponent = getSkillIcon(tech);
@@ -385,14 +460,21 @@ const ProjectsPage = ({ data }) => {
                             </Box>
                           )}
 
+                          {/* === ADDITIONAL SCREENSHOTS === */}
+                          {/* Thumbnail grid of extra screenshots (if more than 1) */}
                           {screenshots.length > 1 && (
                             <Box>
+                              {/* Section Header */}
                               <Typography variant="body2" fontWeight="bold" gutterBottom>
                                 Additional Screenshots:
                               </Typography>
+                              
+                              {/* Screenshot Thumbnails Grid */}
                               <Grid container spacing={1}>
+                                {/* Map through remaining screenshots (skip first one) */}
                                 {screenshots.slice(1).map((screenshot, screenshotIndex) => (
                                   <Grid item xs={6} key={screenshotIndex}>
+                                    {/* Thumbnail Image - clickable to view full size */}
                                     <Box
                                       component="img"
                                       src={screenshot}
@@ -433,7 +515,8 @@ const ProjectsPage = ({ data }) => {
           </Grid>
         )}
 
-        {/* Image Modal */}
+        {/* ========== IMAGE MODAL ========== */}
+        {/* Full-screen modal for viewing screenshots */}
         <Modal
           open={modalOpen}
           onClose={handleCloseModal}
@@ -444,6 +527,7 @@ const ProjectsPage = ({ data }) => {
             p: 2,
           }}
         >
+          {/* Modal Content Container */}
           <Box
             sx={{
               position: 'relative',
@@ -452,6 +536,7 @@ const ProjectsPage = ({ data }) => {
               outline: 'none',
             }}
           >
+            {/* Close Button - top right corner */}
             <IconButton
               onClick={handleCloseModal}
               sx={{
@@ -470,6 +555,8 @@ const ProjectsPage = ({ data }) => {
             >
               <Close />
             </IconButton>
+            
+            {/* Full-Size Image */}
             <Box
               component="img"
               src={selectedImage}

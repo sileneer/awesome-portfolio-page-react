@@ -1,3 +1,27 @@
+/**
+ * ResumePage Component
+ * 
+ * Comprehensive resume/CV page displaying professional background:
+ * - Professional summary
+ * - Work experience with achievements and technologies
+ * - Technical skills with categorized icons
+ * - Education history with coursework and activities
+ * - Certifications and professional credentials
+ * - Awards and recognitions
+ * - Personal interests
+ * - Downloadable CV/resume link
+ * 
+ * Features:
+ * - Technology icons mapped to skill names
+ * - Expandable experience cards with detailed achievements
+ * - Responsive grid layout
+ * - Smooth fade-in animations
+ * - Glass morphism design consistent with other pages
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.data - Portfolio data containing resume information
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -27,7 +51,7 @@ import {
   TrendingUp,
   BusinessCenter,
   PsychologyAlt,
-  // Tech Skills Icons
+  // Technology Icons - Used for skills and technologies
   Code,
   DataObject,
   Web,
@@ -55,6 +79,7 @@ import {
 } from '@mui/icons-material';
 
 const ResumePage = ({ data }) => {
+  // Extract resume data with safe fallbacks
   const resume = data?.resume ?? {};
   const summary = resume?.summary ?? '';
   const cvDownload = resume?.cvDownload ?? '';
@@ -66,7 +91,16 @@ const ResumePage = ({ data }) => {
   const interests = Array.isArray(resume?.interests) ? resume.interests : [];
   const theme = useTheme();
 
-  // Comprehensive Skills Mapping with Icons (using only available Material-UI icons)
+  /**
+   * Get appropriate icon for a technology/skill
+   * 
+   * Maps technology names to Material-UI icons for visual representation.
+   * Supports a comprehensive list of frontend, backend, database, cloud,
+   * and DevOps technologies.
+   * 
+   * @param {string} skill - Technology or skill name
+   * @returns {React.Component} Material-UI icon component
+   */
   const getSkillIcon = (skill) => {
     const skillIconMap = {
       // Frontend Technologies
@@ -170,19 +204,26 @@ const ResumePage = ({ data }) => {
     return skillIconMap[skill] || Code;
   };
 
-  // Glass morphism effect consistent with HomePage
+  /**
+   * Glass morphism effect styling
+   * Consistent with HomePage for unified design
+   */
   const glowEffect = {
     background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
     backdropFilter: 'blur(10px)',
     border: `1px solid ${theme.palette.primary.main}30`,
   };
 
+  /**
+   * Card hover effect styling
+   * Provides smooth lift animation when hovering over cards
+   */
   const cardHoverEffect = {
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: 'translateY(0px)',
     '&:hover': {
-      transform: 'translateY(-8px)',
-      boxShadow: theme.shadows[8],
+      transform: 'translateY(-8px)', // Lift card on hover
+      boxShadow: theme.shadows[8],   // Increase shadow on hover
     },
   };
 

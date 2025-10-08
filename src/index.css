@@ -1,13 +1,31 @@
+/**
+ * Global Styles
+ * 
+ * Base CSS styles applied to the entire application.
+ * These styles provide:
+ * - Reset margins for consistent layout
+ * - System font stack for optimal performance
+ * - Font smoothing for better text rendering
+ * - Monospace font for code elements
+ */
+
+/* Body - Main container for the entire application */
 body {
-  margin: 0;
+  margin: 0; /* Remove default browser margins */
+  
+  /* System font stack - uses native fonts for best performance and appearance */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  
+  /* Font smoothing for better text rendering on different platforms */
+  -webkit-font-smoothing: antialiased;  /* Webkit browsers (Chrome, Safari) */
+  -moz-osx-font-smoothing: grayscale;   /* Firefox on macOS */
 }
 
+/* Code elements - Inline code and code blocks */
 code {
+  /* Monospace font stack for code display */
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
