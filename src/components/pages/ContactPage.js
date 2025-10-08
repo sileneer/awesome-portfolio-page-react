@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Container,
   Typography,
@@ -26,11 +27,11 @@ import {
   Star,
   Send,
   ContactMail,
-  ConnectWithoutContact,
 } from '@mui/icons-material';
 
 const ContactPage = ({ data }) => {
-  const { personalInfo, contact } = data;
+  const personalInfo = data?.personalInfo ?? {};
+  const contact = data?.contact ?? {};
   const theme = useTheme();
 
   // Glass morphism effect consistent with other pages
@@ -48,12 +49,17 @@ const ContactPage = ({ data }) => {
     },
   };
 
+
   const handleEmailClick = () => {
-    window.location.href = `mailto:${personalInfo.email}`;
+    if (personalInfo?.email) {
+      window.location.href = `mailto:${personalInfo.email}`;
+    }
   };
 
   const handlePhoneClick = () => {
-    window.location.href = `tel:${personalInfo.phone}`;
+    if (personalInfo?.phone) {
+      window.location.href = `tel:${personalInfo.phone}`;
+    }
   };
 
   const socialLinks = [
@@ -87,7 +93,7 @@ const ContactPage = ({ data }) => {
       icon: <Facebook />,
       color: '#4267b2',
     },
-  ].filter(link => link.url);
+  ].filter(link => !!link.url);
 
   return (
     <Box 
@@ -100,39 +106,47 @@ const ContactPage = ({ data }) => {
     >
       <Container maxWidth="lg">
         {/* Header */}
-        <Fade in timeout={800}>
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{
-                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 700,
-                mb: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 2,
-                flexWrap: 'wrap',
-              }}
-            >
-              <ConnectWithoutContact sx={{ fontSize: { xs: '2rem', md: '3rem' }, color: theme.palette.primary.main }} />
-              Let's Connect
-            </Typography>
+        <Fade in timeout={1000}>
+          <Box sx={{ mb: 6 }}>
+            <Box sx={{
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: 3,
+              textAlign: { xs: 'center', sm: 'left' }
+            }}>
+              <Typography 
+                variant="h2" 
+                component="h1" 
+                sx={{
+                  fontSize: { xs: '2.5rem', md: '3.5rem' },
+                  fontWeight: 800,
+                  background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 100%)`,
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'inline-block',
+                  lineHeight: 1.25,
+                  paddingBottom: '0.1em',
+                }}
+              >
+                Let's Connect
+              </Typography>
+            </Box>
             <Typography 
               variant="h6" 
               color="text.secondary" 
               sx={{ 
                 maxWidth: 700, 
-                mx: 'auto',
+                mx: { xs: 'auto', sm: 0 },
+                mt: 1.5,
                 lineHeight: 1.6,
-                fontSize: { xs: '1.1rem', md: '1.25rem' }
+                fontSize: { xs: '1.1rem', md: '1.25rem' },
+                textAlign: { xs: 'center', sm: 'left' }
               }}
             >
-              {contact.message || "Ready to bring your ideas to life? Let's discuss how we can work together to create something amazing."}
+              {contact?.message || "Ready to bring your ideas to life? Let's discuss how we can work together to create something amazing."}
             </Typography>
           </Box>
         </Fade>
@@ -175,6 +189,7 @@ const ContactPage = ({ data }) => {
               
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {/* Email */}
+                {personalInfo?.email && (
                 <Grow in timeout={1200}>
                   <Box 
                     sx={{ 
@@ -245,10 +260,12 @@ const ContactPage = ({ data }) => {
                     </Box>
                   </Box>
                 </Grow>
+                )}
 
                 <Divider />
 
                 {/* Phone */}
+                {personalInfo?.phone && (
                 <Grow in timeout={1400}>
                   <Box 
                     sx={{ 
@@ -304,10 +321,12 @@ const ContactPage = ({ data }) => {
                     </Box>
                   </Box>
                 </Grow>
+                )}
 
                 <Divider />
 
                 {/* Location */}
+                {personalInfo?.location && (
                 <Grow in timeout={1600}>
                   <Box 
                     sx={{ 
@@ -351,6 +370,7 @@ const ContactPage = ({ data }) => {
                     </Box>
                   </Box>
                 </Grow>
+                )}
               </Box>
                 </CardContent>
               </Card>
@@ -419,10 +439,8 @@ const ContactPage = ({ data }) => {
                                 boxShadow: `0 4px 12px ${social.color}40`,
                                 '&:hover': {
                                   backgroundColor: social.color,
-                                  transform: 'translateY(-4px) scale(1.02)',
                                   boxShadow: `0 8px 20px ${social.color}60`,
                                 },
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                               }}
                             >
                               {social.name}
@@ -437,7 +455,7 @@ const ContactPage = ({ data }) => {
               </Fade>
 
               {/* Scheduling Section */}
-              {contact.calendly && (
+              {contact?.calendly && (
                 <Fade in timeout={1600}>
                   <Box>
                     <Card 
@@ -511,6 +529,26 @@ const ContactPage = ({ data }) => {
       </Container>
     </Box>
   );
+};
+
+ContactPage.propTypes = {
+  data: PropTypes.shape({
+    personalInfo: PropTypes.shape({
+      email: PropTypes.string,
+      phone: PropTypes.string,
+      location: PropTypes.string,
+      linkedin: PropTypes.string,
+      github: PropTypes.string,
+      website: PropTypes.string,
+    }),
+    contact: PropTypes.shape({
+      message: PropTypes.string,
+      alternateEmail: PropTypes.string,
+      twitter: PropTypes.string,
+      facebook: PropTypes.string,
+      calendly: PropTypes.string,
+    }),
+  }),
 };
 
 export default ContactPage;
