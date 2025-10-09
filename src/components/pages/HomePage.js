@@ -55,6 +55,7 @@ const HomePage = ({ data }) => {
   const website = personalInfo?.website ?? '';
   const linkedin = personalInfo?.linkedin ?? '';
   const github = personalInfo?.github ?? '';
+  const photo = personalInfo?.photo ?? '';
 
   // Calculate statistics for highlight cards
   const experienceCount = Array.isArray(data?.resume?.experience) ? data.resume.experience.length : 0;
@@ -144,7 +145,7 @@ const HomePage = ({ data }) => {
                   >
                     {/* Profile Photo Avatar - displays your photo from public folder */}
                     <Avatar
-                      src="/profile_photo.png"
+                      src={photo}
                       alt={name}
                       sx={{
                         width: { xs: 220, sm: 280, md: 300 },
