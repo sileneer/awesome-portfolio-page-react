@@ -2,6 +2,10 @@
   "brand": "Joke Bear",
   "menuItems": [
     {
+      "name": "Home",
+      "path": "/"
+    },
+    {
       "name": "Resume",
       "path": "/resume"
     },

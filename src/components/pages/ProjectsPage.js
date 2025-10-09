@@ -177,10 +177,6 @@ const ProjectsPage = ({ data }) => {
   const cardHoverEffect = {
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: 'translateY(0px)',
-    boxShadow: theme.shadows[4],
-    borderRadius: 4,
-    width: '100%',
-    display: 'flex',
     '&:hover': {
       transform: 'translateY(-8px)', // Lift card on hover
       boxShadow: theme.shadows[8],   // Increase shadow on hover
@@ -276,20 +272,19 @@ const ProjectsPage = ({ data }) => {
                   item
                   xs={12}
                   key={index}
-                  sx={{ display: 'flex', width: '100%' }}
                 >
                   <Fade in timeout={800 + index * 200}>
-                    <Box sx={cardHoverEffect}>
+                    <Box>
                       {/* === PROJECT CARD === */}
                       {/* Contains screenshot, details, technologies, and links */}
                       <Card
                         elevation={0}
                         sx={{
                           width: '100%',
-                          flexGrow: 1,
                           display: 'flex',
                           flexDirection: 'column',
                           ...glowEffect,
+                          ...cardHoverEffect,
                           borderRadius: 4,
                           overflow: 'hidden',
                         }}
@@ -438,19 +433,27 @@ const ProjectsPage = ({ data }) => {
                                   return (
                                     <Chip
                                       key={techIndex}
-                                      icon={<IconComponent sx={{ fontSize: '1rem !important' }} />}
+                                      icon={<IconComponent sx={{ fontSize: '0.9rem !important' }} />}
                                       label={tech}
                                       size="small"
+                                      variant="outlined"
                                       sx={{
-                                        backgroundColor: 'primary.main',
-                                        color: 'primary.contrastText',
-                                        fontWeight: 600,
-                                        borderRadius: 2,
+                                        borderWidth: 1.5,
+                                        borderColor: 'divider',
+                                        backgroundColor: 'background.paper',
+                                        color: 'text.primary',
+                                        fontWeight: 500,
+                                        px: 1.5,
+                                        py: 0.5,
+                                        height: 'auto',
+                                        borderRadius: 8,
                                         '& .MuiChip-icon': {
-                                          color: 'primary.contrastText',
+                                          color: 'primary.main',
+                                          marginLeft: '6px',
                                         },
                                         '&:hover': {
-                                          boxShadow: '0 2px 8px rgba(0, 123, 255, 0.3)',
+                                          borderColor: 'primary.main',
+                                          backgroundColor: `${theme.palette.primary.main}05`,
                                         },
                                       }}
                                     />

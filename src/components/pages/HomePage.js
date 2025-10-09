@@ -255,12 +255,19 @@ const HomePage = ({ data }) => {
                           variant="outlined"
                           sx={{
                             py: 2,
-                            px: 1,
-                            fontSize: '1rem',
+                            px: 1.5,
+                            fontSize: '0.95rem',
                             height: 'auto',
-                            ...glowEffect,
+                            borderWidth: 2,
+                            borderColor: 'primary.main',
+                            backgroundColor: 'transparent',
+                            color: 'text.primary',
+                            '& .MuiChip-icon': {
+                              color: 'primary.main',
+                            },
                             '&:hover': {
-                              boxShadow: theme.shadows[4],
+                              backgroundColor: `${theme.palette.primary.main}10`,
+                              borderColor: 'primary.dark',
                             },
                           }}
                         />
@@ -274,12 +281,19 @@ const HomePage = ({ data }) => {
                           variant="outlined"
                           sx={{
                             py: 2,
-                            px: 1,
-                            fontSize: '1rem',
+                            px: 1.5,
+                            fontSize: '0.95rem',
                             height: 'auto',
-                            ...glowEffect,
+                            borderWidth: 2,
+                            borderColor: 'secondary.main',
+                            backgroundColor: 'transparent',
+                            color: 'text.primary',
+                            '& .MuiChip-icon': {
+                              color: 'secondary.main',
+                            },
                             '&:hover': {
-                              boxShadow: theme.shadows[4],
+                              backgroundColor: `${theme.palette.secondary.main}10`,
+                              borderColor: 'secondary.dark',
                             },
                           }}
                         />
