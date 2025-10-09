@@ -264,7 +264,7 @@ const ResumePage = ({ data }) => {
                 paddingBottom: '0.1em',
               }}
             >
-              Professional Resume
+              My Resume
             </Typography>
             {cvDownload && (
               <Button
