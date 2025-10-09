@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box, Fade } from '@mui/material';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import { HomePage, ResumePage, ProjectsPage, ContactPage } from './components/Pages';
 
 // Import all portfolio data from JSON files
@@ -259,8 +260,13 @@ function App() {
       {/* CssBaseline - Normalizes CSS across browsers */}
       <CssBaseline />
       
-      {/* Main container with minimum full viewport height */}
-      <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
+      {/* Main container with minimum full viewport height and flex layout */}
+      <Box sx={{ 
+        minHeight: '100vh', 
+        backgroundColor: 'background.default',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
         {/* Navigation bar - always visible at top */}
         <Navigation
           data={data}
@@ -270,10 +276,13 @@ function App() {
         
         {/* Page content with fade transition effect when switching pages */}
         <Fade in timeout={500} key={currentPage}>
-          <div>
+          <Box sx={{ flex: 1 }}>
             {renderCurrentPage()}
-          </div>
+          </Box>
         </Fade>
+
+        {/* Footer - always visible at bottom */}
+        <Footer />
       </Box>
     </ThemeProvider>
   );

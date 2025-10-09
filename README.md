@@ -36,8 +36,6 @@ This portfolio has been completely rewritten using Material-UI components:
 - Component style overrides for consistent branding
 - Material Design elevation system for depth
 
-See [MATERIAL_UI_CONVERSION.md](./MATERIAL_UI_CONVERSION.md) for complete technical details about the Material-UI implementation.
-
 ## 🚀 Quick Start
 
 ### Installation
