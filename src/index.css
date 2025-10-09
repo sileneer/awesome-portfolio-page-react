@@ -7,7 +7,14 @@
  * - System font stack for optimal performance
  * - Font smoothing for better text rendering
  * - Monospace font for code elements
+ * - Consistent scrollbar visibility to prevent layout shift
  */
+
+/* HTML - Root element */
+html {
+  /* Force scrollbar to always be visible to prevent layout shift when navigating between pages */
+  overflow-y: scroll;
+}
 
 /* Body - Main container for the entire application */
 body {
