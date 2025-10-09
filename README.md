@@ -2,7 +2,7 @@
 
 🚀 A modern, customizable React template for developer portfolios. Built with React and **Material-UI (@mui/material)** featuring a clean, professional design with multiple sections to showcase your skills, experience, and projects.
 
-![Portfolio Screenshot](/readme-screenshot1.png)
+![Portfolio Screenshot](/readme-screenshot1.jpeg)
 
 ## ✨ Features
 
@@ -62,10 +62,27 @@ See [MATERIAL_UI_CONVERSION.md](./MATERIAL_UI_CONVERSION.md) for complete techni
 
 ### Customization
 
-1. **Edit your portfolio data** in `src/data/portfolio.json`
-2. **Add your profile photo** to `public/profile_photo.png`
-3. **Add your CV** to `public/CV.pdf` (optional)
-4. **Add project screenshots** to the `public/projects/` folder (optional)
+Your portfolio data is organized into separate JSON files for easy management:
+
+1. **Personal Information**: Edit `src/data/user/personalInfo.json`
+   - Update your name, title, bio, contact info, and social links
+   
+2. **Navigation**: Edit `src/data/core/navigation.json`
+   - Customize your brand name and menu items
+
+3. **Resume**: Edit `src/data/user/resume.json`
+   - Add work experience, education, skills, certifications, and awards
+
+4. **Projects**: Edit `src/data/user/projects.json`
+   - Showcase your portfolio projects with descriptions and screenshots
+
+5. **Contact**: Edit `src/data/user/contact.json`
+   - Add additional contact methods and social media links
+
+6. **Images**:
+   - Add your profile photo to `public/profile_photo.png`
+   - Add your CV to `public/CV.pdf` (optional)
+   - Add project screenshots to `public/projects/` folder (optional)
 
 See [PORTFOLIO_DATA_STRUCTURE.md](./PORTFOLIO_DATA_STRUCTURE.md) for complete details on available fields and data structure.
 
@@ -82,8 +99,14 @@ src/
 │       ├── ProjectsPage.js   # Projects showcase
 │       └── ContactPage.js    # Contact information
 ├── data/
-│   └── portfolio.json        # Your portfolio configuration
-└── App.js                    # Main app component
+│   ├── core/
+│   │   └── navigation.json   # Navigation menu configuration
+│   └── user/
+│       ├── personalInfo.json # Personal information and bio
+│       ├── resume.json       # Professional experience and education
+│       ├── projects.json     # Portfolio projects
+│       └── contact.json      # Contact information and social links
+└── App.js                    # Main app component with theme
 ```
 
 ## 🎨 Pages Overview
@@ -144,22 +167,58 @@ Build the project (`npm run build`) and upload the `build/` folder contents to a
 ## 🛠️ Customization Guide
 
 ### Basic Setup
-1. **Personal Information**: Update the `personalInfo` section in `src/data/portfolio.json`
-2. **Navigation**: Customize the brand name and menu items in the `navigation` section
-3. **Resume**: Add your work experience, education, skills, and achievements
-4. **Projects**: Showcase your work with descriptions, technologies, and screenshots
-5. **Contact**: Add your contact details and social media links
+
+#### 1. Personal Information (`src/data/user/personalInfo.json`)
+Update your basic information:
+- Name, title, and professional bio
+- Contact details (email, phone, location)
+- Social media links (LinkedIn, GitHub, website)
+- Languages you speak
+- Profile photo path
+
+#### 2. Navigation (`src/data/core/navigation.json`)
+Customize your navigation bar:
+- Brand name or logo text
+- Menu items and their routes
+
+#### 3. Resume (`src/data/user/resume.json`)
+Build your professional profile:
+- Professional summary
+- Work experience with achievements
+- Education history
+- Technical skills
+- Certifications and awards
+- Personal interests
+- Downloadable CV link
+
+#### 4. Projects (`src/data/user/projects.json`)
+Showcase your work:
+- Project name and description
+- Technologies used
+- Your role and project duration
+- Screenshots and demo links
+
+#### 5. Contact (`src/data/user/contact.json`)
+Add additional contact options:
+- Custom contact message
+- Alternate email
+- Social media (Twitter, Facebook)
+- Meeting scheduler link (Calendly)
 
 ### Adding Images
 - **Profile Photo**: Add your photo as `public/profile_photo.png`
 - **CV File**: Add your resume PDF as `public/CV.pdf`
 - **Project Screenshots**: Create `public/projects/` folder and add your project images
 
-### Styling
-The application uses CSS classes that can be customized in the component CSS files:
-- `src/App.css` - Main app styles
-- `src/components/Navigation.css` - Navigation bar styles
-- `src/components/Pages.css` - Page content styles
+### Styling & Theming
+The application uses Material-UI theming configured in `src/App.js`:
+- **Theme Configuration**: Modify the `createTheme()` object in `App.js`
+- **Color Palette**: Change primary, secondary, and background colors
+- **Typography**: Adjust font families, sizes, and weights
+- **Component Overrides**: Customize Material-UI component styles
+- **Responsive Breakpoints**: Adjust mobile/tablet/desktop layouts
+
+For detailed theme customization, see the Material-UI documentation: https://mui.com/material-ui/customization/theming/
 
 ## 🤝 Contributing
 
