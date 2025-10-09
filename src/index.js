@@ -15,7 +15,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
 // Create React root and attach to DOM element with id 'root'
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -27,19 +26,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-/**
- * Performance Monitoring
- * 
- * reportWebVitals measures and reports key performance metrics:
- * - CLS (Cumulative Layout Shift)
- * - FID (First Input Delay)
- * - FCP (First Contentful Paint)
- * - LCP (Largest Contentful Paint)
- * - TTFB (Time to First Byte)
- * 
- * To log results to console: reportWebVitals(console.log)
- * To send to analytics: reportWebVitals(sendToAnalytics)
- * Learn more: https://bit.ly/CRA-vitals
- */
-reportWebVitals();

@@ -81,11 +81,20 @@
     "Python"
   ],
   "certifications": [
-    "AWS Certified Developer",
-    "Scrum Master"
+    {
+      "title": "AWS Certified Developer",
+      "certificateLink": "https://www.opencerts.io"
+    },
+    {
+      "title": "Scrum Master",
+      "certificateLink": "https://www.opencerts.io"
+    }
   ],
   "awards": [
-    "Best Developer 2022"
+    {
+      "title": "Best Developer 2022",
+      "certificateLink": "https://www.opencerts.io"
+    }
   ],
   "interests": [
     "Open Source",

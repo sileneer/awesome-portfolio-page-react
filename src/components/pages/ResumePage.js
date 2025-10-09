@@ -40,12 +40,12 @@ import {
   Fade,
   Stack,
 } from '@mui/material';
-import { 
-  Download, 
-  Work, 
-  School, 
-  Star, 
-  EmojiEvents, 
+import {
+  Download,
+  Work,
+  School,
+  Star,
+  EmojiEvents,
   Interests,
   CheckCircle,
   TrendingUp,
@@ -91,6 +91,76 @@ const ResumePage = ({ data }) => {
   const interests = Array.isArray(resume?.interests) ? resume.interests : [];
   const theme = useTheme();
 
+  // State for hover effects on icons
+  const [hoveredIcon, setHoveredIcon] = React.useState(null);
+
+  // Enhanced icon styles with better visual effects
+  const iconStyles = React.useMemo(() => ({
+    base: {
+      fontSize: 22,
+      mr: 1.5,
+      flexShrink: 0,
+      transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+    },
+    achievement: (isHovered) => ({
+      color: 'success.main',
+      transform: isHovered ? 'scale(1.4) rotate(360deg)' : 'scale(1)',
+      filter: isHovered
+        ? 'drop-shadow(0 0 12px rgba(76, 175, 80, 0.8)) drop-shadow(0 0 20px rgba(76, 175, 80, 0.4))'
+        : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+      opacity: isHovered ? 1 : 0.85,
+    }),
+    activity: (isHovered) => ({
+      color: 'success.main',
+      transform: isHovered ? 'scale(1.4) translateY(-4px)' : 'scale(1)',
+      filter: isHovered
+        ? 'drop-shadow(0 0 12px rgba(76, 175, 80, 0.8)) drop-shadow(0 0 20px rgba(76, 175, 80, 0.4))'
+        : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+      opacity: isHovered ? 1 : 0.85,
+    }),
+    certification: (isHovered) => ({
+      color: 'success.main',
+      transform: isHovered ? 'scale(1.4) rotate(360deg)' : 'scale(1)',
+      filter: isHovered
+        ? 'drop-shadow(0 0 12px rgba(76, 175, 80, 0.8)) drop-shadow(0 0 20px rgba(76, 175, 80, 0.4))'
+        : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+      opacity: isHovered ? 1 : 0.85,
+    }),
+    award: (isHovered) => ({
+      color: 'warning.main',
+      transform: isHovered ? 'scale(1.5) rotate(-15deg)' : 'scale(1)',
+      filter: isHovered
+        ? 'drop-shadow(0 0 12px rgba(255, 193, 7, 0.9)) drop-shadow(0 0 24px rgba(255, 193, 7, 0.5))'
+        : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+      opacity: isHovered ? 1 : 0.85,
+    }),
+  }), []);
+
+  // Section heading styles with enhanced visual effects
+  const sectionHeadingStyle = {
+    mb: 4,
+    fontWeight: 700,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1.5,
+    position: 'relative',
+    '& > svg': {
+      fontSize: '2.5rem',
+      padding: '8px',
+      borderRadius: '12px',
+      background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.secondary.main}15)`,
+      border: `2px solid ${theme.palette.primary.main}30`,
+      transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      boxShadow: `0 4px 12px ${theme.palette.primary.main}20`,
+      '&:hover': {
+        transform: 'scale(1.1) rotate(5deg)',
+        background: `linear-gradient(135deg, ${theme.palette.primary.main}25, ${theme.palette.secondary.main}25)`,
+        border: `2px solid ${theme.palette.primary.main}50`,
+        boxShadow: `0 8px 24px ${theme.palette.primary.main}40`,
+      }
+    }
+  };
+
   /**
    * Get appropriate icon for a technology/skill
    * 
@@ -116,7 +186,7 @@ const ResumePage = ({ data }) => {
       'Next.js': Web,
       'Nuxt.js': Web,
       'Gatsby': Web,
-      
+
       // Backend Technologies
       'Node.js': Terminal,
       'Express': Api,
@@ -129,7 +199,7 @@ const ResumePage = ({ data }) => {
       'ASP.NET': Code,
       'GraphQL': Api,
       'REST APIs': Api,
-      
+
       // Databases
       'MongoDB': Storage,
       'PostgreSQL': Storage,
@@ -139,7 +209,7 @@ const ResumePage = ({ data }) => {
       'Firebase': Storage,
       'DynamoDB': Storage,
       'Cassandra': Storage,
-      
+
       // Cloud & DevOps
       'AWS': Cloud,
       'Azure': Cloud,
@@ -151,7 +221,7 @@ const ResumePage = ({ data }) => {
       'GitLab CI': Build,
       'Terraform': Cloud,
       'Ansible': DeviceHub,
-      
+
       // Tools & Others
       'Git': GitHub,
       'GitHub': GitHub,
@@ -177,7 +247,7 @@ const ResumePage = ({ data }) => {
       'Swagger': Api,
       'WebSockets': DeviceHub,
       'Socket.io': DeviceHub,
-      
+
       // Programming Languages
       'Python': Code,
       'Java': Code,
@@ -190,7 +260,7 @@ const ResumePage = ({ data }) => {
       'Swift': Code,
       'Kotlin': Code,
       'Dart': Code,
-      
+
       // Security & Performance
       'OAuth': Security,
       'JWT': Security,
@@ -229,7 +299,7 @@ const ResumePage = ({ data }) => {
 
 
   return (
-    <Box sx={{ 
+    <Box sx={{
       minHeight: '100vh',
       background: `linear-gradient(135deg, 
         ${theme.palette.background.default} 0%, 
@@ -240,18 +310,18 @@ const ResumePage = ({ data }) => {
       <Container maxWidth="lg" sx={{ pt: { xs: 10, md: 12 }, pb: 8 }}>
         {/* Header */}
         <Fade in timeout={1000}>
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             mb: 6,
             flexDirection: { xs: 'column', sm: 'row' },
             gap: 3,
             textAlign: { xs: 'center', sm: 'left' }
           }}>
-            <Typography 
-              variant="h2" 
-              component="h1" 
+            <Typography
+              variant="h2"
+              component="h1"
               sx={{
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
                 fontWeight: 800,
@@ -273,8 +343,8 @@ const ResumePage = ({ data }) => {
                 startIcon={<Download />}
                 href={cvDownload}
                 download
-                sx={{ 
-                  px: 4, 
+                sx={{
+                  px: 4,
                   py: 1.5,
                   fontSize: '1.1rem',
                   fontWeight: 600,
@@ -296,22 +366,19 @@ const ResumePage = ({ data }) => {
         {/* Summary */}
         <Fade in timeout={1200}>
           <Box sx={{ mb: 6 }}>
-            <Typography 
-              variant="h4" 
-              sx={{ 
+            <Typography
+              variant="h4"
+              sx={{
+                ...sectionHeadingStyle,
                 mb: 3,
-                fontWeight: 700,
                 color: 'primary.main',
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 1 
               }}
             >
               <PsychologyAlt />
               Professional Summary
             </Typography>
             {summary && (
-              <Card 
+              <Card
                 elevation={0}
                 sx={{
                   ...glowEffect,
@@ -320,10 +387,10 @@ const ResumePage = ({ data }) => {
                 }}
               >
                 <CardContent sx={{ p: 4 }}>
-                  <Typography 
-                    variant="body1" 
-                    sx={{ 
-                      lineHeight: 1.7, 
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      lineHeight: 1.7,
                       fontSize: '1.2rem',
                       fontWeight: 300,
                       color: 'text.primary'
@@ -340,15 +407,11 @@ const ResumePage = ({ data }) => {
         {/* Experience */}
         <Fade in timeout={1400}>
           <Box sx={{ mb: 6 }}>
-            <Typography 
-              variant="h4" 
-              sx={{ 
-                mb: 4,
-                fontWeight: 700,
+            <Typography
+              variant="h4"
+              sx={{
+                ...sectionHeadingStyle,
                 color: 'primary.main',
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 1 
               }}
             >
               <BusinessCenter />
@@ -358,7 +421,7 @@ const ResumePage = ({ data }) => {
               {experience.map((exp, index) => (
                 <Fade key={index} in timeout={1600 + index * 200}>
                   <Box>
-                    <Card 
+                    <Card
                       elevation={0}
                       sx={{
                         ...glowEffect,
@@ -366,151 +429,169 @@ const ResumePage = ({ data }) => {
                         borderRadius: 4,
                       }}
                     >
-                    <CardContent sx={{ p: 4 }}>
-                      <Box sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'flex-start', 
-                        mb: 3, 
-                        flexDirection: { xs: 'column', sm: 'row' } 
-                      }}>
-                        <Typography 
-                          variant="h5" 
-                          sx={{ 
-                            fontWeight: 700,
-                            color: 'text.primary',
-                            mb: { xs: 1, sm: 0 }
-                          }}
-                        >
-                          {exp?.role ?? 'Role'}
-                        </Typography>
-                        <Chip 
-                          label={exp?.dates ?? ''}
-                          sx={{
-                            backgroundColor: 'primary.main',
-                            color: 'primary.contrastText',
-                            fontWeight: 600,
-                            px: 2,
-                            py: 1,
-                            height: 'auto',
-                            borderRadius: 3,
-                          }}
-                        />
-                      </Box>
-                      
-                      <Typography 
-                        variant="h6" 
-                        sx={{ 
-                          color: 'primary.main',
-                          fontWeight: 600,
-                          mb: 2
-                        }}
-                      >
-                        {[exp?.company, exp?.location].filter(Boolean).join(' • ')}
-                      </Typography>
-                      
-                      <Typography 
-                        variant="body1" 
-                        paragraph 
-                        sx={{ 
-                          lineHeight: 1.7, 
+                      <CardContent sx={{ p: 4 }}>
+                        <Box sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'flex-start',
                           mb: 3,
-                          fontSize: '1.1rem',
-                          color: 'text.secondary'
-                        }}
-                      >
-                        {exp?.description ?? ''}
-                      </Typography>
-                      
-                      <Box sx={{ mb: 3 }}>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            fontWeight: 700, 
-                            mb: 1.5,
-                            color: 'text.primary'
+                          flexDirection: { xs: 'column', sm: 'row' }
+                        }}>
+                          <Typography
+                            variant="h5"
+                            sx={{
+                              fontWeight: 700,
+                              color: 'text.primary',
+                              mb: { xs: 1, sm: 0 }
+                            }}
+                          >
+                            {exp?.role ?? 'Role'}
+                          </Typography>
+                          <Chip
+                            label={exp?.dates ?? ''}
+                            variant="outlined"
+                            sx={{
+                              borderWidth: 2,
+                              borderColor: 'primary.main',
+                              backgroundColor: `${theme.palette.primary.main}08`,
+                              color: 'primary.main',
+                              fontWeight: 700,
+                              px: 2,
+                              py: 1,
+                              height: 'auto',
+                              borderRadius: 2,
+                            }}
+                          />
+                        </Box>
+
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            color: 'primary.main',
+                            fontWeight: 600,
+                            mb: 2
                           }}
                         >
-                          Technologies & Tools:
+                          {[exp?.company, exp?.location].filter(Boolean).join(' • ')}
                         </Typography>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                          {(Array.isArray(exp?.technologies) ? exp.technologies : []).map((tech, techIndex) => {
-                            const IconComponent = getSkillIcon(tech);
-                            return (
-                              <Chip
-                                key={techIndex}
-                                icon={<IconComponent sx={{ fontSize: '1rem !important' }} />}
-                                label={tech}
-                                size="small"
-                                sx={{
-                                  backgroundColor: 'primary.main',
-                                  color: 'primary.contrastText',
-                                  fontWeight: 600,
-                                  px: 1.5,
-                                  py: 0.5,
-                                  height: 'auto',
-                                  borderRadius: 2,
-                                  '& .MuiChip-icon': {
-                                    color: 'primary.contrastText',
-                                    marginLeft: '6px',
-                                  },
-                                  '&:hover': {
-                                    boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
-                                  },
-                                }}
-                              />
-                            );
-                          })}
-                        </Box>
-                      </Box>
-                      
-                      {Array.isArray(exp?.achievements) && exp.achievements.length > 0 && (
-                        <Box>
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
-                              fontWeight: 700, 
+
+                        <Typography
+                          variant="body1"
+                          paragraph
+                          sx={{
+                            lineHeight: 1.7,
+                            mb: 3,
+                            fontSize: '1.1rem',
+                            color: 'text.secondary'
+                          }}
+                        >
+                          {exp?.description ?? ''}
+                        </Typography>
+
+                        <Box sx={{ mb: 3 }}>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontWeight: 700,
                               mb: 1.5,
                               color: 'text.primary'
                             }}
                           >
-                            Key Achievements:
+                            Technologies & Tools:
                           </Typography>
-                          <List dense>
-                            {exp.achievements.map((achievement, achievementIndex) => (
-                              <ListItem 
-                                key={achievementIndex} 
-                                sx={{ 
-                                  py: 0.5,
-                                  display: 'flex',
-                                  alignItems: 'center'
-                                }}
-                              >
-                                <CheckCircle 
-                                  sx={{ 
-                                    color: 'success.main', 
-                                    fontSize: 20, 
-                                    mr: 1.5,
-                                    flexShrink: 0
-                                  }} 
-                                />
-                                <ListItemText 
-                                  primary={achievement}
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                            {(Array.isArray(exp?.technologies) ? exp.technologies : []).map((tech, techIndex) => {
+                              const IconComponent = getSkillIcon(tech);
+                              return (
+                                <Chip
+                                  key={techIndex}
+                                  icon={<IconComponent sx={{ fontSize: '0.9rem !important' }} />}
+                                  label={tech}
+                                  size="small"
+                                  variant="outlined"
                                   sx={{
-                                    '& .MuiListItemText-primary': {
-                                      fontSize: '1rem',
-                                      lineHeight: 1.6,
-                                      color: 'text.secondary'
-                                    }
+                                    borderWidth: 1.5,
+                                    borderColor: 'divider',
+                                    backgroundColor: 'background.paper',
+                                    color: 'text.primary',
+                                    fontWeight: 500,
+                                    px: 1.5,
+                                    py: 0.5,
+                                    height: 'auto',
+                                    borderRadius: 8,
+                                    '& .MuiChip-icon': {
+                                      color: 'primary.main',
+                                      marginLeft: '6px',
+                                    },
+                                    '&:hover': {
+                                      borderColor: 'primary.main',
+                                      backgroundColor: `${theme.palette.primary.main}05`,
+                                    },
                                   }}
                                 />
-                              </ListItem>
-                            ))}
-                          </List>
+                              );
+                            })}
+                          </Box>
                         </Box>
-                      )}
-                    </CardContent>
-                  </Card>
+
+                        {Array.isArray(exp?.achievements) && exp.achievements.length > 0 && (
+                          <Box>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                fontWeight: 700,
+                                mb: 1.5,
+                                color: 'text.primary'
+                              }}
+                            >
+                              Key Achievements:
+                            </Typography>
+                            <List dense>
+                              {exp.achievements.map((achievement, achievementIndex) => (
+                                <ListItem
+                                  key={achievementIndex}
+                                  onMouseEnter={() => setHoveredIcon(`achievement-${index}-${achievementIndex}`)}
+                                  onMouseLeave={() => setHoveredIcon(null)}
+                                  sx={{
+                                    py: 0.75,
+                                    px: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                    borderRadius: 2,
+                                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                    '&:hover': {
+                                      transform: 'translateX(12px)',
+                                      backgroundColor: `${theme.palette.success.main}08`,
+                                      boxShadow: `0 4px 12px ${theme.palette.success.main}15`,
+                                    }
+                                  }}
+                                >
+                                  <CheckCircle
+                                    sx={{
+                                      ...iconStyles.base,
+                                      ...iconStyles.achievement(hoveredIcon === `achievement-${index}-${achievementIndex}`),
+                                    }}
+                                  />
+                                  <ListItemText
+                                    primary={achievement}
+                                    sx={{
+                                      '& .MuiListItemText-primary': {
+                                        fontSize: '1rem',
+                                        lineHeight: 1.6,
+                                        color: 'text.secondary',
+                                        fontWeight: hoveredIcon === `achievement-${index}-${achievementIndex}` ? 600 : 400,
+                                        transition: 'all 0.3s ease',
+                                      }
+                                    }}
+                                  />
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Box>
+                        )}
+                      </CardContent>
+                    </Card>
                   </Box>
                 </Fade>
               ))}
@@ -522,21 +603,17 @@ const ResumePage = ({ data }) => {
         {skills.length > 0 && (
           <Fade in timeout={1800}>
             <Box sx={{ mb: 6 }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  mb: 4,
-                  fontWeight: 700,
+              <Typography
+                variant="h4"
+                sx={{
+                  ...sectionHeadingStyle,
                   color: 'primary.main',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 1 
                 }}
               >
                 <Star />
                 Technical Skills
               </Typography>
-              <Card 
+              <Card
                 elevation={0}
                 sx={{
                   ...glowEffect,
@@ -551,23 +628,27 @@ const ResumePage = ({ data }) => {
                       return (
                         <Chip
                           key={index}
-                          icon={<IconComponent sx={{ fontSize: '1.2rem !important' }} />}
+                          icon={<IconComponent sx={{ fontSize: '1.1rem !important' }} />}
                           label={skill}
+                          variant="outlined"
                           sx={{
-                            backgroundColor: 'primary.main',
-                            color: 'primary.contrastText',
-                            fontWeight: 600,
-                            fontSize: '1rem',
+                            borderWidth: 1.5,
+                            borderColor: 'divider',
+                            backgroundColor: 'background.paper',
+                            color: 'text.primary',
+                            fontWeight: 500,
+                            fontSize: '0.95rem',
                             px: 2,
                             py: 1,
                             height: 'auto',
-                            borderRadius: 3,
+                            borderRadius: 8,
                             '& .MuiChip-icon': {
-                              color: 'primary.contrastText',
+                              color: 'primary.main',
                               marginLeft: '8px',
                             },
                             '&:hover': {
-                              boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                              borderColor: 'primary.main',
+                              backgroundColor: `${theme.palette.primary.main}05`,
                             },
                           }}
                         />
@@ -584,15 +665,11 @@ const ResumePage = ({ data }) => {
         {education.length > 0 && (
           <Fade in timeout={2000}>
             <Box sx={{ mb: 6 }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  mb: 4,
-                  fontWeight: 700,
+              <Typography
+                variant="h4"
+                sx={{
+                  ...sectionHeadingStyle,
                   color: 'primary.main',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 1 
                 }}
               >
                 <School />
@@ -602,7 +679,7 @@ const ResumePage = ({ data }) => {
                 {education.map((edu, index) => (
                   <Fade key={index} in timeout={2200 + index * 200}>
                     <Box>
-                      <Card 
+                      <Card
                         elevation={0}
                         sx={{
                           ...glowEffect,
@@ -638,28 +715,34 @@ const ResumePage = ({ data }) => {
                               {edu?.dates && (
                                 <Chip
                                   label={edu.dates}
+                                  variant="outlined"
                                   sx={{
-                                    backgroundColor: 'primary.main',
-                                    color: 'primary.contrastText',
-                                    fontWeight: 600,
+                                    borderWidth: 2,
+                                    borderColor: 'primary.main',
+                                    backgroundColor: `${theme.palette.primary.main}08`,
+                                    color: 'primary.main',
+                                    fontWeight: 700,
                                     px: 2,
                                     py: 1,
                                     height: 'auto',
-                                    borderRadius: 3,
+                                    borderRadius: 2,
                                   }}
                                 />
                               )}
                               {edu?.gpa && (
                                 <Chip
                                   label={`GPA: ${edu.gpa}`}
+                                  variant="outlined"
                                   sx={{
-                                    backgroundColor: 'secondary.main',
-                                    color: 'secondary.contrastText',
-                                    fontWeight: 600,
+                                    borderWidth: 2,
+                                    borderColor: 'secondary.main',
+                                    backgroundColor: `${theme.palette.secondary.main}08`,
+                                    color: 'secondary.main',
+                                    fontWeight: 700,
                                     px: 2,
                                     py: 1,
                                     height: 'auto',
-                                    borderRadius: 3,
+                                    borderRadius: 2,
                                   }}
                                 />
                               )}
@@ -710,14 +793,21 @@ const ResumePage = ({ data }) => {
                                     key={courseIndex}
                                     label={course}
                                     size="small"
+                                    variant="outlined"
                                     sx={{
-                                      backgroundColor: 'primary.main',
-                                      color: 'primary.contrastText',
-                                      fontWeight: 600,
+                                      borderWidth: 1.5,
+                                      borderColor: 'divider',
+                                      backgroundColor: 'background.paper',
+                                      color: 'text.primary',
+                                      fontWeight: 500,
                                       px: 1.5,
                                       py: 0.5,
                                       height: 'auto',
-                                      borderRadius: 2,
+                                      borderRadius: 8,
+                                      '&:hover': {
+                                        borderColor: 'primary.main',
+                                        backgroundColor: `${theme.palette.primary.main}05`,
+                                      },
                                     }}
                                   />
                                 ))}
@@ -741,18 +831,27 @@ const ResumePage = ({ data }) => {
                                 {edu.extracurriculars.map((activity, activityIndex) => (
                                   <ListItem
                                     key={activityIndex}
+                                    onMouseEnter={() => setHoveredIcon(`activity-${index}-${activityIndex}`)}
+                                    onMouseLeave={() => setHoveredIcon(null)}
                                     sx={{
-                                      py: 0.5,
+                                      py: 0.75,
+                                      px: 1,
                                       display: 'flex',
                                       alignItems: 'center',
+                                      cursor: 'pointer',
+                                      borderRadius: 2,
+                                      transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                      '&:hover': {
+                                        transform: 'translateX(12px)',
+                                        backgroundColor: `${theme.palette.success.main}08`,
+                                        boxShadow: `0 4px 12px ${theme.palette.success.main}15`,
+                                      }
                                     }}
                                   >
                                     <TrendingUp
                                       sx={{
-                                        color: 'success.main',
-                                        fontSize: 20,
-                                        mr: 1.5,
-                                        flexShrink: 0,
+                                        ...iconStyles.base,
+                                        ...iconStyles.activity(hoveredIcon === `activity-${index}-${activityIndex}`),
                                       }}
                                     />
                                     <ListItemText
@@ -762,6 +861,8 @@ const ResumePage = ({ data }) => {
                                           fontSize: '1rem',
                                           lineHeight: 1.6,
                                           color: 'text.secondary',
+                                          fontWeight: hoveredIcon === `activity-${index}-${activityIndex}` ? 600 : 400,
+                                          transition: 'all 0.3s ease',
                                         },
                                       }}
                                     />
@@ -784,15 +885,11 @@ const ResumePage = ({ data }) => {
         {certifications.length > 0 && (
           <Fade in timeout={2200}>
             <Box sx={{ mb: 6 }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  mb: 4,
-                  fontWeight: 700,
+              <Typography
+                variant="h4"
+                sx={{
+                  ...sectionHeadingStyle,
                   color: 'primary.main',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 1 
                 }}
               >
                 <CheckCircle />
@@ -808,35 +905,76 @@ const ResumePage = ({ data }) => {
               >
                 <CardContent sx={{ p: 4 }}>
                   <List dense>
-                    {certifications.map((certification, index) => (
-                      <ListItem
-                        key={index}
-                        sx={{
-                          py: 0.75,
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <CheckCircle
+                    {certifications.map((certification, index) => {
+                      // Support both string format (legacy) and object format (with certificate link)
+                      const certTitle = typeof certification === 'string' ? certification : (certification?.title ?? '');
+                      const certificateLink = typeof certification === 'object' ? (certification?.certificateLink ?? '') : '';
+
+                      return (
+                        <ListItem
+                          key={index}
+                          onMouseEnter={() => setHoveredIcon(`cert-${index}`)}
+                          onMouseLeave={() => setHoveredIcon(null)}
                           sx={{
-                            color: 'success.main',
-                            fontSize: 20,
-                            mr: 1.5,
-                            flexShrink: 0,
+                            py: 1,
+                            px: 1.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            cursor: 'pointer',
+                            borderRadius: 2,
+                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            '&:hover': {
+                              transform: 'translateX(12px)',
+                              backgroundColor: `${theme.palette.success.main}08`,
+                              boxShadow: `0 4px 12px ${theme.palette.success.main}15`,
+                            }
                           }}
-                        />
-                        <ListItemText
-                          primary={certification}
-                          sx={{
-                            '& .MuiListItemText-primary': {
-                              fontSize: '1.05rem',
-                              lineHeight: 1.6,
-                              color: 'text.secondary',
-                            },
-                          }}
-                        />
-                      </ListItem>
-                    ))}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                            <CheckCircle
+                              sx={{
+                                ...iconStyles.base,
+                                ...iconStyles.certification(hoveredIcon === `cert-${index}`),
+                              }}
+                            />
+                            <ListItemText
+                              primary={certTitle}
+                              sx={{
+                                '& .MuiListItemText-primary': {
+                                  fontSize: '1.05rem',
+                                  lineHeight: 1.6,
+                                  color: 'text.secondary',
+                                  fontWeight: hoveredIcon === `cert-${index}` ? 600 : 400,
+                                  transition: 'all 0.3s ease',
+                                },
+                              }}
+                            />
+                          </Box>
+                          {certificateLink && (
+                            <Button
+                              variant="contained"
+                              size="small"
+                              href={certificateLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              sx={{
+                                ml: 2,
+                                borderRadius: 3,
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                boxShadow: `0 4px 12px ${theme.palette.primary.main}30`,
+                                '&:hover': {
+                                  boxShadow: `0 8px 20px ${theme.palette.primary.main}40`,
+                                },
+                              }}
+                            >
+                              View Certificate
+                            </Button>
+                          )}
+                        </ListItem>
+                      );
+                    })}
                   </List>
                 </CardContent>
               </Card>
@@ -848,15 +986,11 @@ const ResumePage = ({ data }) => {
         {awards.length > 0 && (
           <Fade in timeout={2400}>
             <Box sx={{ mb: 6 }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  mb: 4,
-                  fontWeight: 700,
+              <Typography
+                variant="h4"
+                sx={{
+                  ...sectionHeadingStyle,
                   color: 'primary.main',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 1 
                 }}
               >
                 <EmojiEvents />
@@ -872,35 +1006,76 @@ const ResumePage = ({ data }) => {
               >
                 <CardContent sx={{ p: 4 }}>
                   <List dense>
-                    {awards.map((award, index) => (
-                      <ListItem
-                        key={index}
-                        sx={{
-                          py: 0.75,
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <EmojiEvents
+                    {awards.map((award, index) => {
+                      // Support both string format (legacy) and object format (with certificate link)
+                      const awardTitle = typeof award === 'string' ? award : (award?.title ?? '');
+                      const certificateLink = typeof award === 'object' ? (award?.certificateLink ?? '') : '';
+
+                      return (
+                        <ListItem
+                          key={index}
+                          onMouseEnter={() => setHoveredIcon(`award-${index}`)}
+                          onMouseLeave={() => setHoveredIcon(null)}
                           sx={{
-                            color: 'warning.main',
-                            fontSize: 20,
-                            mr: 1.5,
-                            flexShrink: 0,
+                            py: 1,
+                            px: 1.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            cursor: 'pointer',
+                            borderRadius: 2,
+                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            '&:hover': {
+                              transform: 'translateX(12px)',
+                              backgroundColor: `${theme.palette.warning.main}08`,
+                              boxShadow: `0 4px 12px ${theme.palette.warning.main}15`,
+                            }
                           }}
-                        />
-                        <ListItemText
-                          primary={award}
-                          sx={{
-                            '& .MuiListItemText-primary': {
-                              fontSize: '1.05rem',
-                              lineHeight: 1.6,
-                              color: 'text.secondary',
-                            },
-                          }}
-                        />
-                      </ListItem>
-                    ))}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                            <EmojiEvents
+                              sx={{
+                                ...iconStyles.base,
+                                ...iconStyles.award(hoveredIcon === `award-${index}`),
+                              }}
+                            />
+                            <ListItemText
+                              primary={awardTitle}
+                              sx={{
+                                '& .MuiListItemText-primary': {
+                                  fontSize: '1.05rem',
+                                  lineHeight: 1.6,
+                                  color: 'text.secondary',
+                                  fontWeight: hoveredIcon === `award-${index}` ? 600 : 400,
+                                  transition: 'all 0.3s ease',
+                                },
+                              }}
+                            />
+                          </Box>
+                          {certificateLink && (
+                            <Button
+                              variant="contained"
+                              size="small"
+                              href={certificateLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              sx={{
+                                ml: 2,
+                                borderRadius: 3,
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                boxShadow: `0 4px 12px ${theme.palette.primary.main}30`,
+                                '&:hover': {
+                                  boxShadow: `0 8px 20px ${theme.palette.primary.main}40`,
+                                },
+                              }}
+                            >
+                              View Award
+                            </Button>
+                          )}
+                        </ListItem>
+                      );
+                    })}
                   </List>
                 </CardContent>
               </Card>
@@ -912,21 +1087,17 @@ const ResumePage = ({ data }) => {
         {interests.length > 0 && (
           <Fade in timeout={2600}>
             <Box>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  mb: 4,
-                  fontWeight: 700,
+              <Typography
+                variant="h4"
+                sx={{
+                  ...sectionHeadingStyle,
                   color: 'primary.main',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 1 
                 }}
               >
                 <Interests />
                 Interests
               </Typography>
-              <Card 
+              <Card
                 elevation={0}
                 sx={{
                   ...glowEffect,
@@ -940,15 +1111,22 @@ const ResumePage = ({ data }) => {
                       <Chip
                         key={index}
                         label={interest}
+                        variant="outlined"
                         sx={{
-                          backgroundColor: 'primary.main',
-                          color: 'primary.contrastText',
-                          fontWeight: 600,
-                          fontSize: '1rem',
+                          borderWidth: 1.5,
+                          borderColor: 'divider',
+                          backgroundColor: 'background.paper',
+                          color: 'text.primary',
+                          fontWeight: 500,
+                          fontSize: '0.95rem',
                           px: 2,
                           py: 1,
                           height: 'auto',
-                          borderRadius: 3,
+                          borderRadius: 8,
+                          '&:hover': {
+                            borderColor: 'primary.main',
+                            backgroundColor: `${theme.palette.primary.main}05`,
+                          },
                         }}
                       />
                     ))}

@@ -28,8 +28,6 @@ import {
   CardContent,
   Grid,
   Button,
-  IconButton,
-  Divider,
   Fade,
   useTheme,
   Grow,
@@ -59,6 +57,9 @@ const ContactPage = ({ data }) => {
   const contact = data?.contact ?? {};
   const theme = useTheme();
 
+  // State for hover effects on contact items
+  const [hoveredItem, setHoveredItem] = React.useState(null);
+
   /**
    * Glass morphism effect styling
    * Consistent with other pages for unified design
@@ -79,24 +80,6 @@ const ContactPage = ({ data }) => {
       transform: 'translateY(-8px) scale(1.02)', // Lift and slightly enlarge
       boxShadow: `0 20px 40px ${theme.palette.primary.main}20`,
     },
-  };
-
-  /**
-   * Handle email click - open default email client
-   */
-  const handleEmailClick = () => {
-    if (personalInfo?.email) {
-      window.location.href = `mailto:${personalInfo.email}`;
-    }
-  };
-
-  /**
-   * Handle phone click - initiate phone call on mobile devices
-   */
-  const handlePhoneClick = () => {
-    if (personalInfo?.phone) {
-      window.location.href = `tel:${personalInfo.phone}`;
-    }
   };
 
   /**
@@ -256,10 +239,45 @@ const ContactPage = ({ data }) => {
                     <List dense sx={{ p: 0, m: 0, '& .MuiListItem-root + .MuiListItem-root': { mt: 1 } }}>
                       {personalInfo?.email && (
                         <Grow in timeout={1200}>
-                          <ListItem sx={{ px: 0, py: 1.25, borderRadius: 2, '&:hover': { backgroundColor: theme.palette.action.hover } }}>
+                          <ListItem
+                            onMouseEnter={() => setHoveredItem('email')}
+                            onMouseLeave={() => setHoveredItem(null)}
+                            sx={{
+                              px: 0,
+                              py: 1.25,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                backgroundColor: theme.palette.action.hover,
+                                transform: 'translateX(8px)',
+                              }
+                            }}
+                          >
                             <ListItemAvatar>
-                              <Avatar sx={{ bgcolor: theme.palette.primary.main, color: '#fff', width: 40, height: 40 }}>
-                                <Email fontSize="small" />
+                              <Avatar
+                                sx={{
+                                  bgcolor: theme.palette.primary.main,
+                                  color: '#fff',
+                                  width: 40,
+                                  height: 40,
+                                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                  transform: hoveredItem === 'email' ? 'scale(1.15) rotate(10deg)' : 'scale(1) rotate(0deg)',
+                                  boxShadow: hoveredItem === 'email' ? `0 8px 16px ${theme.palette.primary.main}60` : 'none',
+                                  animation: hoveredItem === 'email' ? 'pulse 1.5s ease-in-out infinite' : 'none',
+                                  '@keyframes pulse': {
+                                    '0%, 100%': { boxShadow: `0 0 0 0 ${theme.palette.primary.main}60` },
+                                    '50%': { boxShadow: `0 0 0 10px ${theme.palette.primary.main}00` },
+                                  },
+                                }}
+                              >
+                                <Email
+                                  fontSize="small"
+                                  sx={{
+                                    transition: 'transform 0.3s ease',
+                                    transform: hoveredItem === 'email' ? 'scale(1.2)' : 'scale(1)',
+                                  }}
+                                />
                               </Avatar>
                             </ListItemAvatar>
                             <ListItemText
@@ -285,10 +303,46 @@ const ContactPage = ({ data }) => {
 
                       {personalInfo?.phone && (
                         <Grow in timeout={1400}>
-                          <ListItem sx={{ px: 0, py: 1.25, borderRadius: 2, '&:hover': { backgroundColor: theme.palette.action.hover } }}>
+                          <ListItem
+                            onMouseEnter={() => setHoveredItem('phone')}
+                            onMouseLeave={() => setHoveredItem(null)}
+                            sx={{
+                              px: 0,
+                              py: 1.25,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                backgroundColor: theme.palette.action.hover,
+                                transform: 'translateX(8px)',
+                              }
+                            }}
+                          >
                             <ListItemAvatar>
-                              <Avatar sx={{ bgcolor: theme.palette.secondary.main, color: '#fff', width: 40, height: 40 }}>
-                                <Phone fontSize="small" />
+                              <Avatar
+                                sx={{
+                                  bgcolor: theme.palette.secondary.main,
+                                  color: '#fff',
+                                  width: 40,
+                                  height: 40,
+                                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                  transform: hoveredItem === 'phone' ? 'scale(1.15) rotate(-15deg)' : 'scale(1) rotate(0deg)',
+                                  boxShadow: hoveredItem === 'phone' ? `0 8px 16px ${theme.palette.secondary.main}60` : 'none',
+                                  animation: hoveredItem === 'phone' ? 'shake 0.5s ease-in-out' : 'none',
+                                  '@keyframes shake': {
+                                    '0%, 100%': { transform: 'scale(1.15) rotate(-15deg)' },
+                                    '25%': { transform: 'scale(1.15) rotate(-20deg)' },
+                                    '75%': { transform: 'scale(1.15) rotate(-10deg)' },
+                                  },
+                                }}
+                              >
+                                <Phone
+                                  fontSize="small"
+                                  sx={{
+                                    transition: 'transform 0.3s ease',
+                                    transform: hoveredItem === 'phone' ? 'scale(1.2)' : 'scale(1)',
+                                  }}
+                                />
                               </Avatar>
                             </ListItemAvatar>
                             <ListItemText
@@ -305,10 +359,45 @@ const ContactPage = ({ data }) => {
 
                       {personalInfo?.location && (
                         <Grow in timeout={1600}>
-                          <ListItem sx={{ px: 0, py: 1.25, borderRadius: 2, '&:hover': { backgroundColor: theme.palette.action.hover } }}>
+                          <ListItem
+                            onMouseEnter={() => setHoveredItem('location')}
+                            onMouseLeave={() => setHoveredItem(null)}
+                            sx={{
+                              px: 0,
+                              py: 1.25,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                backgroundColor: theme.palette.action.hover,
+                                transform: 'translateX(8px)',
+                              }
+                            }}
+                          >
                             <ListItemAvatar>
-                              <Avatar sx={{ bgcolor: theme.palette.info.main, color: '#fff', width: 40, height: 40 }}>
-                                <LocationOn fontSize="small" />
+                              <Avatar
+                                sx={{
+                                  bgcolor: theme.palette.info.main,
+                                  color: '#fff',
+                                  width: 40,
+                                  height: 40,
+                                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                  transform: hoveredItem === 'location' ? 'scale(1.15)' : 'scale(1)',
+                                  boxShadow: hoveredItem === 'location' ? `0 8px 16px ${theme.palette.info.main}60` : 'none',
+                                  animation: hoveredItem === 'location' ? 'bounce 0.6s ease-in-out infinite' : 'none',
+                                  '@keyframes bounce': {
+                                    '0%, 100%': { transform: 'scale(1.15) translateY(0)' },
+                                    '50%': { transform: 'scale(1.15) translateY(-8px)' },
+                                  },
+                                }}
+                              >
+                                <LocationOn
+                                  fontSize="small"
+                                  sx={{
+                                    transition: 'transform 0.3s ease',
+                                    transform: hoveredItem === 'location' ? 'scale(1.2)' : 'scale(1)',
+                                  }}
+                                />
                               </Avatar>
                             </ListItemAvatar>
                             <ListItemText

@@ -9,7 +9,7 @@
  * - Page transitions with fade effects
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box, Fade } from '@mui/material';
 import Navigation from './components/Navigation';
@@ -213,6 +213,18 @@ function App() {
     projects,     // Projects portfolio data
     contact,      // Contact information and social links
   };
+
+  // Update document title and meta description dynamically from JSON data
+  useEffect(() => {
+    // Set document title
+    document.title = `${personalInfo.name} | ${personalInfo.title}`;
+    
+    // Update meta description
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', `${personalInfo.name} - ${personalInfo.title}. ${personalInfo.bio}`);
+    }
+  }, []);
 
   /**
    * Handle navigation between pages
