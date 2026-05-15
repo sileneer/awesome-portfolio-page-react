@@ -1,38 +1,30 @@
-/**
- * Global Styles
- * 
- * Base CSS styles applied to the entire application.
- * These styles provide:
- * - Reset margins for consistent layout
- * - System font stack for optimal performance
- * - Font smoothing for better text rendering
- * - Monospace font for code elements
- * - Consistent scrollbar visibility to prevent layout shift
- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
-/* HTML - Root element */
 html {
-  /* Force scrollbar to always be visible to prevent layout shift when navigating between pages */
   overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
-/* Body - Main container for the entire application */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
 body {
-  margin: 0; /* Remove default browser margins */
-  
-  /* System font stack - uses native fonts for best performance and appearance */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  
-  /* Font smoothing for better text rendering on different platforms */
-  -webkit-font-smoothing: antialiased;  /* Webkit browsers (Chrome, Safari) */
-  -moz-osx-font-smoothing: grayscale;   /* Firefox on macOS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Code elements - Inline code and code blocks */
 code {
-  /* Monospace font stack for code display */
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }

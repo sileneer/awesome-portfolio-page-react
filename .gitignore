@@ -25,5 +25,9 @@ yarn-error.log*
 # JetBrains
 .idea/
 
+# Local editor and agent settings
+.vscode/
+.claude/
+
 # WARP
 WARP.md
