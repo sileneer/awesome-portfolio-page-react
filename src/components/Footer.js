@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Link, useTheme } from '@mui/material';
-import { Favorite } from '@mui/icons-material';
+import { Favorite, GitHub } from '@mui/icons-material';
 
 const Footer = () => {
   const theme = useTheme();
@@ -57,6 +57,21 @@ const Footer = () => {
             }}
           >
             Framer Motion
+          </Link>
+          {' '}•{' '}
+          <GitHub sx={{ fontSize: 16 }} aria-hidden="true" />
+          {' '}Built with{' '}
+          <Link
+            href="https://github.com/sileneer/awesome-portfolio-page-react"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              color: 'primary.main',
+              textDecoration: 'none',
+              '&:hover': { textShadow: `0 0 8px ${theme.palette.primary.main}` },
+            }}
+          >
+            Awesome Portfolio Template
           </Link>
         </Typography>
       </Container>
