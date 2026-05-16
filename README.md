@@ -62,19 +62,19 @@ This portfolio has been completely rewritten using Material-UI components:
 
 Your portfolio data is organized into separate JSON files for easy management:
 
-1. **Personal Information**: Edit `src/data/user/personalInfo.json`
+1. **Personal Information**: Edit `src/data/personalInfo.json`
    - Update your name, title, bio, contact info, and social links
    
-2. **Navigation**: Edit `src/data/core/navigation.json`
+2. **Navigation**: Edit `src/data/navigation.json`
    - Customize your brand name and menu items
 
-3. **Resume**: Edit `src/data/user/resume.json`
+3. **Resume**: Edit `src/data/resume.json`
    - Add work experience, education, skills, certifications, and awards
 
-4. **Projects**: Edit `src/data/user/projects.json`
+4. **Projects**: Edit `src/data/projects.json`
    - Showcase your portfolio projects with descriptions and screenshots
 
-5. **Contact**: Edit `src/data/user/contact.json`
+5. **Contact**: Edit `src/data/contact.json`
    - Add additional contact methods and social media links
 
 6. **Images**:
@@ -89,21 +89,21 @@ See [PORTFOLIO_DATA_STRUCTURE.md](./docs/PORTFOLIO_DATA_STRUCTURE.md) for comple
 ```
 src/
 ├── components/
-│   ├── Navigation.js          # Main navigation component
-│   ├── Pages.js              # Page exports
+│   ├── Navigation.js         # Main navigation component
+│   ├── Footer.js             # Footer with attribution
 │   └── pages/
 │       ├── HomePage.js       # Landing page with hero section
 │       ├── ResumePage.js     # Resume and experience
 │       ├── ProjectsPage.js   # Projects showcase
 │       └── ContactPage.js    # Contact information
+├── context/
+│   └── ThemeContext.js       # Light/dark theme state
 ├── data/
-│   ├── core/
-│   │   └── navigation.json   # Navigation menu configuration
-│   └── user/
-│       ├── personalInfo.json # Personal information and bio
-│       ├── resume.json       # Professional experience and education
-│       ├── projects.json     # Portfolio projects
-│       └── contact.json      # Contact information and social links
+│   ├── navigation.json       # Navigation menu configuration
+│   ├── personalInfo.json     # Personal information and bio
+│   ├── resume.json           # Professional experience and education
+│   ├── projects.json         # Portfolio projects
+│   └── contact.json          # Contact information and social links
 └── App.js                    # Main app component with theme
 ```
 
@@ -166,7 +166,7 @@ Build the project (`npm run build`) and upload the `build/` folder contents to a
 
 ### Basic Setup
 
-#### 1. Personal Information (`src/data/user/personalInfo.json`)
+#### 1. Personal Information (`src/data/personalInfo.json`)
 Update your basic information:
 - Name, title, and professional bio
 - Contact details (email, phone, location)
@@ -174,12 +174,12 @@ Update your basic information:
 - Languages you speak
 - Profile photo path
 
-#### 2. Navigation (`src/data/core/navigation.json`)
+#### 2. Navigation (`src/data/navigation.json`)
 Customize your navigation bar:
 - Brand name or logo text
 - Menu items and their routes
 
-#### 3. Resume (`src/data/user/resume.json`)
+#### 3. Resume (`src/data/resume.json`)
 Build your professional profile:
 - Professional summary
 - Work experience with achievements
@@ -189,14 +189,14 @@ Build your professional profile:
 - Personal interests
 - Downloadable CV link
 
-#### 4. Projects (`src/data/user/projects.json`)
+#### 4. Projects (`src/data/projects.json`)
 Showcase your work:
 - Project name and description
 - Technologies used
 - Your role and project duration
 - Screenshots and demo links
 
-#### 5. Contact (`src/data/user/contact.json`)
+#### 5. Contact (`src/data/contact.json`)
 Add additional contact options:
 - Custom contact message
 - Alternate email

@@ -8,11 +8,11 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import { ThemeContext } from './context/ThemeContext';
 
-import personalInfo from './data/user/personalInfo.json';
-import navigation from './data/core/navigation.json';
-import resume from './data/user/resume.json';
-import projects from './data/user/projects.json';
-import contact from './data/user/contact.json';
+import personalInfo from './data/personalInfo.json';
+import navigation from './data/navigation.json';
+import resume from './data/resume.json';
+import projects from './data/projects.json';
+import contact from './data/contact.json';
 
 const HomePage = lazy(() => import('./components/pages/HomePage'));
 const ResumePage = lazy(() => import('./components/pages/ResumePage'));
