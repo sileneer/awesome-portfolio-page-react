@@ -29,5 +29,20 @@ yarn-error.log*
 .vscode/
 .claude/
 
+# AI agent files (per-user, do not commit to the template)
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.cursor/
+.aider*
+
+# Scratch / planning files (kept out of the public repo)
+plans/
+task_plan.md
+findings.md
+progress.md
+PLAN.md
+plan.md
+
 # WARP
 WARP.md

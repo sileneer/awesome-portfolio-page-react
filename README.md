@@ -2,7 +2,7 @@
 
 🚀 A modern, customizable React template for developer portfolios. Built with React and **Material-UI (@mui/material)** featuring a clean, professional design with multiple sections to showcase your skills, experience, and projects.
 
-![Portfolio Screenshot](/readme-screenshot1.jpeg)
+![Portfolio Screenshot](docs/readme-screenshot1.jpeg)
 
 ## ✨ Features
 
@@ -82,7 +82,7 @@ Your portfolio data is organized into separate JSON files for easy management:
    - Add your CV to `public/CV.pdf` (optional)
    - Add project screenshots to `public/projects/` folder (optional)
 
-See [PORTFOLIO_DATA_STRUCTURE.md](./PORTFOLIO_DATA_STRUCTURE.md) for complete details on available fields and data structure.
+See [PORTFOLIO_DATA_STRUCTURE.md](./docs/PORTFOLIO_DATA_STRUCTURE.md) for complete details on available fields and data structure.
 
 ## 📁 Project Structure
 
