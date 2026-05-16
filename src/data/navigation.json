@@ -1,21 +1,9 @@
 {
   "brand": "Joke Bear",
   "menuItems": [
-    {
-      "name": "Home",
-      "path": "/"
-    },
-    {
-      "name": "Resume",
-      "path": "/resume"
-    },
-    {
-      "name": "Projects",
-      "path": "/projects"
-    },
-    {
-      "name": "Contact",
-      "path": "/contact"
-    }
+    { "name": "Home",     "path": "/",         "component": "HomePage" },
+    { "name": "Resume",   "path": "/resume",   "component": "ResumePage" },
+    { "name": "Projects", "path": "/projects", "component": "ProjectsPage" },
+    { "name": "Contact",  "path": "/contact",  "component": "ContactPage" }
   ]
 }

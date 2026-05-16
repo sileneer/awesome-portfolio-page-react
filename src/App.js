@@ -19,6 +19,20 @@ const ResumePage = lazy(() => import('./components/pages/ResumePage'));
 const ProjectsPage = lazy(() => import('./components/pages/ProjectsPage'));
 const ContactPage = lazy(() => import('./components/pages/ContactPage'));
 
+// Registry of page components addressable from navigation.json.
+// Add new pages here: import lazily above, then register the same name used
+// in navigation.json's `component` field.
+const PAGE_COMPONENTS = { HomePage, ResumePage, ProjectsPage, ContactPage };
+
+// Throws at render time if nav.json references an unknown component — loud
+// failure that surfaces config typos immediately. To soften this, return a
+// fallback (e.g. HomePage) with a console.warn instead.
+const resolvePageComponent = (name) => {
+  const Component = PAGE_COMPONENTS[name];
+  if (!Component) throw new Error(`Unknown page component "${name}" in navigation.json`);
+  return Component;
+};
+
 const getDesignTokens = (mode) => ({
   palette: {
     mode,
@@ -105,10 +119,16 @@ const AnimatedRoutes = ({ data }) => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<RouteWrapper><HomePage data={data} /></RouteWrapper>} />
-        <Route path="/resume" element={<RouteWrapper><ResumePage data={data} /></RouteWrapper>} />
-        <Route path="/projects" element={<RouteWrapper><ProjectsPage data={data} /></RouteWrapper>} />
-        <Route path="/contact" element={<RouteWrapper><ContactPage data={data} /></RouteWrapper>} />
+        {data.navigation.menuItems.map((item) => {
+          const PageComponent = resolvePageComponent(item.component);
+          return (
+            <Route
+              key={item.path}
+              path={item.path}
+              element={<RouteWrapper><PageComponent data={data} /></RouteWrapper>}
+            />
+          );
+        })}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
