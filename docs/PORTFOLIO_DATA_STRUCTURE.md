@@ -60,16 +60,20 @@ Configures the navigation menu at the top of your portfolio.
 - `menuItems` (array of objects): Navigation menu items
   - `name` (string): Display name of menu item
   - `path` (string): Route path (e.g., "/", "/resume", "/projects", "/contact")
+  - `component` (string): Name of the page component to render at this path.
+    Must match a key in `PAGE_COMPONENTS` in `src/App.js` (defaults:
+    `HomePage`, `ResumePage`, `ProjectsPage`, `ContactPage`). Misspellings
+    throw at app load.
 
 ### Example:
 ```json
 {
   "brand": "John Doe",
   "menuItems": [
-    { "name": "Home", "path": "/" },
-    { "name": "Resume", "path": "/resume" },
-    { "name": "Projects", "path": "/projects" },
-    { "name": "Contact", "path": "/contact" }
+    { "name": "Home",     "path": "/",         "component": "HomePage" },
+    { "name": "Resume",   "path": "/resume",   "component": "ResumePage" },
+    { "name": "Projects", "path": "/projects", "component": "ProjectsPage" },
+    { "name": "Contact",  "path": "/contact",  "component": "ContactPage" }
   ]
 }
 ```
@@ -244,4 +248,20 @@ If you need to add new fields:
 2. Update this documentation
 3. Modify the corresponding page component in `src/components/pages/`
 4. Test thoroughly to ensure the new fields display correctly
+
+### Adding a new page
+
+The route table is driven from `navigation.json`, so adding a page takes three
+small edits:
+
+1. Create the new component, e.g. `src/components/pages/BlogPage.js`.
+2. Register it in `src/App.js`: add a `lazy()` import and include `BlogPage`
+   in the `PAGE_COMPONENTS` map.
+3. Add a menu entry to `src/data/navigation.json`:
+   ```json
+   { "name": "Blog", "path": "/blog", "component": "BlogPage" }
+   ```
+
+No `<Route>` boilerplate to touch — App.js generates routes from the menu
+items at render time.
 
