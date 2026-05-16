@@ -6,18 +6,16 @@ Your portfolio data is organized into **separate JSON files** for better maintai
 
 ```
 src/data/
-├── core/
-│   └── navigation.json       # Navigation menu configuration
-└── user/
-    ├── personalInfo.json     # Personal information and bio
-    ├── resume.json           # Professional experience and education
-    ├── projects.json         # Portfolio projects
-    └── contact.json          # Contact information and social links
+├── navigation.json       # Navigation menu configuration
+├── personalInfo.json     # Personal information and bio
+├── resume.json           # Professional experience and education
+├── projects.json         # Portfolio projects
+└── contact.json          # Contact information and social links
 ```
 
 ---
 
-## 📄 `src/data/user/personalInfo.json`
+## 📄 `src/data/personalInfo.json`
 
 Contains your personal information displayed on the home page.
 
@@ -53,7 +51,7 @@ Contains your personal information displayed on the home page.
 
 ---
 
-## 📄 `src/data/core/navigation.json`
+## 📄 `src/data/navigation.json`
 
 Configures the navigation menu at the top of your portfolio.
 
@@ -78,7 +76,7 @@ Configures the navigation menu at the top of your portfolio.
 
 ---
 
-## 📄 `src/data/user/resume.json`
+## 📄 `src/data/resume.json`
 
 Contains your professional background, skills, and qualifications.
 
@@ -156,7 +154,7 @@ Contains your professional background, skills, and qualifications.
 
 ---
 
-## 📄 `src/data/user/projects.json`
+## 📄 `src/data/projects.json`
 
 An array of your portfolio projects.
 
@@ -188,7 +186,7 @@ Array of project objects, each with the following fields:
 
 ---
 
-## 📄 `src/data/user/contact.json`
+## 📄 `src/data/contact.json`
 
 Additional contact information and social media links.
 
