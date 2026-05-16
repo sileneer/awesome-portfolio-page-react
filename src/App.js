@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useMemo, Suspense, lazy } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box, CircularProgress, Fab, Zoom, useScrollTrigger } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { MotionConfig, AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
@@ -185,7 +185,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <MotionConfig reducedMotion="user">
-        <HashRouter>
+        <BrowserRouter>
           <ScrollToTop />
           <ScrollToTopButton />
 
@@ -231,7 +231,7 @@ function App() {
 
             <Footer />
           </Box>
-        </HashRouter>
+        </BrowserRouter>
       </MotionConfig>
     </ThemeProvider>
   );
