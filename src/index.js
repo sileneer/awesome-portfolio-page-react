@@ -15,11 +15,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { ThemeContextProvider } from './context/ThemeContext';
+import { validatePortfolioData } from './data/schemas';
 
-// Create React root and attach to DOM element with id 'root'
+// Validate JSON data at boot — throws a clear error in the console if any
+// data file is malformed, before React tries to render against bad data.
+validatePortfolioData();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// Render the application
 root.render(
   <React.StrictMode>
     <ThemeContextProvider>

@@ -232,7 +232,7 @@ Additional contact information and social media links.
 
 ## ⚠️ Important Notes
 
-1. **Data Validation**: Only use the fields listed above to ensure compatibility with the application components.
+1. **Data Validation**: Each JSON file is validated against a Zod schema in `src/data/schemas.js` at app startup. If a required field is missing, has the wrong type, or fails a constraint (e.g. paths must start with `/`), the browser console shows a clear error naming the file and the bad field path. Update the schema whenever you add new fields.
 2. **Privacy**: Do not include sensitive or private information in your portfolio data.
 3. **Image Paths**: All image paths should start with `/` and reference files in the `public/` folder.
 4. **URLs**: Always use complete URLs for external links (including `https://`).
@@ -245,9 +245,11 @@ Additional contact information and social media links.
 
 If you need to add new fields:
 1. Update the appropriate JSON file in `src/data/`
-2. Update this documentation
-3. Modify the corresponding page component in `src/components/pages/`
-4. Test thoroughly to ensure the new fields display correctly
+2. Update the matching schema in `src/data/schemas.js` so validation accepts
+   the new field
+3. Update this documentation
+4. Modify the corresponding page component in `src/components/pages/`
+5. Test thoroughly to ensure the new fields display correctly
 
 ### Adding a new page
 
