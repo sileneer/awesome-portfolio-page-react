@@ -22,26 +22,76 @@ export const navigationSchema = z.object({
     .min(1),
 });
 
-// ---------------------------------------------------------------------------
-// TODO — replace each `z.unknown()` with a real schema.
-//
-// Reference: docs/PORTFOLIO_DATA_STRUCTURE.md lists every field per file.
-// Your domain knowledge of which fields are TRULY optional (vs. always
-// required for the UI to render) belongs here. Until you replace z.unknown(),
-// validation is effectively a no-op for that file.
-//
-// Useful zod patterns:
-//   z.string().min(1)          // non-empty string
-//   z.string().url()           // URL shape
-//   z.string().email()         // email shape
-//   z.string().optional()      // field may be missing
-//   z.array(z.string())        // array of strings
-//   z.array(...).min(1)        // non-empty array
-// ---------------------------------------------------------------------------
-export const personalInfoSchema = z.unknown();
-export const resumeSchema = z.unknown();
-export const projectsSchema = z.unknown();
-export const contactSchema = z.unknown();
+export const personalInfoSchema = z.object({
+  name: z.string().min(1),
+  title: z.string().min(1),
+  bio: z.string().min(1),
+  photo: z.string().min(1),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  location: z.string().optional(),
+  linkedin: z.string().url().optional(),
+  github: z.string().url().optional(),
+  website: z.string().url().optional(),
+  languages: z.array(z.string()).optional(),
+});
+
+const experienceItemSchema = z.object({
+  company: z.string().min(1),
+  role: z.string().min(1),
+  dates: z.string().min(1),
+  description: z.string().min(1),
+  location: z.string().optional(),
+  technologies: z.array(z.string()).optional(),
+  achievements: z.array(z.string()).optional(),
+});
+
+const educationItemSchema = z.object({
+  degree: z.string().min(1),
+  institution: z.string().min(1),
+  dates: z.string().min(1),
+  gpa: z.string().optional(),
+  location: z.string().optional(),
+  description: z.string().optional(),
+  coursework: z.array(z.string()).optional(),
+  extracurriculars: z.array(z.string()).optional(),
+});
+
+const credentialSchema = z.object({
+  title: z.string().min(1),
+  certificateLink: z.string().url().optional(),
+});
+
+export const resumeSchema = z.object({
+  summary: z.string().min(1),
+  experience: z.array(experienceItemSchema),
+  education: z.array(educationItemSchema),
+  skills: z.array(z.string()),
+  certifications: z.array(credentialSchema).optional(),
+  awards: z.array(credentialSchema).optional(),
+  interests: z.array(z.string()).optional(),
+  cvDownload: z.string().optional(),
+});
+
+const projectSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  technologies: z.array(z.string()),
+  link: z.string().url().optional(),
+  screenshots: z.array(z.string()).optional(),
+  role: z.string().optional(),
+  duration: z.string().optional(),
+});
+
+export const projectsSchema = z.array(projectSchema);
+
+export const contactSchema = z.object({
+  message: z.string().min(1),
+  alternateEmail: z.string().email().optional(),
+  twitter: z.string().url().optional(),
+  facebook: z.string().url().optional(),
+  calendly: z.string().url().optional(),
+});
 
 const VALIDATIONS = [
   { name: 'navigation.json',   schema: navigationSchema,   data: navigation   },
