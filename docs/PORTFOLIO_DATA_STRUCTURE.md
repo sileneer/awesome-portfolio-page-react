@@ -61,7 +61,7 @@ Configures the navigation menu at the top of your portfolio.
   - `name` (string): Display name of menu item
   - `path` (string): Route path (e.g., "/", "/resume", "/projects", "/contact")
   - `component` (string): Name of the page component to render at this path.
-    Must match a key in `PAGE_COMPONENTS` in `src/App.js` (defaults:
+    Must match a key in `PAGE_COMPONENTS` in `src/App.jsx` (defaults:
     `HomePage`, `ResumePage`, `ProjectsPage`, `ContactPage`). Misspellings
     throw at app load.
 
@@ -202,7 +202,6 @@ Additional contact information and social media links.
 - `alternateEmail` (string, optional): Secondary email address
 - `twitter` (string, optional): Twitter profile URL
 - `facebook` (string, optional): Facebook profile URL
-- `calendly` (string, optional): Calendly or meeting scheduler link
 
 ### Example:
 ```json
@@ -260,14 +259,14 @@ If you need to add new fields:
 The route table is driven from `navigation.json`, so adding a page takes three
 small edits:
 
-1. Create the new component, e.g. `src/components/pages/BlogPage.js`.
-2. Register it in `src/App.js`: add a `lazy()` import and include `BlogPage`
+1. Create the new component, e.g. `src/components/pages/BlogPage.jsx`.
+2. Register it in `src/App.jsx`: add a `lazy()` import and include `BlogPage`
    in the `PAGE_COMPONENTS` map.
 3. Add a menu entry to `src/data/navigation.json`:
    ```json
    { "name": "Blog", "path": "/blog", "component": "BlogPage" }
    ```
 
-No `<Route>` boilerplate to touch — App.js generates routes from the menu
+No `<Route>` boilerplate to touch — App.jsx generates routes from the menu
 items at render time.
 
