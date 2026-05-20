@@ -3,7 +3,7 @@ import { Box, Typography, useTheme, useMediaQuery, IconButton, Tooltip } from '@
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Description, Dashboard, Mail, LightMode, DarkMode } from '@mui/icons-material';
+import { Home, Description, Dashboard, Mail, LightMode, DarkMode, SettingsBrightness } from '@mui/icons-material';
 import { ThemeContext } from '../context/ThemeContext';
 
 const iconMap = {
@@ -13,10 +13,19 @@ const iconMap = {
   contact: Mail,
 };
 
+// Drives both the toggle icon and the tooltip / aria-label.
+// `nextLabel` mirrors the cycle order in ThemeContext: light → dark → system → light.
+const PREFERENCE_META = {
+  light: { Icon: LightMode, label: 'Light mode', nextLabel: 'dark mode' },
+  dark: { Icon: DarkMode, label: 'Dark mode', nextLabel: 'follow system' },
+  system: { Icon: SettingsBrightness, label: 'Follow system', nextLabel: 'light mode' },
+};
+
 const Navigation = ({ data }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { mode, toggleTheme } = useContext(ThemeContext);
+  const { mode, preference, cyclePreference } = useContext(ThemeContext);
+  const { Icon: ThemeIcon, label: themeLabel, nextLabel: themeNextLabel } = PREFERENCE_META[preference];
   const { menuItems } = data.navigation;
   const navigate = useNavigate();
   const location = useLocation();
@@ -122,16 +131,16 @@ const Navigation = ({ data }) => {
 
       <Box sx={{ width: '1px', height: '24px', background: theme.palette.divider, mx: 1 }} />
 
-      <Tooltip title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`} arrow placement="top">
+      <Tooltip title={`Theme: ${themeLabel}. Click for ${themeNextLabel}.`} arrow placement="top">
         <IconButton
-          onClick={toggleTheme}
-          aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+          onClick={cyclePreference}
+          aria-label={`Theme: ${themeLabel}. Switch to ${themeNextLabel}.`}
           sx={{
             color: theme.palette.text.primary,
             '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
           }}
         >
-          {mode === 'dark' ? <LightMode fontSize="small" /> : <DarkMode fontSize="small" />}
+          <ThemeIcon fontSize="small" />
         </IconButton>
       </Tooltip>
     </Box>

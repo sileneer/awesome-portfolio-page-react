@@ -122,9 +122,10 @@ const ProjectsPage = ({ data }) => {
                     component={motion.div}
                     layout
                     initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: '-50px' }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.4, type: 'spring' }}
+                    transition={{ type: 'spring', stiffness: 80, damping: 15 }}
                   >
                     <motion.div
                       whileHover={{ y: -6 }}
