@@ -87,6 +87,7 @@ export const projectsSchema = z.array(projectSchema);
 
 export const contactSchema = z.object({
   message: z.string().min(1),
+  responseTime: z.string().min(1).max(40).optional(),
   alternateEmail: z.string().email().optional(),
   twitter: z.string().url().optional(),
   facebook: z.string().url().optional(),

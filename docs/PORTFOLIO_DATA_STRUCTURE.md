@@ -196,6 +196,9 @@ Additional contact information and social media links.
 
 ### Allowed Fields:
 - `message` (string): Custom contact message or call-to-action
+- `responseTime` (string, optional): Expected reply time shown on the Contact
+  page's stat strip (e.g. "Within 24 hours", "Same day"). Max 40 characters.
+  Falls back to "Within 24 hours" if omitted.
 - `alternateEmail` (string, optional): Secondary email address
 - `twitter` (string, optional): Twitter profile URL
 - `facebook` (string, optional): Facebook profile URL
@@ -205,6 +208,7 @@ Additional contact information and social media links.
 ```json
 {
   "message": "Feel free to reach out for collaboration, freelance work, or just to connect!",
+  "responseTime": "Within 24 hours",
   "alternateEmail": "contact@example.com",
   "twitter": "https://twitter.com/johndoe",
   "facebook": "https://facebook.com/johndoe"
