@@ -91,7 +91,6 @@ export const contactSchema = z.object({
   alternateEmail: z.string().email().optional(),
   twitter: z.string().url().optional(),
   facebook: z.string().url().optional(),
-  calendly: z.string().url().optional(),
 });
 
 const VALIDATIONS = [

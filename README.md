@@ -11,8 +11,8 @@
 - **🏠 Home Page**: Professional landing page with hero section and highlight cards
 - **📄 Resume Section**: Complete professional background with structured experience, education, and skills
 - **💼 Projects Showcase**: Showcase projects with Material-UI cards, chips, and media components
-- **📞 Contact Page**: Multiple contact methods with icons and professional styling
-- **� Theme System**: Centralized Material-UI theme with custom color palette
+- **📞 Contact Page**: Featured email with copy + mailto CTAs, at-a-glance stat strip (reply time, location, availability), and social grid
+- **🎨 Theme System**: Three-state preference (light / dark / system) with live OS-theme following and custom Material-UI palette
 - **♿ Accessible**: Built-in accessibility features and ARIA attributes
 - **⚙️ Fully Customizable**: All content driven by a single JSON configuration file
 - **🔒 Data Validation**: Structured data format ensures consistency and prevents errors
@@ -56,7 +56,7 @@ This portfolio has been completely rewritten using Material-UI components:
    npm start
    ```
 
-4. **Open your browser** and visit [http://localhost:3000](http://localhost:3000)
+4. **Open your browser** and visit [http://localhost:5173](http://localhost:5173)
 
 ### Customization
 
@@ -89,22 +89,24 @@ See [PORTFOLIO_DATA_STRUCTURE.md](./docs/PORTFOLIO_DATA_STRUCTURE.md) for comple
 ```
 src/
 ├── components/
-│   ├── Navigation.js         # Main navigation component
-│   ├── Footer.js             # Footer with attribution
+│   ├── Navigation.jsx        # Floating bottom nav with theme toggle
+│   ├── Footer.jsx            # Footer with attribution
 │   └── pages/
-│       ├── HomePage.js       # Landing page with hero section
-│       ├── ResumePage.js     # Resume and experience
-│       ├── ProjectsPage.js   # Projects showcase
-│       └── ContactPage.js    # Contact information
+│       ├── HomePage.jsx      # Landing page with hero and stat cards
+│       ├── ResumePage.jsx    # Resume and experience timeline
+│       ├── ProjectsPage.jsx  # Projects showcase with filtering
+│       └── ContactPage.jsx   # Stat strip + featured email + socials
 ├── context/
-│   └── ThemeContext.js       # Light/dark theme state
+│   └── ThemeContext.jsx      # Light / dark / system theme state
 ├── data/
 │   ├── navigation.json       # Navigation menu configuration
 │   ├── personalInfo.json     # Personal information and bio
 │   ├── resume.json           # Professional experience and education
 │   ├── projects.json         # Portfolio projects
-│   └── contact.json          # Contact information and social links
-└── App.js                    # Main app component with theme
+│   ├── contact.json          # Contact information and social links
+│   └── schemas.js            # Zod schemas — JSON files validated at boot
+├── App.jsx                   # Main app component with theme
+└── index.jsx                 # Entry point + data validation
 ```
 
 ## 🎨 Pages Overview
@@ -131,15 +133,17 @@ src/
 - Clean, organized layout for easy browsing
 
 ### Contact Page
-- Multiple contact methods (email, phone, location)
-- Social media links (LinkedIn, GitHub, Twitter, Facebook)
-- Meeting scheduling integration (Calendly)
-- Professional contact message
+- **Stat strip** at the top: typical reply time, location, and a live availability indicator (paired with the HomePage status pill)
+- **Featured email card**: avatar, address, and two CTAs (`Copy address` to put the email on the clipboard, `Email me` to launch the user's mail client via `mailto:`)
+- Phone row with a `tel:` link (rendered only when `phone` is set)
+- Social media grid (LinkedIn, GitHub, website, Twitter, Facebook) — each social shown only if configured
+- Professional contact message above the cards
+- Configurable response time string in `contact.json` (`responseTime`)
 
 ## 📋 Available Scripts
 
 ### Development
-- **`npm start`** - Start development server at [http://localhost:3000](http://localhost:3000)
+- **`npm start`** - Start development server at [http://localhost:5173](http://localhost:5173)
 - **`npm test`** - Run tests in watch mode
 - **`npm run build`** - Build for production (outputs to `build/` folder)
 
@@ -198,10 +202,10 @@ Showcase your work:
 
 #### 5. Contact (`src/data/contact.json`)
 Add additional contact options:
-- Custom contact message
+- Custom contact message displayed under the page title
+- Typical response time string (e.g. "Within 24 hours") shown on the stat strip
 - Alternate email
 - Social media (Twitter, Facebook)
-- Meeting scheduler link (Calendly)
 
 ### Adding Images
 - **Profile Photo**: Add your photo as `public/profile_photo.png`
@@ -209,8 +213,8 @@ Add additional contact options:
 - **Project Screenshots**: Create `public/projects/` folder and add your project images
 
 ### Styling & Theming
-The application uses Material-UI theming configured in `src/App.js`:
-- **Theme Configuration**: Modify the `createTheme()` object in `App.js`
+The application uses Material-UI theming configured in `src/App.jsx`:
+- **Theme Configuration**: Modify the `getDesignTokens()` function in `App.jsx`
 - **Color Palette**: Change primary, secondary, and background colors
 - **Typography**: Adjust font families, sizes, and weights
 - **Component Overrides**: Customize Material-UI component styles
@@ -232,7 +236,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
-- Built with [Create React App](https://github.com/facebook/create-react-app)
+- Bundled with [Vite](https://vitejs.dev/) and built on [React](https://react.dev/) + [Material-UI](https://mui.com/) + [Framer Motion](https://www.framer.com/motion/)
+- Runtime JSON validation by [Zod](https://zod.dev/)
 - Icons and design inspiration from modern portfolio trends
 - Thank you to all contributors who help improve this template
 
