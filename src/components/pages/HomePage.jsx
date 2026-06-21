@@ -3,20 +3,7 @@ import { Container, Typography, Box, Button, Avatar, Grid, Card, useTheme, Stack
 import { alpha } from '@mui/material/styles';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { GitHub, LinkedIn, WorkOutline, FolderSpecial, EmojiObjects } from '@mui/icons-material';
-
-const calculateYearsOfExperience = (experience) => {
-  if (!Array.isArray(experience) || experience.length === 0) return 0;
-  const years = experience
-    .map((exp) => {
-      const match = String(exp?.dates || '').match(/\d{4}/);
-      return match ? parseInt(match[0], 10) : null;
-    })
-    .filter((y) => y !== null);
-  if (years.length === 0) return 0;
-  const earliest = Math.min(...years);
-  const current = new Date().getFullYear();
-  return Math.max(0, current - earliest);
-};
+import { yearsOfExperience } from '../../utils/experience';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -43,16 +30,18 @@ const HomePage = ({ data }) => {
   const github = personalInfo?.github ?? '';
   const photo = personalInfo?.photo ?? '';
 
-  const yearsExperience = useMemo(() => calculateYearsOfExperience(data?.resume?.experience), [data?.resume?.experience]);
+  const yearsExperience = useMemo(() => yearsOfExperience(data?.resume?.experience), [data?.resume?.experience]);
   const skillsCount = Array.isArray(data?.resume?.skills) ? data.resume.skills.length : 0;
   const projectsCount = Array.isArray(data?.projects) ? data.projects.length : 0;
 
   const primarySoft = alpha(theme.palette.primary.main, 0.1);
   const secondarySoft = alpha(theme.palette.secondary.main, 0.1);
 
+  const withPlus = (n) => `${n}${n > 0 ? '+' : ''}`;
+
   const stats = useMemo(() => [
     {
-      value: `${yearsExperience}+`,
+      value: withPlus(yearsExperience),
       label: 'Years Experience',
       icon: WorkOutline,
       color: theme.palette.primary.main,
@@ -60,7 +49,7 @@ const HomePage = ({ data }) => {
       glow: theme.palette.primary.main,
     },
     {
-      value: `${projectsCount}+`,
+      value: withPlus(projectsCount),
       label: 'Projects Completed',
       icon: FolderSpecial,
       color: theme.palette.secondary.main,
@@ -68,7 +57,7 @@ const HomePage = ({ data }) => {
       glow: theme.palette.secondary.main,
     },
     {
-      value: `${skillsCount}+`,
+      value: withPlus(skillsCount),
       label: 'Technologies Mastered',
       icon: EmojiObjects,
       color: theme.palette.primary.main,
@@ -122,7 +111,7 @@ const HomePage = ({ data }) => {
             <Grid size={{ xs: 12, md: 7 }}>
               <Box component={motion.div} variants={containerVariants} initial="hidden" animate="visible" sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                 <motion.div variants={textVariants}>
-                  <Typography variant="h6" color="primary.main" sx={{ mb: 2, textTransform: 'uppercase', letterSpacing: 3, fontWeight: 700 }}>
+                  <Typography variant="h6" component="p" color="primary.main" sx={{ mb: 2, textTransform: 'uppercase', letterSpacing: 3, fontWeight: 700 }}>
                     Welcome to my universe
                   </Typography>
                 </motion.div>
@@ -138,7 +127,7 @@ const HomePage = ({ data }) => {
                 </motion.div>
 
                 <motion.div variants={textVariants}>
-                  <Typography variant="h4" color="secondary.light" sx={{ mb: 4, fontWeight: 600 }}>
+                  <Typography variant="h4" component="p" color="secondary.light" sx={{ mb: 4, fontWeight: 600 }}>
                     {title}
                   </Typography>
                 </motion.div>
@@ -318,6 +307,7 @@ const HomePage = ({ data }) => {
                     <Box>
                       <Typography
                         variant="h3"
+                        component="p"
                         fontWeight={900}
                         sx={{
                           fontFamily: '"Outfit", sans-serif',
@@ -333,6 +323,7 @@ const HomePage = ({ data }) => {
                       </Typography>
                       <Typography
                         variant="subtitle1"
+                        component="p"
                         fontWeight={600}
                         sx={{
                           color: theme.palette.text.primary,

@@ -13,6 +13,7 @@ import navigation from './data/navigation.json';
 import resume from './data/resume.json';
 import projects from './data/projects.json';
 import contact from './data/contact.json';
+import { validatePortfolioData } from './data/schemas';
 
 const HomePage = lazy(() => import('./components/pages/HomePage'));
 const ResumePage = lazy(() => import('./components/pages/ResumePage'));
@@ -182,6 +183,9 @@ const ScrollToTopButton = () => {
 };
 
 function App() {
+  // Validate portfolio JSON during render so the ErrorBoundary can surface a
+  // readable message (instead of a blank screen) if a data file is malformed.
+  useMemo(() => validatePortfolioData(), []);
   const { mode } = useContext(ThemeContext);
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 

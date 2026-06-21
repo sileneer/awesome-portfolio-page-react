@@ -7,7 +7,7 @@
  * - Renders the App component into the DOM
  * - Enables React StrictMode for development warnings
  * 
- * The application is mounted to the 'root' div in public/index.html
+ * The application is mounted to the 'root' div in index.html
  */
 
 import React from 'react';
@@ -15,18 +15,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { ThemeContextProvider } from './context/ThemeContext';
-import { validatePortfolioData } from './data/schemas';
-
-// Validate JSON data at boot — throws a clear error in the console if any
-// data file is malformed, before React tries to render against bad data.
-validatePortfolioData();
+import ErrorBoundary from './components/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+// Portfolio JSON is validated during App render (see validatePortfolioData),
+// so the ErrorBoundary can surface a readable message instead of a blank screen.
 root.render(
   <React.StrictMode>
-    <ThemeContextProvider>
-      <App />
-    </ThemeContextProvider>
+    <ErrorBoundary>
+      <ThemeContextProvider>
+        <App />
+      </ThemeContextProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
