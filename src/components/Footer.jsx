@@ -31,7 +31,7 @@ const Footer = () => {
           }}
         >
           Crafted with{' '}
-          <Favorite sx={{ fontSize: 16, color: theme.palette.secondary.main }} aria-label="love" />
+          <Favorite sx={{ fontSize: 16, color: theme.palette.secondary.main }} titleAccess="love" />
           {' '}using{' '}
           <Link
             href="https://react.dev"

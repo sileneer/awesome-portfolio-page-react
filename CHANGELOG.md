@@ -5,6 +5,73 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-06-21
+
+Feature release. Restores résumé content that existed in the data and schema but
+stopped rendering after the 2.0.0 migration, redesigns the Résumé, Projects, and
+Contact pages around one shared design language, and adds an accessibility and
+consistency pass across the site. No data or schema changes — existing `*.json`
+files work unchanged.
+
+### Added
+- **Restored résumé sections**: professional `summary`, per-role `location` and
+  `achievements`, and full **Education**, **Certifications**, **Awards**, and
+  **Interests** sections. These fields were already present in `resume.json`,
+  the zod schema, and the docs, but no component rendered them.
+- **Résumé page**: a sticky in-page section navigation (desktop) with
+  IntersectionObserver scrollspy and smooth-scroll anchors that respect
+  `prefers-reduced-motion`; an intro band with at-a-glance stats (years of
+  experience, roles, skills, certifications); and a single-rail experience
+  timeline.
+- **Languages** section on the Résumé page, sourced from
+  `personalInfo.languages` (previously not rendered anywhere).
+- **Projects page**: an intro band with project and technology counts; `role`
+  and `duration` surfaced on each card; a rich project detail dialog (gallery +
+  description + role/duration + technologies + links) replacing the
+  screenshot-only lightbox; and a "Showing X of Y" count while filtering.
+- **Contact page**: `contact.alternateEmail` surfaced as a second contact
+  method, with copy-to-clipboard on phone and alternate email (previously
+  email only).
+- **Error boundary**: malformed `src/data` JSON or an unknown `navigation.json`
+  component now shows a readable message instead of a blank screen.
+- **Tests**: component tests for the Résumé, Projects, Contact, and Home pages,
+  a unit test for the years-of-experience helper, and jest-dom wiring
+  (`src/setupTests.js`).
+
+### Changed
+- **Heading hierarchy (all pages)**: each page now has exactly one `<h1>`, and
+  value/label text that MUI was silently rendering as `<h6>` (the `subtitle1`
+  and `h6` variants default to an `<h6>` tag) is now non-heading text — fixing
+  the document outline for screen readers.
+- **Contact page** aligned with the rest of the site: a left-aligned hero, the
+  shared icon-chip section-heading style, and a balanced two-column layout for
+  contact methods and social links.
+- **Badges** for Skills, Languages, and Interests unified into one consistent
+  soft-tint pill style (previously inconsistent sizes and treatments).
+- **Shared components**: `SectionHeading`, `StatItem`, and a `yearsOfExperience`
+  helper were extracted to `src/components` / `src/utils` and reused across
+  pages so they cannot drift apart.
+- **Languages** moved from the Home hero to the Résumé page.
+
+### Removed
+- Redundant "View details" button on project cards — the card image (with its
+  hover affordance) opens the detail dialog, which carries the external link.
+
+### Fixed
+- The project detail dialog now plays its close transition instead of snapping
+  shut.
+- Home stat values no longer show "0+" when a count is zero.
+- `aria-current` added to the active Résumé section-nav link.
+- The footer heart icon now exposes its "love" label to assistive tech
+  (`titleAccess` instead of an ignored `aria-label`).
+- Stale `public/index.html` reference in `src/index.jsx` corrected to
+  `index.html` (post-Vite).
+
+### Security
+- N/A
+
+---
+
 ## [2.0.0] - 2026-05-20
 
 Major release. This version refreshes the Contact page, introduces a

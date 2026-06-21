@@ -7,8 +7,64 @@ import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import {
   Email, Phone, LocationOn, LinkedIn, GitHub, Language, Twitter, Facebook,
-  Send, ContentCopy, Schedule,
+  Send, ContentCopy, Schedule, AlternateEmail, ContactMail, Public,
 } from '@mui/icons-material';
+import SectionHeading from '../SectionHeading';
+
+// A single tappable contact method: icon tile, label, value (as a mailto/tel
+// link), and a copy-to-clipboard button. Used for email, alternate email, phone.
+const ContactMethod = ({ icon, accent, label, value, href, onCopy, copyLabel }) => {
+  const theme = useTheme();
+  return (
+    <Stack
+      direction="row"
+      alignItems="center"
+      spacing={2}
+      sx={{
+        p: 1.5,
+        borderRadius: 3,
+        transition: 'background 0.2s ease',
+        '&:hover': { background: alpha(accent, 0.06) },
+      }}
+    >
+      <Avatar sx={{ bgcolor: alpha(accent, 0.12), color: accent, width: 48, height: 48, flexShrink: 0 }}>
+        {icon}
+      </Avatar>
+      <Box sx={{ minWidth: 0, flex: 1 }}>
+        <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>
+          {label}
+        </Typography>
+        <Link
+          href={href}
+          title={value}
+          sx={{
+            display: 'block',
+            fontWeight: 700,
+            color: theme.palette.text.primary,
+            textDecoration: 'none',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            '&:hover': { color: accent },
+          }}
+        >
+          {value}
+        </Link>
+      </Box>
+      {onCopy && (
+        <Tooltip title={copyLabel} arrow placement="top">
+          <IconButton
+            onClick={onCopy}
+            aria-label={copyLabel}
+            sx={{ flexShrink: 0, color: 'text.secondary', '&:hover': { color: accent } }}
+          >
+            <ContentCopy fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Stack>
+  );
+};
 
 const ContactPage = ({ data }) => {
   const personalInfo = data?.personalInfo ?? {};
@@ -30,14 +86,30 @@ const ContactPage = ({ data }) => {
     { name: 'Twitter', url: contact.twitter, icon: <Twitter />, color: '#1da1f2' },
     { name: 'Facebook', url: contact.facebook, icon: <Facebook />, color: '#4267b2' },
   ].filter((link) => !!link.url);
+  const hasSocial = socialLinks.length > 0;
+
+  const methods = [
+    personalInfo.email && {
+      key: 'email', icon: <Email />, accent: theme.palette.primary.main,
+      label: 'Email', value: personalInfo.email, href: `mailto:${personalInfo.email}`, copyLabel: 'Copy email address',
+    },
+    contact.alternateEmail && {
+      key: 'alt', icon: <AlternateEmail />, accent: theme.palette.secondary.main,
+      label: 'Alternate email', value: contact.alternateEmail, href: `mailto:${contact.alternateEmail}`, copyLabel: 'Copy alternate email',
+    },
+    personalInfo.phone && {
+      key: 'phone', icon: <Phone />, accent: theme.palette.secondary.main,
+      label: 'Phone', value: personalInfo.phone, href: `tel:${personalInfo.phone}`, copyLabel: 'Copy phone number',
+    },
+  ].filter(Boolean);
 
   const showSnackbar = (severity, message) => setSnackbar({ open: true, severity, message });
 
-  const handleCopyEmail = async () => {
-    if (!personalInfo.email) return;
+  const handleCopy = async (value, label) => {
+    if (!value) return;
     try {
-      await navigator.clipboard.writeText(personalInfo.email);
-      showSnackbar('success', 'Email address copied to clipboard.');
+      await navigator.clipboard.writeText(value);
+      showSnackbar('success', `${label} copied to clipboard.`);
     } catch {
       showSnackbar('error', 'Copy failed — please copy manually.');
     }
@@ -52,8 +124,7 @@ const ContactPage = ({ data }) => {
   const secondarySoft = alpha(theme.palette.secondary.main, 0.1);
 
   // Pulsing-dot icon tile — parallel to the Schedule / LocationOn tiles in
-  // cells 1 and 2 of the stat strip. The pulse keeps the HomePage's identity
-  // element alive while letting cell 3 share the others' visual skeleton.
+  // cells 1 and 2 of the stat strip.
   const availabilityTile = (
     <Box sx={{
       p: 2, borderRadius: 3,
@@ -75,9 +146,9 @@ const ContactPage = ({ data }) => {
       <Container maxWidth="lg">
 
         {/* ---------- Hero ---------- */}
-        <Box sx={{ mb: 5, textAlign: 'center' }}>
+        <Box sx={{ mb: 5 }}>
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Typography variant="h2" sx={{
+            <Typography variant="h2" component="h1" sx={{
               fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 800,
               background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 100%)`,
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', mb: 2,
@@ -87,7 +158,7 @@ const ContactPage = ({ data }) => {
             </Typography>
           </motion.div>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto', fontWeight: 400 }}>
+            <Typography variant="h6" component="p" color="text.secondary" sx={{ maxWidth: '65ch', fontWeight: 400 }}>
               {contact?.message || "Ready to bring your ideas to life? Let's discuss how we can work together to create something amazing."}
             </Typography>
           </motion.div>
@@ -105,7 +176,7 @@ const ContactPage = ({ data }) => {
                   </Box>
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Typical reply</Typography>
-                    <Typography variant="h6" fontWeight={800} color="text.primary">{responseTime}</Typography>
+                    <Typography variant="h6" component="p" fontWeight={800} color="text.primary">{responseTime}</Typography>
                   </Box>
                 </Box>
               </Grid>
@@ -127,7 +198,7 @@ const ContactPage = ({ data }) => {
                     </Box>
                     <Box sx={{ minWidth: 0 }}>
                       <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Location</Typography>
-                      <Typography variant="h6" fontWeight={800} color="text.primary">{personalInfo.location}</Typography>
+                      <Typography variant="h6" component="p" fontWeight={800} color="text.primary">{personalInfo.location}</Typography>
                     </Box>
                   </Box>
                 </Grid>
@@ -138,7 +209,7 @@ const ContactPage = ({ data }) => {
                   {availabilityTile}
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Status</Typography>
-                    <Typography variant="h6" fontWeight={800} color="text.primary">Available</Typography>
+                    <Typography variant="h6" component="p" fontWeight={800} color="text.primary">Available</Typography>
                   </Box>
                 </Box>
               </Grid>
@@ -149,145 +220,92 @@ const ContactPage = ({ data }) => {
 
         {/* ---------- Contact card ---------- */}
         <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.5 }}>
-          <Card sx={{
-            borderRadius: 4,
-            p: { xs: 4, md: 5 },
-          }}>
+          <Card sx={{ borderRadius: 4, p: { xs: 3, md: 5 } }}>
+            <Grid container spacing={{ xs: 4, md: 5 }}>
 
-            {personalInfo.email && (
-              <Box>
-                <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'flex-start', sm: 'center' }} spacing={2.5}>
-                  <Avatar sx={{
-                    bgcolor: alpha(theme.palette.primary.main, 0.12),
-                    color: theme.palette.primary.main,
-                    width: 56,
-                    height: 56,
-                    flexShrink: 0,
-                  }}>
-                    <Email sx={{ fontSize: 28 }} />
-                  </Avatar>
-                  <Box sx={{ minWidth: 0, flex: 1, width: '100%' }}>
-                    <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>
-                      Email
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      fontWeight={700}
-                      sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                      title={personalInfo.email}
-                    >
-                      {personalInfo.email}
-                    </Typography>
-                  </Box>
-                  <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
-                    <Button
-                      variant="outlined"
-                      startIcon={<ContentCopy />}
-                      onClick={handleCopyEmail}
-                      aria-label="Copy email address to clipboard"
-                      sx={{
-                        borderColor: theme.palette.divider,
-                        color: theme.palette.text.primary,
-                        '&:hover': { borderColor: theme.palette.primary.main, color: theme.palette.primary.main },
-                      }}
-                    >
-                      Copy
-                    </Button>
-                    <Button
-                      variant="contained"
-                      startIcon={<Send />}
-                      href={`mailto:${personalInfo.email}`}
-                      aria-label={`Open your email client to send a message to ${personalInfo.email}`}
-                      sx={{
-                        background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                        color: theme.palette.getContrastText(theme.palette.primary.main),
-                        fontWeight: 700,
-                        '&:hover': { boxShadow: `0 0 20px ${alpha(theme.palette.primary.main, 0.4)}` },
-                      }}
-                    >
-                      Email me
-                    </Button>
-                  </Stack>
+              {/* Direct contact methods */}
+              <Grid size={{ xs: 12, md: hasSocial ? 7 : 12 }}>
+                <SectionHeading icon={ContactMail} size="sm">Reach me directly</SectionHeading>
+                <Stack spacing={0.5} divider={<Divider flexItem sx={{ my: 0.5 }} />}>
+                  {methods.map((m) => (
+                    <ContactMethod
+                      key={m.key}
+                      icon={m.icon}
+                      accent={m.accent}
+                      label={m.label}
+                      value={m.value}
+                      href={m.href}
+                      copyLabel={m.copyLabel}
+                      onCopy={() => handleCopy(m.value, m.label)}
+                    />
+                  ))}
                 </Stack>
-              </Box>
-            )}
+                {personalInfo.email && (
+                  <Button
+                    variant="contained"
+                    startIcon={<Send />}
+                    href={`mailto:${personalInfo.email}`}
+                    aria-label={`Open your email client to send a message to ${personalInfo.email}`}
+                    sx={{
+                      mt: 3,
+                      px: 4, py: 1.25,
+                      fontWeight: 700,
+                      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                      color: theme.palette.getContrastText(theme.palette.primary.main),
+                      '&:hover': { boxShadow: `0 0 20px ${alpha(theme.palette.primary.main, 0.4)}` },
+                    }}
+                  >
+                    Email me
+                  </Button>
+                )}
+              </Grid>
 
-            {personalInfo.phone && (
-              <>
-                <Divider sx={{ my: 3 }} />
-                <Stack direction="row" alignItems="center" spacing={2.5}>
-                  <Avatar sx={{
-                    bgcolor: alpha(theme.palette.secondary.main, 0.12),
-                    color: theme.palette.secondary.main,
-                    width: 56,
-                    height: 56,
-                    flexShrink: 0,
-                  }}>
-                    <Phone sx={{ fontSize: 28 }} />
-                  </Avatar>
-                  <Box sx={{ minWidth: 0 }}>
-                    <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>
-                      Phone
-                    </Typography>
-                    <Link
-                      href={`tel:${personalInfo.phone}`}
-                      sx={{
-                        display: 'block',
-                        fontWeight: 700,
-                        fontSize: '1.1rem',
-                        color: theme.palette.text.primary,
-                        textDecoration: 'none',
-                        '&:hover': { color: theme.palette.secondary.main },
-                      }}
-                    >
-                      {personalInfo.phone}
-                    </Link>
-                  </Box>
-                </Stack>
-              </>
-            )}
-
-            {socialLinks.length > 0 && (
-              <>
-                <Divider sx={{ my: 3 }} />
-                <Stack
-                  direction={{ xs: 'column', sm: 'row' }}
-                  alignItems={{ xs: 'flex-start', sm: 'center' }}
-                  justifyContent="space-between"
-                  spacing={2}
+              {/* Social links */}
+              {hasSocial && (
+                <Grid
+                  size={{ xs: 12, md: 5 }}
+                  sx={{
+                    borderLeft: { md: `1px solid ${theme.palette.divider}` },
+                    borderTop: { xs: `1px solid ${theme.palette.divider}`, md: 'none' },
+                    pt: { xs: 4, md: 0 },
+                    pl: { md: 5 },
+                  }}
                 >
-                  <Typography variant="h6" fontWeight={700}>Follow me</Typography>
-                  <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
-                    {socialLinks.map((social, index) => (
-                      <Tooltip key={index} title={social.name} arrow placement="top">
-                        <IconButton
-                          href={social.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`Open ${social.name} profile in a new tab`}
-                          sx={{
-                            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(15,23,42,0.05)',
-                            color: social.color,
-                            border: `1px solid ${theme.palette.divider}`,
-                            p: 1.5,
-                            transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
-                            '&:hover': {
-                              backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(15,23,42,0.08)',
-                              borderColor: social.color,
-                              boxShadow: `0 0 15px ${alpha(social.color, 0.4)}`,
-                            },
-                            '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
-                          }}
-                        >
-                          {social.icon}
-                        </IconButton>
-                      </Tooltip>
+                  <SectionHeading icon={Public} size="sm">Find me online</SectionHeading>
+                  <Stack spacing={1}>
+                    {socialLinks.map((social) => (
+                      <Button
+                        key={social.name}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        startIcon={social.icon}
+                        aria-label={`Open ${social.name} profile in a new tab`}
+                        sx={{
+                          justifyContent: 'flex-start',
+                          px: 2, py: 1.25,
+                          borderRadius: 2,
+                          fontWeight: 600,
+                          color: theme.palette.text.primary,
+                          border: `1px solid ${theme.palette.divider}`,
+                          transition: 'border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease',
+                          '& .MuiButton-startIcon': { color: social.color },
+                          '&:hover': {
+                            borderColor: social.color,
+                            background: alpha(social.color, 0.06),
+                            boxShadow: `0 0 14px ${alpha(social.color, 0.25)}`,
+                          },
+                          '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
+                        }}
+                      >
+                        {social.name}
+                      </Button>
                     ))}
                   </Stack>
-                </Stack>
-              </>
-            )}
+                </Grid>
+              )}
 
+            </Grid>
           </Card>
         </motion.div>
 
