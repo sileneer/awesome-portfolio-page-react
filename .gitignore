@@ -32,17 +32,38 @@ yarn-error.log*
 # AI agent files (per-user, do not commit to the template)
 CLAUDE.md
 AGENTS.md
+AGENT.md
 GEMINI.md
+QWEN.md
+WARP.md
 .cursor/
+.cursorrules
+.cursorignore
 .aider*
+.gemini/
+.codex/
+.windsurf/
+.windsurfrules
+.clinerules*
+.roo/
+.kiro/
+.junie/
+.trae/
+.augment/
+.continue/
+.amazonq/
+.goosehints
+.github/copilot-instructions.md
+
+# AI agent memory / skill state
+.remember/
 
 # Scratch / planning files (kept out of the public repo)
 plans/
 task_plan.md
 findings.md
 progress.md
+PROGRESS.md
+TODO.md
 PLAN.md
 plan.md
-
-# WARP
-WARP.md
