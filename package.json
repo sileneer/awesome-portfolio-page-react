@@ -18,6 +18,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "vitest run",
     "test:watch": "vitest"
   },
