@@ -14,6 +14,7 @@ import resume from './data/resume.json';
 import projects from './data/projects.json';
 import contact from './data/contact.json';
 import { validatePortfolioData } from './data/schemas';
+import { pageTitle } from './utils/pageTitle';
 
 const HomePage = lazy(() => import('./components/pages/HomePage'));
 const ResumePage = lazy(() => import('./components/pages/ResumePage'));
@@ -126,7 +127,11 @@ const AnimatedRoutes = ({ data }) => {
             <Route
               key={item.path}
               path={item.path}
-              element={<RouteWrapper><PageComponent data={data} /></RouteWrapper>}
+              element={
+                <RouteWrapper title={pageTitle(item, data.personalInfo)}>
+                  <PageComponent data={data} />
+                </RouteWrapper>
+              }
             />
           );
         })}
@@ -136,16 +141,21 @@ const AnimatedRoutes = ({ data }) => {
   );
 };
 
-const RouteWrapper = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.25 }}
-  >
-    {children}
-  </motion.div>
-);
+const RouteWrapper = ({ children, title }) => {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -198,7 +208,6 @@ function App() {
   };
 
   useEffect(() => {
-    document.title = `${personalInfo.name} | ${personalInfo.title}`;
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', `${personalInfo.name} - ${personalInfo.title}. ${personalInfo.bio}`);
