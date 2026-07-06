@@ -64,7 +64,7 @@ const HomePage = ({ data }) => {
       bg: primarySoft,
       glow: theme.palette.primary.main,
     },
-  ], [yearsExperience, projectsCount, skillsCount, theme]);
+  ], [yearsExperience, projectsCount, skillsCount, theme, primarySoft, secondarySoft]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
