@@ -162,9 +162,12 @@ This project can be deployed to various platforms:
 
 ### GitHub Pages
 ```bash
-npm run build
-# Deploy the build/ folder to your hosting service
+npm run deploy
 ```
+This builds the site and publishes `build/` to the `gh-pages` branch using the
+[gh-pages](https://github.com/tschaub/gh-pages) package. If your site is served
+from a sub-path (`https://<user>.github.io/<repo>/` rather than a user page),
+set `base: '/<repo>/'` in `vite.config.js` first.
 
 ### Netlify / Vercel
 Simply connect your GitHub repository and these services will automatically build and deploy your portfolio.
