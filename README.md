@@ -80,7 +80,7 @@ Your portfolio data is organized into separate JSON files for easy management:
    - Add additional contact methods and social media links
 
 6. **Images**:
-   - Add your profile photo to `public/profile_photo.png`
+   - Add your profile photo to `public/profile_photo.jpg`
    - Add your CV to `public/CV.pdf` (optional)
    - Add project screenshots to `public/projects/` folder (optional)
 
@@ -218,7 +218,7 @@ Add additional contact options:
 - Social media (Twitter, Facebook)
 
 ### Adding Images
-- **Profile Photo**: Add your photo as `public/profile_photo.png`
+- **Profile Photo**: Add your photo as `public/profile_photo.jpg`
 - **CV File**: Add your resume PDF as `public/CV.pdf`
 - **Project Screenshots**: Create `public/projects/` folder and add your project images
 

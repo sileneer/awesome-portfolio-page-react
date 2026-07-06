@@ -27,7 +27,7 @@ Contains your personal information displayed on the home page.
 - `location` (string): City, State/Country (e.g., "San Francisco, CA, USA")
 - `linkedin` (string): LinkedIn profile URL
 - `github` (string): GitHub profile URL
-- `photo` (string): Path to profile photo (e.g., "/profile_photo.png" in public folder)
+- `photo` (string): Path to profile photo (e.g., "/profile_photo.jpg" in public folder)
 - `website` (string): Personal website or portfolio URL
 - `bio` (string): Short professional bio or tagline
 - `languages` (array of strings): Spoken/written languages (e.g., ["English", "Spanish"])
@@ -49,7 +49,7 @@ Contains your personal information displayed on the home page.
   "location": "San Francisco, CA, USA",
   "linkedin": "https://www.linkedin.com/in/johndoe/",
   "github": "https://github.com/johndoe",
-  "photo": "/profile_photo.png",
+  "photo": "/profile_photo.jpg",
   "website": "https://johndoe.dev",
   "bio": "Passionate developer focused on building impactful web applications.",
   "languages": ["English", "Spanish"]
@@ -226,8 +226,8 @@ Additional contact information and social media links.
 ## 🎨 Adding Images
 
 ### Profile Photo
-- Add your photo to `public/profile_photo.png`
-- Reference it in `personalInfo.json` as `"/profile_photo.png"`
+- Add your photo to `public/profile_photo.jpg`
+- Reference it in `personalInfo.json` as `"/profile_photo.jpg"`
 
 ### CV/Resume PDF
 - Add your CV to `public/CV.pdf`
