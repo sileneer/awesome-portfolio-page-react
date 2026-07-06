@@ -32,6 +32,13 @@ Contains your personal information displayed on the home page.
 - `bio` (string): Short professional bio or tagline
 - `languages` (array of strings): Spoken/written languages (e.g., ["English", "Spanish"])
 
+> **SEO note:** `name`, `title`, `bio`, `email`, `photo`, `website`, `linkedin`,
+> and `github` also populate the static SEO tags in `index.html` (page title,
+> description, Open Graph / Twitter cards, and Person JSON-LD) at build time —
+> no need to edit `index.html` by hand. Set `website` to your deployed URL so
+> social-share cards get absolute links. `public/manifest.json` is the one file
+> still edited manually (PWA name and icons).
+
 ### Example:
 ```json
 {

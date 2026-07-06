@@ -16,6 +16,7 @@
 - **♿ Accessible**: Clean heading hierarchy, ARIA attributes, focus states, and reduced-motion support
 - **⚙️ Fully Customizable**: All content driven by simple JSON configuration files
 - **🔒 Data Validation**: Zod schemas validate the JSON at startup, with a friendly error screen if something is off
+- **🔍 SEO Ready**: Page titles, Open Graph/Twitter cards, and Person JSON-LD are generated from your JSON data at build time
 
 ## 🎨 Material-UI Implementation
 
