@@ -6,8 +6,7 @@ import projects from './projects.json';
 import contact from './contact.json';
 
 // ---------------------------------------------------------------------------
-// Example schema — matches src/data/navigation.json. Use this as the pattern
-// when filling in the four TODO schemas below.
+// Schema for src/data/navigation.json.
 // ---------------------------------------------------------------------------
 export const navigationSchema = z.object({
   brand: z.string().min(1),
