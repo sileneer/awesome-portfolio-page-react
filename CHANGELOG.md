@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-07-06
+
+Template-polish release. SEO/social metadata is now generated from the JSON
+data files at build time, the browser tab title follows the current page,
+deployment to GitHub Pages is one command, and the repo gains lint + CI.
+No data or schema changes — existing `*.json` files work unchanged (the demo
+profile photo changed extension; `personalInfo.photo` already points wherever
+you like).
+
+### Added
+- **Build-time SEO metadata**: `index.html`'s title, description, Open Graph /
+  Twitter cards, and Person JSON-LD are now generated from `personalInfo.json`
+  and `resume.json` by a small Vite plugin — crawlers see your data, not the
+  demo identity. Runs in dev and build.
+- **Per-page document titles**: the browser tab now reads "Projects | <name>"
+  etc., updating on navigation.
+- **`npm run deploy`**: builds and publishes to the `gh-pages` branch.
+- **ESLint** (flat config, react-hooks + react-refresh rules) and
+  **`npm run lint`**.
+- **CI**: GitHub Actions workflow running lint, tests, and build on pushes
+  and pull requests.
+
+### Changed
+- Demo profile photo re-encoded from a 637 KB 1080px PNG to a 43 KB 800px
+  JPEG (it doubles as the social-share image).
+- Testing libraries moved from `dependencies` to `devDependencies`.
+
+### Removed
+- `@testing-library/user-event` (unused).
+- Dead `browserslist` config (CRA leftover — Vite doesn't read it).
+- `keywords` meta tag (ignored by search engines).
+- Runtime meta-description update in `App.jsx` (baked in at build time now).
+
+### Fixed
+- Stale `theme-color` (`#09090b` → `#0f172a`, the actual dark background).
+
+### Security
+- N/A
+
+---
+
 ## [2.1.0] - 2026-06-21
 
 Feature release. Restores résumé content that existed in the data and schema but
