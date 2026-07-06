@@ -207,13 +207,6 @@ function App() {
     contact,
   };
 
-  useEffect(() => {
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', `${personalInfo.name} - ${personalInfo.title}. ${personalInfo.bio}`);
-    }
-  }, []);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

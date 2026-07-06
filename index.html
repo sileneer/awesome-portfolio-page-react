@@ -5,31 +5,26 @@
   <meta charset="utf-8" />
   <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#09090b" />
+  <meta name="theme-color" content="#0f172a" />
 
-  <title>Joke Bear | Full Stack Developer Portfolio</title>
-  <meta name="description"
-    content="Joke Bear — Full Stack Developer. Passionate about building impactful web applications with React, Node.js, and modern web technologies." />
-  <meta name="author" content="Joke Bear" />
-  <meta name="keywords"
-    content="Full Stack Developer, React, Node.js, JavaScript, TypeScript, Portfolio, Web Developer" />
-  <link rel="canonical" href="https://sileneer.github.io/" />
+  <title>%PORTFOLIO_NAME% | %PORTFOLIO_TITLE%</title>
+  <meta name="description" content="%PORTFOLIO_DESCRIPTION%" />
+  <meta name="author" content="%PORTFOLIO_NAME%" />
+  <link rel="canonical" href="%PORTFOLIO_URL%" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sileneer.github.io/" />
-  <meta property="og:title" content="Joke Bear | Full Stack Developer Portfolio" />
-  <meta property="og:description"
-    content="Passionate developer focused on building impactful web applications." />
-  <meta property="og:image" content="https://sileneer.github.io/profile_photo.png" />
-  <meta property="og:image:alt" content="Portrait of Joke Bear" />
+  <meta property="og:url" content="%PORTFOLIO_URL%" />
+  <meta property="og:title" content="%PORTFOLIO_NAME% | %PORTFOLIO_TITLE%" />
+  <meta property="og:description" content="%PORTFOLIO_DESCRIPTION%" />
+  <meta property="og:image" content="%PORTFOLIO_IMAGE%" />
+  <meta property="og:image:alt" content="Portrait of %PORTFOLIO_NAME%" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Joke Bear | Full Stack Developer Portfolio" />
-  <meta name="twitter:description"
-    content="Passionate developer focused on building impactful web applications." />
-  <meta name="twitter:image" content="https://sileneer.github.io/profile_photo.png" />
+  <meta name="twitter:title" content="%PORTFOLIO_NAME% | %PORTFOLIO_TITLE%" />
+  <meta name="twitter:description" content="%PORTFOLIO_DESCRIPTION%" />
+  <meta name="twitter:image" content="%PORTFOLIO_IMAGE%" />
 
   <link rel="apple-touch-icon" href="/logo192.png" />
   <link rel="manifest" href="/manifest.json" />
@@ -49,28 +44,7 @@
     }(window.location));
   </script>
 
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Joke Bear",
-      "jobTitle": "Full Stack Developer",
-      "url": "https://sileneer.github.io/",
-      "image": "https://sileneer.github.io/profile_photo.png",
-      "email": "mailto:example@gmail.com",
-      "sameAs": [
-        "https://www.linkedin.com/in/zihao-liu-470986208/",
-        "https://github.com/sileneer/awesome-portfolio-page-react"
-      ],
-      "knowsAbout": [
-        "JavaScript",
-        "TypeScript",
-        "React",
-        "Node.js",
-        "Full Stack Development"
-      ]
-    }
-  </script>
+  <script type="application/ld+json">%PORTFOLIO_JSONLD%</script>
 </head>
 
 <body>
