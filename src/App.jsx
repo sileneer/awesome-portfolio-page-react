@@ -35,6 +35,10 @@ const resolvePageComponent = (name) => {
   return Component;
 };
 
+// Static ESM imports that can never change at runtime — built once at module
+// scope so the object identity is stable across renders.
+const data = { personalInfo, navigation, resume, projects, contact };
+
 const getDesignTokens = (mode) => ({
   palette: {
     mode,
@@ -198,14 +202,6 @@ function App() {
   useMemo(() => validatePortfolioData(), []);
   const { mode } = useContext(ThemeContext);
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
-  const data = {
-    personalInfo,
-    navigation,
-    resume,
-    projects,
-    contact,
-  };
 
   return (
     <ThemeProvider theme={theme}>
