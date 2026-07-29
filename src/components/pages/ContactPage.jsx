@@ -142,7 +142,7 @@ const ContactPage = ({ data }) => {
   );
 
   return (
-    <Box sx={{ minHeight: '100vh', pt: { xs: 10, md: 12 }, pb: 8 }}>
+    <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
       <Container maxWidth="lg">
 
         {/* ---------- Hero ---------- */}

@@ -75,13 +75,18 @@ const Navigation = ({ data }) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 1,
+              // 44x44 floor: on mobile these icons are the only navigation on the
+              // page, and 8px padding around a 20px icon only reached 36x36.
+              minWidth: 44,
+              minHeight: 44,
               padding: { xs: '8px', md: '10px 20px' },
               borderRadius: '24px',
               border: 'none',
               cursor: 'pointer',
               background: isActive
-                ? alpha(theme.palette.primary.main, 0.12)
+                ? alpha(theme.palette.primary.main, 0.08)
                 : 'transparent',
               color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
               transition: 'background-color 0.2s ease, color 0.2s ease',
@@ -136,6 +141,8 @@ const Navigation = ({ data }) => {
           onClick={cyclePreference}
           aria-label={`Theme: ${themeLabel}. Switch to ${themeNextLabel}.`}
           sx={{
+            width: 44,
+            height: 44,
             color: theme.palette.text.primary,
             '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
           }}

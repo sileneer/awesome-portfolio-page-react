@@ -32,6 +32,27 @@ you like).
   JPEG (it doubles as the social-share image).
 - Testing libraries moved from `dependencies` to `devDependencies`.
 
+### Fixed
+- **Light-mode accent now passes WCAG AA.** `primary.main` moved from
+  `#0891b2` to `#0e7490` — the old value only reached 3.3–3.7:1 against the
+  light surfaces, failing the 4.5:1 minimum for primary-coloured links, chips,
+  and the white label on every gradient button. The theme also sets
+  `contrastThreshold: 4.5`, so `getContrastText` no longer returns white for
+  normal-sized text at ~3.7:1. Dark mode was already compliant and is
+  unchanged.
+- **Bottom navigation meets the 44×44 touch-target minimum** — the mobile
+  icon buttons were 36×36, and they are the only navigation on small screens.
+- **Fonts load in parallel with the bundle.** The Google Fonts request moved
+  from an `@import` inside `index.css` to a `<link>` in `index.html`; an
+  `@import` in bundled CSS is invisible to the preload scanner, so the font
+  fetch was queued behind the JS bundle and the existing `preconnect` hints
+  could not help.
+- **`100dvh` replaces `100vh`** on the app shell and all four pages, so the
+  full-height sections are not clipped by mobile browser chrome.
+- **Smooth scrolling respects `prefers-reduced-motion`.** The route-change and
+  scroll-to-top handlers passed `behavior: 'smooth'` explicitly, which
+  overrode the reduced-motion guard in `index.css`; they now inherit it.
+
 ### Removed
 - `@testing-library/user-event` (unused).
 - Dead `browserslist` config (CRA leftover — Vite doesn't read it).

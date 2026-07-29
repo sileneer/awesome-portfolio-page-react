@@ -54,12 +54,13 @@ const useActiveSection = (ids) => {
   return active;
 };
 
+// No `behavior` here on purpose: omitting it inherits `html { scroll-behavior }`
+// from index.css, which already flips to `auto` under prefers-reduced-motion.
 const scrollToSection = (e, id) => {
   const el = document.getElementById(id);
   if (!el) return;
   e.preventDefault();
-  const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-  el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+  el.scrollIntoView({ block: 'start' });
   if (window.history?.replaceState) window.history.replaceState(null, '', `#${id}`);
 };
 
@@ -384,7 +385,7 @@ const ResumePage = ({ data }) => {
   }, [experience, skills.length, certifications.length]);
 
   return (
-    <Box sx={{ minHeight: '100vh', pt: { xs: 10, md: 12 }, pb: 8 }}>
+    <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
       <Container maxWidth="lg">
 
         {/* Intro band */}

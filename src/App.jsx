@@ -42,6 +42,10 @@ const data = { personalInfo, navigation, resume, projects, contact };
 const getDesignTokens = (mode) => ({
   palette: {
     mode,
+    // MUI's default of 3 is the WCAG *large text* threshold, so getContrastText
+    // will hand back white for a button whose label is normal-sized and only
+    // reaches ~3.7:1. 4.5 makes it flip to dark text instead of guessing.
+    contrastThreshold: 4.5,
     ...(mode === 'dark'
       ? {
           primary: { main: '#2dd4bf', dark: '#0d9488', light: '#5eead4' }, // Teal/Cyan
@@ -51,7 +55,10 @@ const getDesignTokens = (mode) => ({
           divider: 'rgba(255, 255, 255, 0.1)',
         }
       : {
-          primary: { main: '#0891b2', dark: '#164e63', light: '#06b6d4' }, // Cyan
+          // cyan-700, not cyan-600: #0891b2 only reaches 3.5-3.7:1 against every
+          // light surface here, so primary-coloured body text and white-on-primary
+          // buttons both failed AA. #0e7490 clears 4.8:1 on the worst of them.
+          primary: { main: '#0e7490', dark: '#164e63', light: '#06b6d4' }, // Cyan
           secondary: { main: '#7c3aed', dark: '#4c1d95', light: '#8b5cf6' }, // Violet
           background: { default: '#f8fafc', paper: '#ffffff' }, // Slate
           text: { primary: '#0f172a', secondary: '#475569' },
@@ -161,10 +168,13 @@ const RouteWrapper = ({ children, title }) => {
   );
 };
 
+// Omitting `behavior` makes these scrolls inherit `html { scroll-behavior }` from
+// index.css, which is already switched to `auto` under prefers-reduced-motion.
+// Passing `behavior: 'smooth'` here would override that guard.
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   }, [pathname]);
   return null;
 };
@@ -173,7 +183,7 @@ const ScrollToTopButton = () => {
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 200 });
 
   const handleClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   };
 
   return (
@@ -239,7 +249,7 @@ function App() {
           }} />
 
           <Box sx={{
-            minHeight: '100vh',
+            minHeight: '100dvh',
             display: 'flex',
             flexDirection: 'column',
           }}>

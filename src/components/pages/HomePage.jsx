@@ -99,7 +99,7 @@ const HomePage = ({ data }) => {
   return (
     <Box sx={{ pb: 8 }}>
       <Box sx={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         display: 'flex',
         alignItems: 'center',
         position: 'relative',

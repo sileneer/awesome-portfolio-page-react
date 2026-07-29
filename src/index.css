@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+/* Fonts are linked from index.html, not @import-ed here — an @import inside the
+   bundled CSS is invisible to the preload scanner and serialises the request
+   chain behind the JS bundle. */
 
 html {
   overflow-y: scroll;
