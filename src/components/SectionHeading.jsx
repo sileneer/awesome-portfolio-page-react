@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
+import AppIcon from './AppIcon';
 
 // Shared section heading used across pages: an accented icon chip beside a
 // gradient-clipped heading. Renders a real <h2> (override via `component`) so
@@ -33,7 +34,7 @@ const SectionHeading = ({ icon: Icon, children, size = 'lg', component = 'h2' })
           display: 'inline-flex', p: 1, borderRadius: 2,
           color: theme.palette.primary.main, background: alpha(theme.palette.primary.main, 0.1),
         }}>
-          <Icon />
+          <AppIcon icon={Icon} size={24} />
         </Box>
       )}
       <Typography variant="h3" component={component} sx={{
