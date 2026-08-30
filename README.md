@@ -29,7 +29,7 @@ This portfolio is built with Material-UI components throughout:
 - **Typography**: Consistent text hierarchy with the Material-UI typography system
 - **Interactive**: `Button`, `IconButton`, `Chip` components with built-in ripple effects
 - **Media**: `Avatar` and lazy-loaded images with proper aspect ratios
-- **Icons**: `@mui/icons-material` for professional vector icons
+- **Icons**: rendered via [morphicons](https://www.morphicons.com/) (`AppIcon` wrapper) using Lucide icon data — icons can spring-morph between states (e.g. the theme toggle)
 - **Motion**: [Framer Motion](https://www.framer.com/motion/) for entrance, hover, and scroll-triggered animations
 
 ### Theme Features

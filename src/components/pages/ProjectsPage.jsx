@@ -2,7 +2,9 @@ import React, { useMemo, useState } from 'react';
 import { Container, Typography, Box, Grid, Chip, Button, Stack, Divider, Dialog, IconButton, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Launch, GitHub, Close, ChevronLeft, ChevronRight, FilterList, Person, Schedule, Visibility } from '@mui/icons-material';
+import { ExternalLink, X, ChevronLeft, ChevronRight, ListFilter, User, Clock, Eye } from 'lucide';
+import { Github } from '../brandIcons';
+import AppIcon from '../AppIcon';
 import StatItem from '../StatItem';
 
 const MAX_CARD_TECH = 5;
@@ -16,13 +18,13 @@ const ProjectMeta = ({ role, duration, sx }) => {
     <Stack direction="row" spacing={2.5} useFlexGap flexWrap="wrap" sx={{ color: 'text.secondary', ...sx }}>
       {role && (
         <Stack direction="row" spacing={0.5} alignItems="center">
-          <Person aria-hidden="true" fontSize="small" />
+          <AppIcon icon={User} size={20} />
           <Typography variant="body2" fontWeight={600}>{role}</Typography>
         </Stack>
       )}
       {duration && (
         <Stack direction="row" spacing={0.5} alignItems="center">
-          <Schedule aria-hidden="true" fontSize="small" />
+          <AppIcon icon={Clock} size={20} />
           <Typography variant="body2">{duration}</Typography>
         </Stack>
       )}
@@ -68,6 +70,7 @@ const ProjectCard = ({ project, onOpen }) => {
             onClick={() => onOpen(project)}
             role="button"
             tabIndex={0}
+            aria-haspopup="dialog"
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(project); } }}
             aria-label={`View screenshots of ${name}`}
             sx={{ position: 'relative', height: 230, overflow: 'hidden', cursor: 'pointer' }}
@@ -91,7 +94,7 @@ const ProjectCard = ({ project, onOpen }) => {
                 opacity: 0, transition: 'opacity 0.3s ease', pointerEvents: 'none',
               }}
             >
-              <Visibility fontSize="small" /> View details
+              <AppIcon icon={Eye} size={20} /> View details
             </Box>
             {screenshots.length > 1 && (
               <Chip
@@ -141,7 +144,7 @@ const ProjectCard = ({ project, onOpen }) => {
               <Button
                 variant="outlined"
                 size="small"
-                startIcon={isGithubLink(link) ? <GitHub /> : <Launch />}
+                startIcon={<AppIcon icon={isGithubLink(link) ? Github : ExternalLink} size={20} />}
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -187,7 +190,7 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
           '&:hover': { backgroundColor: theme.palette.error.main },
         }}
       >
-        <Close />
+        <AppIcon icon={X} size={24} />
       </IconButton>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
@@ -209,14 +212,14 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
                   aria-label="Previous screenshot"
                   sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.6)', color: '#fff', '&:hover': { backgroundColor: theme.palette.primary.main } }}
                 >
-                  <ChevronLeft />
+                  <AppIcon icon={ChevronLeft} size={24} />
                 </IconButton>
                 <IconButton
                   onClick={onNext}
                   aria-label="Next screenshot"
                   sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.6)', color: '#fff', '&:hover': { backgroundColor: theme.palette.primary.main } }}
                 >
-                  <ChevronRight />
+                  <AppIcon icon={ChevronRight} size={24} />
                 </IconButton>
                 <Box sx={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', px: 1.5, py: 0.5, borderRadius: 4, backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>
                   {index + 1} / {screenshots.length}
@@ -251,7 +254,7 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
           {link && (
             <Button
               variant="contained"
-              startIcon={isGithubLink(link) ? <GitHub /> : <Launch />}
+              startIcon={<AppIcon icon={isGithubLink(link) ? Github : ExternalLink} size={20} />}
               href={link}
               target="_blank"
               rel="noopener noreferrer"
@@ -375,7 +378,7 @@ const ProjectsPage = ({ data }) => {
         {allTechnologies.length > 1 && (
           <Box sx={{ mb: 4 }}>
             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2, color: 'text.secondary' }}>
-              <FilterList fontSize="small" />
+              <AppIcon icon={ListFilter} size={20} />
               <Typography variant="body2" sx={{ fontWeight: 600 }}>Filter by technology</Typography>
             </Stack>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }} role="group" aria-label="Project technology filters">

@@ -5,10 +5,9 @@ import {
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
-import {
-  Email, Phone, LocationOn, LinkedIn, GitHub, Language, Twitter, Facebook,
-  Send, ContentCopy, Schedule, AlternateEmail, ContactMail, Public,
-} from '@mui/icons-material';
+import { Mail, Phone, MapPin, Globe, Send, Copy, Clock, AtSign, Contact } from 'lucide';
+import { Linkedin, Github, Twitter, Facebook } from '../brandIcons';
+import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
 
 // A single tappable contact method: icon tile, label, value (as a mailto/tel
@@ -28,7 +27,7 @@ const ContactMethod = ({ icon, accent, label, value, href, onCopy, copyLabel }) 
       }}
     >
       <Avatar sx={{ bgcolor: alpha(accent, 0.12), color: accent, width: 48, height: 48, flexShrink: 0 }}>
-        {icon}
+        <AppIcon icon={icon} size={24} />
       </Avatar>
       <Box sx={{ minWidth: 0, flex: 1 }}>
         <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>
@@ -58,7 +57,7 @@ const ContactMethod = ({ icon, accent, label, value, href, onCopy, copyLabel }) 
             aria-label={copyLabel}
             sx={{ flexShrink: 0, color: 'text.secondary', '&:hover': { color: accent } }}
           >
-            <ContentCopy fontSize="small" />
+            <AppIcon icon={Copy} size={20} />
           </IconButton>
         </Tooltip>
       )}
@@ -80,25 +79,25 @@ const ContactPage = ({ data }) => {
   const statColSize = statCells === 3 ? 4 : 6;
 
   const socialLinks = [
-    { name: 'LinkedIn', url: personalInfo.linkedin, icon: <LinkedIn />, color: '#0077b5' },
-    { name: 'GitHub', url: personalInfo.github, icon: <GitHub />, color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000' },
-    { name: 'Website', url: personalInfo.website, icon: <Language />, color: theme.palette.primary.main },
-    { name: 'Twitter', url: contact.twitter, icon: <Twitter />, color: '#1da1f2' },
-    { name: 'Facebook', url: contact.facebook, icon: <Facebook />, color: '#4267b2' },
+    { name: 'LinkedIn', url: personalInfo.linkedin, icon: Linkedin, color: '#0077b5' },
+    { name: 'GitHub', url: personalInfo.github, icon: Github, color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000' },
+    { name: 'Website', url: personalInfo.website, icon: Globe, color: theme.palette.primary.main },
+    { name: 'Twitter', url: contact.twitter, icon: Twitter, color: '#1da1f2' },
+    { name: 'Facebook', url: contact.facebook, icon: Facebook, color: '#4267b2' },
   ].filter((link) => !!link.url);
   const hasSocial = socialLinks.length > 0;
 
   const methods = [
     personalInfo.email && {
-      key: 'email', icon: <Email />, accent: theme.palette.primary.main,
+      key: 'email', icon: Mail, accent: theme.palette.primary.main,
       label: 'Email', value: personalInfo.email, href: `mailto:${personalInfo.email}`, copyLabel: 'Copy email address',
     },
     contact.alternateEmail && {
-      key: 'alt', icon: <AlternateEmail />, accent: theme.palette.secondary.main,
+      key: 'alt', icon: AtSign, accent: theme.palette.secondary.main,
       label: 'Alternate email', value: contact.alternateEmail, href: `mailto:${contact.alternateEmail}`, copyLabel: 'Copy alternate email',
     },
     personalInfo.phone && {
-      key: 'phone', icon: <Phone />, accent: theme.palette.secondary.main,
+      key: 'phone', icon: Phone, accent: theme.palette.secondary.main,
       label: 'Phone', value: personalInfo.phone, href: `tel:${personalInfo.phone}`, copyLabel: 'Copy phone number',
     },
   ].filter(Boolean);
@@ -128,7 +127,7 @@ const ContactPage = ({ data }) => {
   const availabilityTile = (
     <Box sx={{
       p: 2, borderRadius: 3,
-      background: alpha('#00e676', 0.12),
+      background: alpha(theme.palette.success.main, 0.12),
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       width: 64, height: 64,
     }}>
@@ -136,7 +135,12 @@ const ContactPage = ({ data }) => {
         component={motion.span}
         animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
         transition={{ duration: 2, repeat: Infinity }}
-        sx={{ width: 16, height: 16, borderRadius: '50%', backgroundColor: '#00e676', boxShadow: '0 0 12px #00e676', display: 'inline-block' }}
+        sx={{
+          width: 16, height: 16, borderRadius: '50%',
+          backgroundColor: 'success.main',
+          boxShadow: (t) => `0 0 12px ${t.palette.success.main}`,
+          display: 'inline-block',
+        }}
       />
     </Box>
   );
@@ -172,7 +176,7 @@ const ContactPage = ({ data }) => {
               <Grid size={{ xs: 12, md: statColSize }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, justifyContent: { xs: 'flex-start', md: 'center' } }}>
                   <Box sx={{ p: 2, borderRadius: 3, background: primarySoft, color: 'primary.main', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Schedule sx={{ fontSize: 32 }} />
+                    <AppIcon icon={Clock} size={32} />
                   </Box>
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Typical reply</Typography>
@@ -194,7 +198,7 @@ const ContactPage = ({ data }) => {
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, justifyContent: { xs: 'flex-start', md: 'center' } }}>
                     <Box sx={{ p: 2, borderRadius: 3, background: secondarySoft, color: 'secondary.main', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <LocationOn sx={{ fontSize: 32 }} />
+                      <AppIcon icon={MapPin} size={32} />
                     </Box>
                     <Box sx={{ minWidth: 0 }}>
                       <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Location</Typography>
@@ -225,7 +229,7 @@ const ContactPage = ({ data }) => {
 
               {/* Direct contact methods */}
               <Grid size={{ xs: 12, md: hasSocial ? 7 : 12 }}>
-                <SectionHeading icon={ContactMail} size="sm">Reach me directly</SectionHeading>
+                <SectionHeading icon={Contact} size="sm">Reach me directly</SectionHeading>
                 <Stack spacing={0.5} divider={<Divider flexItem sx={{ my: 0.5 }} />}>
                   {methods.map((m) => (
                     <ContactMethod
@@ -243,7 +247,7 @@ const ContactPage = ({ data }) => {
                 {personalInfo.email && (
                   <Button
                     variant="contained"
-                    startIcon={<Send />}
+                    startIcon={<AppIcon icon={Send} size={20} />}
                     href={`mailto:${personalInfo.email}`}
                     aria-label={`Open your email client to send a message to ${personalInfo.email}`}
                     sx={{
@@ -271,7 +275,7 @@ const ContactPage = ({ data }) => {
                     pl: { md: 5 },
                   }}
                 >
-                  <SectionHeading icon={Public} size="sm">Find me online</SectionHeading>
+                  <SectionHeading icon={Globe} size="sm">Find me online</SectionHeading>
                   <Stack spacing={1}>
                     {socialLinks.map((social) => (
                       <Button
@@ -279,7 +283,7 @@ const ContactPage = ({ data }) => {
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        startIcon={social.icon}
+                        startIcon={<AppIcon icon={social.icon} size={20} />}
                         aria-label={`Open ${social.name} profile in a new tab`}
                         sx={{
                           justifyContent: 'flex-start',

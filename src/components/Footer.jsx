@@ -1,5 +1,7 @@
 import { Box, Container, Typography, Link, useTheme } from '@mui/material';
-import { Favorite, GitHub } from '@mui/icons-material';
+import { Heart } from 'lucide';
+import { Github } from './brandIcons';
+import AppIcon from './AppIcon';
 
 const Footer = () => {
   const theme = useTheme();
@@ -31,7 +33,7 @@ const Footer = () => {
           }}
         >
           Crafted with{' '}
-          <Favorite sx={{ fontSize: 16, color: theme.palette.secondary.main }} titleAccess="love" />
+          <AppIcon icon={Heart} size={16} label="love" style={{ color: theme.palette.secondary.main }} />
           {' '}using{' '}
           <Link
             href="https://react.dev"
@@ -59,7 +61,7 @@ const Footer = () => {
             Framer Motion
           </Link>
           {' '}•{' '}
-          <GitHub sx={{ fontSize: 16 }} aria-hidden="true" />
+          <AppIcon icon={Github} size={16} aria-hidden="true" />
           {' '}Built with{' '}
           <Link
             href="https://github.com/sileneer/awesome-portfolio-page-react"

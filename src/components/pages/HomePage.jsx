@@ -2,7 +2,9 @@ import React, { useMemo } from 'react';
 import { Container, Typography, Box, Button, Avatar, Grid, Card, useTheme, Stack } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { GitHub, LinkedIn, WorkOutline, FolderSpecial, EmojiObjects } from '@mui/icons-material';
+import { Briefcase, FolderOpen, Lightbulb } from 'lucide';
+import { Github, Linkedin } from '../brandIcons';
+import AppIcon from '../AppIcon';
 import { yearsOfExperience } from '../../utils/experience';
 
 const cardVariants = {
@@ -43,7 +45,7 @@ const HomePage = ({ data }) => {
     {
       value: withPlus(yearsExperience),
       label: 'Years Experience',
-      icon: WorkOutline,
+      icon: Briefcase,
       color: theme.palette.primary.main,
       bg: primarySoft,
       glow: theme.palette.primary.main,
@@ -51,7 +53,7 @@ const HomePage = ({ data }) => {
     {
       value: withPlus(projectsCount),
       label: 'Projects Completed',
-      icon: FolderSpecial,
+      icon: FolderOpen,
       color: theme.palette.secondary.main,
       bg: secondarySoft,
       glow: theme.palette.secondary.main,
@@ -59,7 +61,7 @@ const HomePage = ({ data }) => {
     {
       value: withPlus(skillsCount),
       label: 'Technologies Mastered',
-      icon: EmojiObjects,
+      icon: Lightbulb,
       color: theme.palette.primary.main,
       bg: primarySoft,
       glow: theme.palette.primary.main,
@@ -80,8 +82,8 @@ const HomePage = ({ data }) => {
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['15deg', '-15deg']);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-15deg', '15deg']);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['8deg', '-8deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-8deg', '8deg']);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -143,7 +145,7 @@ const HomePage = ({ data }) => {
                     {linkedin && (
                       <Button
                         variant="contained"
-                        startIcon={<LinkedIn />}
+                        startIcon={<AppIcon icon={Linkedin} size={20} />}
                         href={linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -162,7 +164,7 @@ const HomePage = ({ data }) => {
                     {github && (
                       <Button
                         variant="outlined"
-                        startIcon={<GitHub />}
+                        startIcon={<AppIcon icon={Github} size={20} />}
                         href={github}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -223,7 +225,12 @@ const HomePage = ({ data }) => {
                       component={motion.span}
                       animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#00e676', boxShadow: '0 0 10px #00e676', display: 'inline-block' }}
+                      sx={{
+                        width: 10, height: 10, borderRadius: '50%',
+                        backgroundColor: 'success.main',
+                        boxShadow: (t) => `0 0 10px ${t.palette.success.main}`,
+                        display: 'inline-block',
+                      }}
                     />
                     <Typography variant="caption" fontWeight={700}>Available</Typography>
                   </Box>
@@ -234,8 +241,10 @@ const HomePage = ({ data }) => {
                     sx={{
                       width: { xs: 260, md: 340 },
                       height: { xs: 260, md: 340 },
-                      border: `4px solid ${theme.palette.divider}`,
-                      boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                      // Primary-tinted ring ties the portrait into the palette
+                      // instead of a flat divider-coloured border.
+                      border: (t) => `4px solid ${alpha(t.palette.primary.main, 0.35)}`,
+                      boxShadow: (t) => `0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px ${alpha(t.palette.primary.main, 0.15)}`,
                     }}
                   />
                 </motion.div>
@@ -252,7 +261,7 @@ const HomePage = ({ data }) => {
           {stats.map((stat, i) => {
             const IconComponent = stat.icon;
             return (
-              <Grid key={i} size={{ xs: 12, md: 4 }}>
+              <Grid key={stat.label} size={{ xs: 12, md: 4 }}>
                 <Card
                   component={motion.div}
                   custom={i}
@@ -302,7 +311,7 @@ const HomePage = ({ data }) => {
                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       }}
                     >
-                      <IconComponent sx={{ fontSize: 28 }} />
+                      <AppIcon icon={IconComponent} size={28} />
                     </Box>
                     <Box>
                       <Typography
