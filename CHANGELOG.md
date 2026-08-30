@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-08-30
+
+Icon-system and accessibility-polish release. All icons now render through
+[morphicons](https://www.morphicons.com/) with Lucide icon data, the theme
+toggle spring-morphs between states, and a UI/UX audit landed WCAG AA fixes.
+No data or schema changes — existing `*.json` files work unchanged.
+
+### Added
+- **Morphing icon system**: all icons render through a shared `AppIcon`
+  wrapper (`MorphIcon` from `morphicons/react`, icon data from the `lucide`
+  package). Any icon can spring-morph into any other; the nav theme toggle
+  morphs sun → moon → sun-moon as you cycle light/dark/system.
+- **Dynamic `theme-color`**: the mobile browser chrome now follows the active
+  theme (dark `#0f172a` / light `#f8fafc`) instead of staying dark.
+- **Brand-tinted text selection** (`::selection`) and a consistent global
+  `:focus-visible` keyboard-focus ring for links, buttons, and
+  `role="button"` widgets.
+
+### Changed
+- **`@mui/icons-material` removed** in favour of morphicons + Lucide data
+  (brand icons ship locally as compatible IconNode data). The bundle is
+  ~80 KB raw smaller than the MUI-icons build.
+- **Fluid heading type scale**: `h1`–`h3` use `clamp()` so headings scale
+  smoothly across viewports instead of jumping at a single breakpoint.
+- **Firefox scrollbar styling** via `scrollbar-width`/`scrollbar-color`
+  (previously WebKit-only).
+
+### Fixed
+- **Light-mode accent now passes WCAG AA.** `primary.main` moved from
+  `#0891b2` to `#0e7490` — the old value only reached 3.3–3.7:1 against the
+  light surfaces, failing the 4.5:1 minimum for primary-coloured links, chips,
+  and the white label on every gradient button. The theme also sets
+  `contrastThreshold: 4.5`, so `getContrastText` no longer returns white for
+  normal-sized text at ~3.7:1. Dark mode was already compliant and is
+  unchanged.
+- **Bottom navigation meets the 44×44 touch-target minimum** — the mobile
+  icon buttons were 36×36, and they are the only navigation on small screens.
+- **Fonts load in parallel with the bundle.** The Google Fonts request moved
+  from an `@import` inside `index.css` to a `<link>` in `index.html`; an
+  `@import` in bundled CSS is invisible to the preload scanner, so the font
+  fetch was queued behind the JS bundle and the existing `preconnect` hints
+  could not help.
+- **`100dvh` replaces `100vh`** on the app shell and all four pages, so the
+  full-height sections are not clipped by mobile browser chrome.
+- **Smooth scrolling respects `prefers-reduced-motion`.** The route-change and
+  scroll-to-top handlers passed `behavior: 'smooth'` explicitly, which
+  overrode the reduced-motion guard in `index.css`; they now inherit it.
+- **"Available" indicators are theme-aware** — the hard-coded `#00e676` green
+  became a `success` palette colour, adapting to light/dark mode.
+
 ## [2.2.0] - 2026-07-06
 
 Template-polish release. SEO/social metadata is now generated from the JSON
