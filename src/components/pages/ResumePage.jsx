@@ -4,17 +4,18 @@ import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import {
   Download,
-  Work,
-  School,
+  Briefcase,
+  GraduationCap,
   Code,
-  WorkspacePremium,
-  EmojiEvents,
-  Interests,
-  Place,
-  Launch,
-  CheckCircleOutline,
-  Translate,
-} from '@mui/icons-material';
+  Award,
+  Trophy,
+  Sparkles,
+  MapPin,
+  ExternalLink,
+  CircleCheck,
+  Languages,
+} from 'lucide';
+import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
 import StatItem from '../StatItem';
 import { yearsOfExperience } from '../../utils/experience';
@@ -54,12 +55,13 @@ const useActiveSection = (ids) => {
   return active;
 };
 
+// No `behavior` here on purpose: omitting it inherits `html { scroll-behavior }`
+// from index.css, which already flips to `auto` under prefers-reduced-motion.
 const scrollToSection = (e, id) => {
   const el = document.getElementById(id);
   if (!el) return;
   e.preventDefault();
-  const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-  el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+  el.scrollIntoView({ block: 'start' });
   if (window.history?.replaceState) window.history.replaceState(null, '', `#${id}`);
 };
 
@@ -98,7 +100,7 @@ const SectionNav = ({ sections, activeId, sx }) => {
                 },
               }}
             >
-              <Icon aria-hidden="true" sx={{ fontSize: '1.1rem' }} />
+              <AppIcon icon={Icon} size={18} />
               {label}
             </Link>
           );
@@ -231,7 +233,7 @@ const ExperienceTimeline = ({ experience }) => {
                 </Stack>
                 {exp.location && (
                   <Stack direction="row" spacing={0.5} alignItems="center" sx={{ color: 'text.secondary', mb: 2 }}>
-                    <Place aria-hidden="true" sx={{ fontSize: '1rem' }} />
+                    <AppIcon icon={MapPin} size={16} />
                     <Typography variant="body2">{exp.location}</Typography>
                   </Stack>
                 )}
@@ -242,7 +244,11 @@ const ExperienceTimeline = ({ experience }) => {
                   <Box sx={{ mb: technologies.length ? 2 : 0 }}>
                     {achievements.map((achievement, i) => (
                       <Stack key={i} direction="row" spacing={1} alignItems="flex-start" sx={{ mb: 1 }}>
-                        <CheckCircleOutline aria-hidden="true" sx={{ fontSize: '1.1rem', color: 'primary.main', mt: '3px', flexShrink: 0 }} />
+                        <AppIcon
+                          icon={CircleCheck}
+                          size={18}
+                          style={{ color: theme.palette.primary.main, marginTop: 3, flexShrink: 0 }}
+                        />
                         <Typography variant="body2" color="text.secondary">{achievement}</Typography>
                       </Stack>
                     ))}
@@ -312,7 +318,7 @@ const CredentialGrid = ({ items, icon: Icon }) => {
             <Card sx={cardHoverSx(theme, theme.palette.primary.main)}>
               <CardContent sx={{ p: 3, display: 'flex', alignItems: 'flex-start', gap: 2 }}>
                 <Box aria-hidden="true" sx={{ color: theme.palette.primary.main, display: 'inline-flex', mt: '2px' }}>
-                  <Icon />
+                  <AppIcon icon={Icon} size={24} />
                 </Box>
                 <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                   <Typography variant="subtitle1" component="p" fontWeight={700}>{title}</Typography>
@@ -332,7 +338,7 @@ const CredentialGrid = ({ items, icon: Icon }) => {
                         color: theme.palette.primary.main,
                       }}
                     >
-                      View credential <Launch sx={{ fontSize: '1rem' }} />
+                      View credential <AppIcon icon={ExternalLink} size={16} />
                     </Link>
                   )}
                 </Box>
@@ -360,13 +366,13 @@ const ResumePage = ({ data }) => {
 
   const sections = useMemo(() => {
     const list = [];
-    if (experience.length) list.push({ id: 'experience', label: 'Experience', icon: Work });
-    if (education.length) list.push({ id: 'education', label: 'Education', icon: School });
+    if (experience.length) list.push({ id: 'experience', label: 'Experience', icon: Briefcase });
+    if (education.length) list.push({ id: 'education', label: 'Education', icon: GraduationCap });
     if (skills.length) list.push({ id: 'skills', label: 'Skills', icon: Code });
-    if (languages.length) list.push({ id: 'languages', label: 'Languages', icon: Translate });
-    if (certifications.length) list.push({ id: 'certifications', label: 'Certifications', icon: WorkspacePremium });
-    if (awards.length) list.push({ id: 'awards', label: 'Awards', icon: EmojiEvents });
-    if (interests.length) list.push({ id: 'interests', label: 'Interests', icon: Interests });
+    if (languages.length) list.push({ id: 'languages', label: 'Languages', icon: Languages });
+    if (certifications.length) list.push({ id: 'certifications', label: 'Certifications', icon: Award });
+    if (awards.length) list.push({ id: 'awards', label: 'Awards', icon: Trophy });
+    if (interests.length) list.push({ id: 'interests', label: 'Interests', icon: Sparkles });
     return list;
   }, [experience.length, education.length, skills.length, languages.length, certifications.length, awards.length, interests.length]);
 
@@ -384,7 +390,7 @@ const ResumePage = ({ data }) => {
   }, [experience, skills.length, certifications.length]);
 
   return (
-    <Box sx={{ minHeight: '100vh', pt: { xs: 10, md: 12 }, pb: 8 }}>
+    <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
       <Container maxWidth="lg">
 
         {/* Intro band */}
@@ -413,7 +419,7 @@ const ResumePage = ({ data }) => {
             {resume.cvDownload && (
               <Button
                 variant="contained"
-                startIcon={<Download />}
+                startIcon={<AppIcon icon={Download} size={20} />}
                 href={resume.cvDownload}
                 download
                 aria-label="Download CV as PDF"
@@ -469,13 +475,13 @@ const ResumePage = ({ data }) => {
 
           <Box sx={{ flexGrow: 1, minWidth: 0, width: '100%' }}>
             {experience.length > 0 && (
-              <Section id="experience" icon={Work} title="Experience">
+              <Section id="experience" icon={Briefcase} title="Experience">
                 <ExperienceTimeline experience={experience} />
               </Section>
             )}
 
             {education.length > 0 && (
-              <Section id="education" icon={School} title="Education">
+              <Section id="education" icon={GraduationCap} title="Education">
                 <Grid
                   container
                   spacing={3}
@@ -505,7 +511,7 @@ const ResumePage = ({ data }) => {
             )}
 
             {languages.length > 0 && (
-              <Section id="languages" icon={Translate} title="Languages">
+              <Section id="languages" icon={Languages} title="Languages">
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
                   {languages.map((language, index) => (
                     <Chip key={index} label={language} sx={badgeChipSx(theme)} />
@@ -515,19 +521,19 @@ const ResumePage = ({ data }) => {
             )}
 
             {certifications.length > 0 && (
-              <Section id="certifications" icon={WorkspacePremium} title="Certifications">
-                <CredentialGrid items={certifications} icon={WorkspacePremium} />
+              <Section id="certifications" icon={Award} title="Certifications">
+                <CredentialGrid items={certifications} icon={Award} />
               </Section>
             )}
 
             {awards.length > 0 && (
-              <Section id="awards" icon={EmojiEvents} title="Awards">
-                <CredentialGrid items={awards} icon={EmojiEvents} />
+              <Section id="awards" icon={Trophy} title="Awards">
+                <CredentialGrid items={awards} icon={Trophy} />
               </Section>
             )}
 
             {interests.length > 0 && (
-              <Section id="interests" icon={Interests} title="Interests">
+              <Section id="interests" icon={Sparkles} title="Interests">
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
                   {interests.map((interest, index) => (
                     <Chip key={index} label={interest} sx={badgeChipSx(theme)} />

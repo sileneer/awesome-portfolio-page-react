@@ -21,8 +21,11 @@ export default [
       // (merged into recommended in eslint-plugin-react-hooks v7) don't apply.
       'react-hooks/preserve-manual-memoization': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      // Component/context identifiers are capitalized; don't flag them as unused imports.
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // ESLint tracks JSX identifier usage natively, so component imports need
+      // no exemption. Only the legacy `import React` lines (unused under the
+      // automatic JSX runtime) are ignored — narrow so that genuinely unused
+      // component imports still error. Drop this once those imports are gone.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
     },
   },
   {

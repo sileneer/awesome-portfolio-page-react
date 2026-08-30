@@ -3,22 +3,26 @@ import { Box, Typography, useTheme, useMediaQuery, IconButton, Tooltip } from '@
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Description, Dashboard, Mail, LightMode, DarkMode, SettingsBrightness } from '@mui/icons-material';
+import { Home, FileText, LayoutGrid, Mail, Sun, Moon, SunMoon } from 'lucide';
 import { ThemeContext } from '../context/ThemeContext';
+import AppIcon from './AppIcon';
 
+// Icon *data* from lucide, rendered through AppIcon/morphicons — see AGENT.md.
 const iconMap = {
   home: Home,
-  resume: Description,
-  projects: Dashboard,
+  resume: FileText,
+  projects: LayoutGrid,
   contact: Mail,
 };
 
 // Drives both the toggle icon and the tooltip / aria-label.
 // `nextLabel` mirrors the cycle order in ThemeContext: light → dark → system → light.
+// The icon is rendered via MorphIcon, so switching preference spring-morphs
+// between sun / moon / sun-moon.
 const PREFERENCE_META = {
-  light: { Icon: LightMode, label: 'Light mode', nextLabel: 'dark mode' },
-  dark: { Icon: DarkMode, label: 'Dark mode', nextLabel: 'follow system' },
-  system: { Icon: SettingsBrightness, label: 'Follow system', nextLabel: 'light mode' },
+  light: { Icon: Sun, label: 'Light mode', nextLabel: 'dark mode' },
+  dark: { Icon: Moon, label: 'Dark mode', nextLabel: 'follow system' },
+  system: { Icon: SunMoon, label: 'Follow system', nextLabel: 'light mode' },
 };
 
 const Navigation = ({ data }) => {
@@ -75,13 +79,18 @@ const Navigation = ({ data }) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 1,
+              // 44x44 floor: on mobile these icons are the only navigation on the
+              // page, and 8px padding around a 20px icon only reached 36x36.
+              minWidth: 44,
+              minHeight: 44,
               padding: { xs: '8px', md: '10px 20px' },
               borderRadius: '24px',
               border: 'none',
               cursor: 'pointer',
               background: isActive
-                ? alpha(theme.palette.primary.main, 0.12)
+                ? alpha(theme.palette.primary.main, 0.08)
                 : 'transparent',
               color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
               transition: 'background-color 0.2s ease, color 0.2s ease',
@@ -96,7 +105,7 @@ const Navigation = ({ data }) => {
               },
             }}
           >
-            <Icon fontSize="small" />
+            <AppIcon icon={Icon} size={20} />
             {!isMobile && (
               <Typography variant="button" sx={{ fontWeight: isActive ? 700 : 500 }}>
                 {label}
@@ -136,11 +145,13 @@ const Navigation = ({ data }) => {
           onClick={cyclePreference}
           aria-label={`Theme: ${themeLabel}. Switch to ${themeNextLabel}.`}
           sx={{
+            width: 44,
+            height: 44,
             color: theme.palette.text.primary,
             '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
           }}
         >
-          <ThemeIcon fontSize="small" />
+          <AppIcon icon={ThemeIcon} size={20} />
         </IconButton>
       </Tooltip>
     </Box>
