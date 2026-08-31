@@ -171,7 +171,7 @@ const ContactPage = ({ data }) => {
         {/* ---------- Stat strip ---------- */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.35 }}>
           <Card sx={{ p: { xs: 3, md: 4 }, borderRadius: 4, mb: 5 }}>
-            <Grid container spacing={3} alignItems="center">
+            <Grid container spacing={3} sx={{ alignItems: 'center' }}>
 
               <Grid size={{ xs: 12, md: statColSize }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, justifyContent: { xs: 'flex-start', md: 'center' } }}>

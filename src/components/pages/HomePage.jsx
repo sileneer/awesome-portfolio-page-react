@@ -116,7 +116,7 @@ const HomePage = ({ data }) => {
         pt: { xs: 8, md: 0 },
       }}>
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 6, md: 8 }} alignItems="center">
+          <Grid container spacing={{ xs: 6, md: 8 }} sx={{ alignItems: 'center' }}>
 
             <Grid size={{ xs: 12, md: 7 }}>
               <Box component={motion.div} variants={containerVariants} initial="hidden" animate="visible" sx={{ textAlign: { xs: 'center', md: 'left' } }}>
@@ -143,7 +143,7 @@ const HomePage = ({ data }) => {
                 </motion.div>
 
                 <motion.div variants={textVariants}>
-                  <Typography variant="h6" color="text.secondary" paragraph sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 6, maxWidth: 650, lineHeight: 1.8 }}>
+                  <Typography variant="h6" component="p" color="text.secondary" sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 6, maxWidth: 650, lineHeight: 1.8 }}>
                     {bio}
                   </Typography>
                 </motion.div>
@@ -265,7 +265,7 @@ const HomePage = ({ data }) => {
       </Box>
 
       <Container maxWidth="lg" sx={{ mt: { xs: -4, md: -8 }, position: 'relative', zIndex: 10 }}>
-        <Grid container spacing={3} alignItems="stretch">
+        <Grid container spacing={3} sx={{ alignItems: 'stretch' }}>
           {stats.map((stat, i) => {
             const IconComponent = stat.icon;
             return (
