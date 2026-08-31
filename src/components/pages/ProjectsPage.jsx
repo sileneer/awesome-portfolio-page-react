@@ -6,8 +6,24 @@ import { ExternalLink, X, ChevronLeft, ChevronRight, ListFilter, User, Clock, Ey
 import { Github } from '../brandIcons';
 import AppIcon from '../AppIcon';
 import StatItem from '../StatItem';
+import { withBase } from '../../utils/withBase';
+import connect1 from '../../assets/projects/connect1.png';
+import connect2 from '../../assets/projects/connect2.png';
+import taskmanager1 from '../../assets/projects/taskmanager1.png';
 
 const MAX_CARD_TECH = 5;
+
+// Hashed imports for default template screenshots (Vite handles base + hash).
+// Custom screenshots from JSON fall back to withBase so /my.png respects BASE_URL.
+const screenshotMap = {
+  '/projects/connect1.png': connect1,
+  '/projects/connect2.png': connect2,
+  '/projects/taskmanager1.png': taskmanager1,
+  'projects/connect1.png': connect1,
+  'projects/connect2.png': connect2,
+  'projects/taskmanager1.png': taskmanager1,
+};
+const resolveScreenshot = (src) => screenshotMap[src] ?? withBase(src);
 
 const isGithubLink = (link) => typeof link === 'string' && link.includes('github.com');
 
@@ -76,7 +92,7 @@ const ProjectCard = ({ project, onOpen }) => {
             sx={{ position: 'relative', height: 230, overflow: 'hidden', cursor: 'pointer' }}
           >
             <img
-              src={screenshots[0]}
+              src={resolveScreenshot(screenshots[0])}
               alt={`${name} screenshot`}
               loading="lazy"
               width="600"
@@ -201,7 +217,7 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
             minHeight: { xs: 240, md: 520 },
           }}>
             <img
-              src={screenshots[index]}
+              src={resolveScreenshot(screenshots[index])}
               alt={`${project.name} screenshot ${index + 1}`}
               style={{ width: '100%', height: '100%', maxHeight: '82vh', objectFit: 'contain', display: 'block' }}
             />

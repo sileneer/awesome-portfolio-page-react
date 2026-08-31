@@ -6,6 +6,8 @@ import { Briefcase, FolderOpen, Lightbulb } from 'lucide';
 import { Github, Linkedin } from '../brandIcons';
 import AppIcon from '../AppIcon';
 import { yearsOfExperience } from '../../utils/experience';
+import { withBase } from '../../utils/withBase';
+import defaultPhoto from '../../assets/profile_photo.jpg';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -31,14 +33,11 @@ const HomePage = ({ data }) => {
   const linkedin = personalInfo?.linkedin ?? '';
   const github = personalInfo?.github ?? '';
   const rawPhoto = personalInfo?.photo ?? '';
-  // Resolve absolute "/profile_photo.jpg" against Vite BASE_URL so the demo
-  // at /awesome-portfolio-page-react/ doesn't accidentally load the
-  // super-domain's https://sileneer.github.io/profile_photo.jpg.
-  const photo = rawPhoto
-    ? rawPhoto.startsWith('/')
-      ? `${import.meta.env.BASE_URL}${rawPhoto.slice(1)}`
-      : rawPhoto
-    : '';
+  // B: Hashed import for default bear (Vite handles base + hash). Custom
+  // photos use withBase so /my-photo.jpg respects BASE_URL.
+  const photo = !rawPhoto || rawPhoto === '/profile_photo.jpg'
+    ? defaultPhoto
+    : withBase(rawPhoto);
 
   const yearsExperience = useMemo(() => yearsOfExperience(data?.resume?.experience), [data?.resume?.experience]);
   const skillsCount = Array.isArray(data?.resume?.skills) ? data.resume.skills.length : 0;

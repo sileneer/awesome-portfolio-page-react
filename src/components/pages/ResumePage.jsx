@@ -19,6 +19,8 @@ import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
 import StatItem from '../StatItem';
 import { yearsOfExperience } from '../../utils/experience';
+import { withBase } from '../../utils/withBase';
+import defaultCV from '../../assets/CV.pdf';
 
 // Shared entrance choreography: one stagger container reveals its children in
 // sequence (30–60ms apart) instead of every element animating independently.
@@ -416,23 +418,28 @@ const ResumePage = ({ data }) => {
             }}>
               Résumé
             </Typography>
-            {resume.cvDownload && (
-              <Button
-                variant="contained"
-                startIcon={<AppIcon icon={Download} size={20} />}
-                href={resume.cvDownload}
-                download
-                aria-label="Download CV as PDF"
-                sx={{
-                  flexShrink: 0,
-                  background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                  color: theme.palette.getContrastText(theme.palette.primary.main),
-                  px: 4, py: 1.5,
-                }}
-              >
-                Download CV
-              </Button>
-            )}
+            {(() => {
+              const rawCv = resume?.cvDownload ?? '';
+              if (!rawCv) return null;
+              const cvHref = rawCv === '/CV.pdf' ? defaultCV : withBase(rawCv);
+              return (
+                <Button
+                  variant="contained"
+                  startIcon={<AppIcon icon={Download} size={20} />}
+                  href={cvHref}
+                  download
+                  aria-label="Download CV as PDF"
+                  sx={{
+                    flexShrink: 0,
+                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    color: theme.palette.getContrastText(theme.palette.primary.main),
+                    px: 4, py: 1.5,
+                  }}
+                >
+                  Download CV
+                </Button>
+              );
+            })()}
           </Box>
 
           {summary && (
