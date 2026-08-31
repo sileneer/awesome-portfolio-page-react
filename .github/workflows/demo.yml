@@ -33,7 +33,7 @@ jobs:
         env:
           VITE_BASE: /awesome-portfolio-page-react/
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: build
       - id: deployment
