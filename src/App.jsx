@@ -245,7 +245,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <MotionConfig reducedMotion="user">
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <ScrollToTop />
           <ScrollToTopButton />
 

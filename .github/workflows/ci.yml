@@ -3,18 +3,39 @@ name: CI
 on:
   push:
     branches: [dev, master]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Cancel superseded runs on the same branch — saves Actions minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # Vite 8 supports ^20.19.0 || >=22.12.0 — verify the oldest and current LTS.
+      matrix:
+        node: [20, 22]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ matrix.node }}
           cache: npm
       - run: npm ci
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
