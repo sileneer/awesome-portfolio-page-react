@@ -1,0 +1,35 @@
+name: Release
+
+# On a v* tag: verify (lint/test/build), attach the built site as a zip,
+# and publish a GitHub Release with auto-generated notes.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Zip the built site
+        run: |
+          cd build
+          zip -r "../awesome-portfolio-page-react-${GITHUB_REF_NAME}.zip" .
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            "awesome-portfolio-page-react-${GITHUB_REF_NAME}.zip" \
+            --verify-tag --generate-notes

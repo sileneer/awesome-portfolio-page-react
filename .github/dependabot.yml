@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Group routine version updates into one PR; security updates stay separate.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm-and-yarn:
+        applies-to: version-updates
+        patterns:
+          - '*'
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+
+  # Keep the Actions in the workflows up to date too.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - ci
