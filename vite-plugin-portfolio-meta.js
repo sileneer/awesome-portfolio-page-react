@@ -7,8 +7,18 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 
 export const buildMeta = (personalInfo, resume) => {
   const site = personalInfo.website ?? '';
-  const image =
-    site && personalInfo.photo ? new URL(personalInfo.photo, site).href : (personalInfo.photo ?? '');
+  const image = (() => {
+    if (!site || !personalInfo.photo) return personalInfo.photo ?? '';
+    try {
+      const base = site.endsWith('/') ? site : `${site}/`;
+      // "/profile_photo.jpg" with new URL would resolve to origin root,
+      // ignoring the sub-path; strip leading "/" so it resolves under site.
+      const path = personalInfo.photo.replace(/^\//, '');
+      return new URL(path, base).href;
+    } catch {
+      return personalInfo.photo;
+    }
+  })();
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
