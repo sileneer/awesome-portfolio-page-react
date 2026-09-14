@@ -24,6 +24,7 @@ Contains your personal information displayed on the home page.
 - `title` (string): Professional title (e.g., "Full Stack Developer")
 - `email` (string): Primary contact email address
 - `phone` (string): Contact phone number (e.g., "+1 (123) 456-7890")
+- `alternatePhone` (string, optional): Secondary phone number (e.g., an international number)
 - `location` (string): City, State/Country (e.g., "San Francisco, CA, USA")
 - `linkedin` (string): LinkedIn profile URL
 - `github` (string): GitHub profile URL
@@ -98,6 +99,7 @@ Contains your professional background, skills, and qualifications.
   - `company` (string): Company name
   - `role` (string): Job title/role
   - `dates` (string): Employment period (e.g., "2023 - Present")
+  - `type` (string, optional): Employment type (e.g., "Full-time", "Part-time", "Internship")
   - `location` (string): Job location (e.g., "London, UK" or "Remote")
   - `description` (string): Job description and responsibilities
   - `technologies` (array of strings): Technologies used (e.g., ["React", "Node.js"])
@@ -107,11 +109,15 @@ Contains your professional background, skills, and qualifications.
   - `institution` (string): School/university name
   - `dates` (string): Attendance period (e.g., "2017 - 2021")
   - `gpa` (string, optional): Grade point average
+  - `grade` (string, optional): Grade or classification for non-GPA systems (e.g., "First Class Honours", "II.1")
   - `location` (string, optional): School location
   - `description` (string, optional): Additional details
   - `coursework` (array of strings, optional): Relevant courses
   - `extracurriculars` (array of strings, optional): Activities and clubs
 - `skills` (array of strings): Technical skills and technologies
+- `skillCategories` (array of objects, optional): Skills grouped by category for richer display
+  - `category` (string): Category name (e.g., "Frontend", "DevOps & Tools")
+  - `items` (array of strings): Skills within this category
 - `certifications` (array of objects): Professional certifications
   - `title` (string): Certification name
   - `certificateLink` (string, optional): Link to certificate
@@ -179,6 +185,7 @@ Array of project objects, each with the following fields:
 - `screenshots` (array of strings): Paths to project images (e.g., ["/projects/app1.png"])
 - `role` (string): Your role in the project (e.g., "Lead Developer")
 - `duration` (string): Project duration (e.g., "6 months")
+- `dates` (string, optional): Project date range (e.g., "Jan 2023 - Jun 2023")
 
 ### Example:
 ```json

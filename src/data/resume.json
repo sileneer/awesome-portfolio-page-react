@@ -5,6 +5,7 @@
       "company": "TechCorp",
       "role": "Frontend Engineer",
       "dates": "2023 - Present",
+      "type": "Full-time",
       "location": "London, UK",
       "description": "Lead development of dashboard features using React, TypeScript, and Redux. Collaborated with product managers and designers to deliver solutions for clients.",
       "technologies": [
@@ -38,6 +39,7 @@
       "institution": "Example University",
       "dates": "2017 - 2021",
       "gpa": "3.8",
+      "grade": "First Class Honours",
       "coursework": [
         "Algorithms",
         "Web Development",
@@ -79,6 +81,20 @@
     "Nginx",
     "Linux",
     "Python"
+  ],
+  "skillCategories": [
+    {
+      "category": "Frontend",
+      "items": ["React", "Redux", "Material-UI", "Webpack"]
+    },
+    {
+      "category": "Backend",
+      "items": ["Node.js", "Express", "PostgreSQL", "MongoDB", "GraphQL"]
+    },
+    {
+      "category": "DevOps & Tools",
+      "items": ["Docker", "AWS", "Nginx", "Redis", "Linux", "Git"]
+    }
   ],
   "certifications": [
     {
