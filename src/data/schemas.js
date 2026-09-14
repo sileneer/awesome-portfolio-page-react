@@ -28,6 +28,7 @@ export const personalInfoSchema = z.object({
   photo: z.string().min(1),
   email: z.string().email(),
   phone: z.string().optional(),
+  alternatePhone: z.string().optional(),
   location: z.string().optional(),
   linkedin: z.string().url().optional(),
   github: z.string().url().optional(),
@@ -40,6 +41,7 @@ const experienceItemSchema = z.object({
   role: z.string().min(1),
   dates: z.string().min(1),
   description: z.string().min(1),
+  type: z.string().optional(),
   location: z.string().optional(),
   technologies: z.array(z.string()).optional(),
   achievements: z.array(z.string()).optional(),
@@ -50,6 +52,7 @@ const educationItemSchema = z.object({
   institution: z.string().min(1),
   dates: z.string().min(1),
   gpa: z.string().optional(),
+  grade: z.string().optional(),
   location: z.string().optional(),
   description: z.string().optional(),
   coursework: z.array(z.string()).optional(),
@@ -66,6 +69,14 @@ export const resumeSchema = z.object({
   experience: z.array(experienceItemSchema),
   education: z.array(educationItemSchema),
   skills: z.array(z.string()),
+  skillCategories: z
+    .array(
+      z.object({
+        category: z.string().min(1),
+        items: z.array(z.string()),
+      }),
+    )
+    .optional(),
   certifications: z.array(credentialSchema).optional(),
   awards: z.array(credentialSchema).optional(),
   interests: z.array(z.string()).optional(),
@@ -80,6 +91,7 @@ const projectSchema = z.object({
   screenshots: z.array(z.string()).optional(),
   role: z.string().optional(),
   duration: z.string().optional(),
+  dates: z.string().optional(),
 });
 
 export const projectsSchema = z.array(projectSchema);
