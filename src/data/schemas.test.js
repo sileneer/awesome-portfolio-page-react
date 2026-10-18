@@ -74,3 +74,17 @@ test('new optional fields can be omitted (backward compatible)', () => {
     ]).success,
   ).toBe(true);
 });
+
+
+const experienceWithLogo = (logo) => ({
+  summary: 'Summary', skills: [], education: [],
+  experience: [{ company: 'Acme', role: 'Engineer', dates: '2026', description: 'Built tools.', ...(logo === undefined ? {} : { logo }) }],
+});
+
+test.each([undefined, '/companies/acme.svg', '/companies/acme.png', 'https://cdn.example.org/logo?id=1'])('accepts optional company logo %s', (logo) => {
+  expect(resumeSchema.safeParse(experienceWithLogo(logo)).success).toBe(true);
+});
+
+test.each(['', 'javascript:alert(1)', '//cdn.example.org/logo.svg', '/../logo.svg', '/companies/%2e%2e/logo.svg', '/companies/logo.pdf'])('rejects invalid company logo %s', (logo) => {
+  expect(resumeSchema.safeParse(experienceWithLogo(logo)).success).toBe(false);
+});

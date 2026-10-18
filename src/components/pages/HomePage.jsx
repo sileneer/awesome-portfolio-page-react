@@ -2,12 +2,13 @@ import React, { useMemo } from 'react';
 import { Container, Typography, Box, Button, Avatar, Grid, Card, useTheme, Stack } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Briefcase, FolderOpen, Lightbulb } from 'lucide';
+import { Briefcase, FolderOpen, Lightbulb, Sparkles } from 'lucide';
 import { Github, Linkedin } from '../brandIcons';
 import AppIcon from '../AppIcon';
+import ResearchPreview from '../ResearchPreview';
+import { PageEyebrow } from '../PageIntro';
 import { yearsOfExperience } from '../../utils/experience';
-import { withBase } from '../../utils/withBase';
-import defaultPhoto from '../../assets/profile_photo.jpg';
+import { resolveAsset } from '../../utils/assets';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -33,11 +34,7 @@ const HomePage = ({ data }) => {
   const linkedin = personalInfo?.linkedin ?? '';
   const github = personalInfo?.github ?? '';
   const rawPhoto = personalInfo?.photo ?? '';
-  // B: Hashed import for default bear (Vite handles base + hash). Custom
-  // photos use withBase so /my-photo.jpg respects BASE_URL.
-  const photo = !rawPhoto || rawPhoto === '/profile_photo.jpg'
-    ? defaultPhoto
-    : withBase(rawPhoto);
+  const photo = resolveAsset(rawPhoto || '/profile_photo.jpg');
 
   const yearsExperience = useMemo(() => yearsOfExperience(data?.resume?.experience), [data?.resume?.experience]);
   const skillsCount = Array.isArray(data?.resume?.skills) ? data.resume.skills.length : 0;
@@ -109,6 +106,7 @@ const HomePage = ({ data }) => {
     <Box sx={{ pb: 8 }}>
       <Box sx={{
         minHeight: '100dvh',
+        overflowX: 'clip',
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
@@ -120,9 +118,9 @@ const HomePage = ({ data }) => {
             <Grid size={{ xs: 12, md: 7 }}>
               <Box component={motion.div} variants={containerVariants} initial="hidden" animate="visible" sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                 <motion.div variants={textVariants}>
-                  <Typography variant="h6" component="p" color="primary.main" sx={{ mb: 2, textTransform: 'uppercase', letterSpacing: 3, fontWeight: 700 }}>
-                    Welcome to my universe
-                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                    <PageEyebrow icon={Sparkles}>Hello & welcome</PageEyebrow>
+                  </Box>
                 </motion.div>
 
                 <motion.div variants={textVariants}>
@@ -357,6 +355,7 @@ const HomePage = ({ data }) => {
           })}
         </Grid>
       </Container>
+      <ResearchPreview research={data?.research} path={data?.navigation?.menuItems?.find((item) => item.component === 'ResearchPage')?.path} />
     </Box>
   );
 };

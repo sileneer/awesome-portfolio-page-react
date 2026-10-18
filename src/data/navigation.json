@@ -4,6 +4,7 @@
     { "name": "Home",     "path": "/",         "component": "HomePage" },
     { "name": "Resume",   "path": "/resume",   "component": "ResumePage" },
     { "name": "Projects", "path": "/projects", "component": "ProjectsPage" },
+    { "name": "Research", "path": "/research", "component": "ResearchPage" },
     { "name": "Contact",  "path": "/contact",  "component": "ContactPage" }
   ]
 }

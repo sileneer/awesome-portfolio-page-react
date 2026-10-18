@@ -14,18 +14,20 @@ import navigation from './data/navigation.json';
 import resume from './data/resume.json';
 import projects from './data/projects.json';
 import contact from './data/contact.json';
+import research from './data/research.json';
 import { validatePortfolioData } from './data/schemas';
 import { pageTitle } from './utils/pageTitle';
 
 const HomePage = lazy(() => import('./components/pages/HomePage'));
 const ResumePage = lazy(() => import('./components/pages/ResumePage'));
 const ProjectsPage = lazy(() => import('./components/pages/ProjectsPage'));
+const ResearchPage = lazy(() => import('./components/pages/ResearchPage'));
 const ContactPage = lazy(() => import('./components/pages/ContactPage'));
 
 // Registry of page components addressable from navigation.json.
 // Add new pages here: import lazily above, then register the same name used
 // in navigation.json's `component` field.
-const PAGE_COMPONENTS = { HomePage, ResumePage, ProjectsPage, ContactPage };
+const PAGE_COMPONENTS = { HomePage, ResumePage, ProjectsPage, ResearchPage, ContactPage };
 
 // Throws at render time if nav.json references an unknown component — loud
 // failure that surfaces config typos immediately. To soften this, return a
@@ -38,7 +40,7 @@ const resolvePageComponent = (name) => {
 
 // Static ESM imports that can never change at runtime — built once at module
 // scope so the object identity is stable across renders.
-const data = { personalInfo, navigation, resume, projects, contact };
+const data = { personalInfo, navigation, resume, projects, research, contact };
 
 const getDesignTokens = (mode) => ({
   palette: {

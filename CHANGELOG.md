@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Research and publications page with featured work, year groups, explicit statuses,
+  abstracts, citation copying, resource links, research projects, and optional Home preview.
+- Optional company logos on experience entries, with a fallback for failed images.
+
+### Changed
+- Shared page-introduction and eyebrow styling across all five pages.
+- Centralized asset discovery and URL resolution for portraits, CVs, project images,
+  company logos, and research resources, including deployment sub-paths.
+
+### Fixed
+- Home portrait glow no longer causes horizontal overflow at narrow widths.
+- Header statistics wrap correctly with the installed MUI layout API.
+
 ## [2.3.0] - 2026-08-30
 
 Icon-system and accessibility-polish release. All icons now render through

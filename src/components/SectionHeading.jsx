@@ -22,12 +22,11 @@ const SectionHeading = ({ icon: Icon, children, size = 'lg', component = 'h2' })
       component={motion.div}
       direction="row"
       spacing={1.5}
-      alignItems="center"
       initial={{ opacity: 0, x: -16 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      sx={{ mb }}
+      sx={{ mb, alignItems: 'center' }}
     >
       {Icon && (
         <Box aria-hidden="true" sx={{

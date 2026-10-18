@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import ResumePage from './ResumePage';
 
 const fullResume = {
@@ -119,4 +119,28 @@ describe('ResumePage restored sections', () => {
     expect(container.querySelector('#education')).toBeNull();
     expect(container.querySelector('#certifications')).toBeNull();
   });
+});
+
+
+test('company logos are optional and resolve under the deployment base', () => {
+  vi.stubEnv('BASE_URL', '/portfolio/');
+  try {
+    const resume = { ...minimalResume, experience: [{ ...minimalResume.experience[0], logo: '/companies/acme.svg' }] };
+    const { rerender } = render(<ResumePage data={{ resume }} />);
+    expect(screen.getByRole('img', { name: 'X Co logo' })).toHaveAttribute('src', '/portfolio/companies/acme.svg');
+    rerender(<ResumePage data={{ resume: minimalResume }} />);
+    expect(screen.queryByRole('img', { name: /logo/i })).not.toBeInTheDocument();
+    expect(screen.getByText('X Co')).toBeInTheDocument();
+  } finally { vi.unstubAllEnvs(); }
+});
+
+test('failed logos use a fallback and a changed source can load again', () => {
+  const resume = { ...minimalResume, experience: [{ ...minimalResume.experience[0], logo: 'https://example.org/missing.svg' }] };
+  const { rerender } = render(<ResumePage data={{ resume }} />);
+  fireEvent.error(screen.getByRole('img', { name: 'X Co logo' }));
+  expect(screen.queryByRole('img', { name: 'X Co logo' })).not.toBeInTheDocument();
+  expect(screen.getByText('X Co')).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Engineer' })).toBeInTheDocument();
+  rerender(<ResumePage data={{ resume: { ...resume, experience: [{ ...resume.experience[0], logo: 'https://example.org/new.svg' }] } }} />);
+  expect(screen.getByRole('img', { name: 'X Co logo' })).toHaveAttribute('src', 'https://example.org/new.svg');
 });

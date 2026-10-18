@@ -11,6 +11,7 @@
 - **🏠 Home Page**: Professional landing page with hero section and highlight cards
 - **📄 Resume Section**: Experience timeline, education, skills, languages, certifications, awards, and interests, with a sticky section navigator
 - **💼 Projects Showcase**: Filterable project grid with a detail dialog (screenshot gallery, role/duration, technologies, and links)
+- **📚 Research & Publications**: Year-grouped papers, explicit statuses, featured work, expandable abstracts, citation copying, research projects, and an optional Home preview
 - **📞 Contact Page**: Copyable contact methods (email, alternate email, phone) with a mailto CTA, an at-a-glance stat strip (reply time, location, availability), and a social links list
 - **🎨 Theme System**: Three-state preference (light / dark / system) with live OS-theme following and custom Material-UI palette
 - **♿ Accessible**: Clean heading hierarchy, ARIA attributes, focus states, and reduced-motion support
@@ -71,7 +72,7 @@ Your portfolio data is organized into separate JSON files for easy management:
    - Customize your brand name and menu items
 
 3. **Resume**: Edit `src/data/resume.json`
-   - Add work experience, education, skills, certifications, awards, and interests
+   - Add work experience (with optional company logos), education, skills, certifications, awards, and interests
 
 4. **Projects**: Edit `src/data/projects.json`
    - Showcase your portfolio projects with descriptions and screenshots
@@ -79,10 +80,15 @@ Your portfolio data is organized into separate JSON files for easy management:
 5. **Contact**: Edit `src/data/contact.json`
    - Add additional contact methods and social media links
 
-6. **Images**:
-   - Add your profile photo to `public/profile_photo.jpg`
-   - Add your CV to `public/CV.pdf` (optional)
-   - Add project screenshots to `public/projects/` folder (optional)
+6. **Research**: Edit `src/data/research.json`
+   - Add publications, research projects, interests, and academic profile links
+   - Optionally feature one entry; the Home preview appears when content is available
+   - Ships with empty lists so no sample papers are attributed to you
+
+7. **Images**:
+   - Replace the default portrait in `src/assets/profile_photo.jpg`, or set a custom path from `public/`
+   - Replace the default CV in `src/assets/CV.pdf`, or set a custom path from `public/` (optional)
+   - Add screenshots or company logos under `src/assets/` or `public/` and reference their paths in JSON
 
 See [PORTFOLIO_DATA_STRUCTURE.md](./docs/PORTFOLIO_DATA_STRUCTURE.md) for complete details on available fields and data structure.
 
@@ -93,6 +99,7 @@ src/
 ├── components/
 │   ├── Navigation.jsx        # Floating bottom nav with theme toggle
 │   ├── Footer.jsx            # Footer with attribution
+│   ├── PageIntro.jsx         # Shared interior header and Home eyebrow styling
 │   ├── SectionHeading.jsx    # Shared icon + gradient section heading
 │   ├── StatItem.jsx          # Shared at-a-glance stat figure
 │   ├── ErrorBoundary.jsx     # Friendly fallback for boot/render errors
@@ -100,6 +107,7 @@ src/
 │       ├── HomePage.jsx      # Landing page with hero and stat cards
 │       ├── ResumePage.jsx    # Résumé sections, timeline, and section nav
 │       ├── ProjectsPage.jsx  # Projects grid with filter + detail dialog
+│       ├── ResearchPage.jsx  # Publications, featured work, and research projects
 │       └── ContactPage.jsx   # Stat strip + contact methods + socials
 ├── context/
 │   └── ThemeContext.jsx      # Light / dark / system theme state
@@ -108,9 +116,11 @@ src/
 │   ├── personalInfo.json     # Personal information, bio, and languages
 │   ├── resume.json           # Professional experience and education
 │   ├── projects.json         # Portfolio projects
+│   ├── research.json         # Publications, research interests, and research projects
 │   ├── contact.json          # Contact information and social links
 │   └── schemas.js            # Zod schemas — JSON files validated at boot
 ├── utils/
+│   ├── assets.js             # Central asset discovery and deployment-aware URLs
 │   └── experience.js         # Derives years of experience from date strings
 ├── App.jsx                   # Main app component, theme, and data validation
 └── index.jsx                 # Entry point (wraps the app in an error boundary)
@@ -127,7 +137,7 @@ src/
 ### Resume Page
 - Intro band with a professional summary, at-a-glance stats (years, roles, skills, certifications), and a downloadable CV link
 - Sticky section navigation (desktop) with scrollspy that tracks the current section as you scroll
-- Work experience on a single-rail timeline — location, achievements, and technologies per role
+- Work experience on a single-rail timeline — optional company logos, location, achievements, and technologies per role
 - Education with GPA, coursework, and activities
 - Skills, languages, and interests shown as tag badges
 - Certifications and awards with optional credential links
@@ -137,6 +147,16 @@ src/
 - Filter projects by technology
 - Project cards showing role, duration, technologies, and a screenshot
 - Click a card to open a detail dialog with a screenshot gallery, full description, and links (source code / live demo)
+
+### Research Page
+- Research statement, interest tags, and optional academic profile links
+- Featured paper or research project linking to its full entry
+- Publications grouped newest first, with ordered authors, venue, type, and status
+- Inline abstract disclosures, supplied BibTeX copying, and optional resource links
+- Research-project cards with questions, contributions, and collaborators
+- Year/type/topic filters for five or more entries when there are meaningful choices
+- Empty sections work without fabricated content; edit `src/data/research.json` to add your work
+- Home preview appears when content and a research route are configured
 
 ### Contact Page
 - **Stat strip** at the top: typical reply time, location, and a live availability indicator (paired with the HomePage status indicator)
@@ -168,7 +188,9 @@ npm run deploy
 This builds the site and publishes `build/` to the `gh-pages` branch using the
 [gh-pages](https://github.com/tschaub/gh-pages) package. If your site is served
 from a sub-path (`https://<user>.github.io/<repo>/` rather than a user page),
-set `base: '/<repo>/'` in `vite.config.js` first.
+set `base: '/<repo>/'` in `vite.config.js` (or `VITE_BASE='/<repo>/'`)
+and set `pathSegmentsToKeep = 1` in `public/404.html` so direct page links
+return to the correct app path.
 
 ### Netlify / Vercel
 Simply connect your GitHub repository and these services will automatically build and deploy your portfolio.
@@ -218,9 +240,12 @@ Add additional contact options:
 - Social media (Twitter, Facebook)
 
 ### Adding Images
-- **Profile Photo**: Add your photo as `public/profile_photo.jpg`
-- **CV File**: Add your resume PDF as `public/CV.pdf`
-- **Project Screenshots**: Create `public/projects/` folder and add your project images
+- **Profile Photo**: Replace `src/assets/profile_photo.jpg`, or use a custom photo in `public/` and update `personalInfo.photo`
+- **CV File**: Replace `src/assets/CV.pdf`, or use a custom file in `public/` and update `resume.cvDownload`
+- **Project Screenshots**: Add images under `src/assets/projects/` or `public/projects/` and list their paths in `projects.json`
+- **Company Logos**: Add images under `src/assets/companies/` or `public/companies/` and set an experience entry’s optional `logo` field
+
+All page media use the central resolver in `src/utils/assets.js`. See the [resource guide](docs/PORTFOLIO_DATA_STRUCTURE.md#centralized-images-and-documents) for path rules and deployment behavior.
 
 ### Styling & Theming
 The application uses Material-UI theming configured in `src/App.jsx`:

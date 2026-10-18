@@ -5,10 +5,11 @@ import {
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Globe, Send, Copy, Clock, AtSign, Contact } from 'lucide';
+import { Mail, Phone, MapPin, Globe, Send, Copy, Clock, AtSign, Contact, MessageCircle } from 'lucide';
 import { Linkedin, Github, Twitter, Facebook } from '../brandIcons';
 import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
+import PageIntro from '../PageIntro';
 
 // A single tappable contact method: icon tile, label, value (as a mailto/tel
 // link), and a copy-to-clipboard button. Used for email, alternate email, phone.
@@ -149,24 +150,8 @@ const ContactPage = ({ data }) => {
     <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
       <Container maxWidth="lg">
 
-        {/* ---------- Hero ---------- */}
-        <Box sx={{ mb: 5 }}>
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Typography variant="h2" component="h1" sx={{
-              fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 800,
-              background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 100%)`,
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', mb: 2,
-              textShadow: theme.palette.mode === 'dark' ? '0 2px 10px rgba(0,0,0,0.5)' : 'none',
-            }}>
-              Let's Connect
-            </Typography>
-          </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <Typography variant="h6" component="p" color="text.secondary" sx={{ maxWidth: '65ch', fontWeight: 400 }}>
-              {contact?.message || "Ready to bring your ideas to life? Let's discuss how we can work together to create something amazing."}
-            </Typography>
-          </motion.div>
-        </Box>
+        <PageIntro icon={MessageCircle} eyebrow="Connect & collaborate" title="Let's Connect"
+          description={contact?.message || "Ready to bring your ideas to life? Let's discuss how we can work together to create something amazing."} />
 
         {/* ---------- Stat strip ---------- */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.35 }}>

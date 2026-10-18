@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import {
   Download,
   Briefcase,
+  Building2,
   GraduationCap,
   Code,
   Award,
@@ -18,9 +19,9 @@ import {
 import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
 import StatItem from '../StatItem';
+import PageIntro from '../PageIntro';
 import { yearsOfExperience } from '../../utils/experience';
-import { withBase } from '../../utils/withBase';
-import defaultCV from '../../assets/CV.pdf';
+import { resolveAsset } from '../../utils/assets';
 
 // Shared entrance choreography: one stagger container reveals its children in
 // sequence (30–60ms apart) instead of every element animating independently.
@@ -169,6 +170,21 @@ const badgeChipSx = (theme) => ({
   },
 });
 
+// Keep a stable tile when an optional logo fails; a new source can load again.
+const CompanyLogo = ({ source, company }) => {
+  const [failedSource, setFailedSource] = useState(null);
+  const url = resolveAsset(source);
+  return (
+    <Box sx={{ width: 48, height: 48, flexShrink: 0, border: 1, borderColor: 'divider', borderRadius: 2,
+      overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'action.hover', color: 'primary.main' }}>
+      {failedSource === url ? <AppIcon icon={Building2} size={24} /> : (
+        <Box component="img" src={url} alt={`${company} logo`} width={48} height={48} loading="lazy" decoding="async"
+          onError={() => setFailedSource(url)} sx={{ width: '100%', height: '100%', objectFit: 'contain', p: 0.75, bgcolor: '#fff' }} />
+      )}
+    </Box>
+  );
+};
+
 // Single-rail timeline: one vertical rail on the left with full-width cards, so
 // the eye reads straight down instead of zig-zagging across the row.
 const ExperienceTimeline = ({ experience }) => {
@@ -222,14 +238,15 @@ const ExperienceTimeline = ({ experience }) => {
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 <Stack
                   direction={{ xs: 'column', sm: 'row' }}
-                  justifyContent="space-between"
-                  alignItems={{ sm: 'flex-start' }}
                   spacing={1}
-                  sx={{ mb: 1 }}
+                  sx={{ mb: 1, justifyContent: 'space-between', alignItems: { sm: 'flex-start' } }}
                 >
-                  <Box>
-                    <Typography variant="h5" component="h3" color="primary.main" fontWeight={700}>{exp.role}</Typography>
-                    <Typography variant="subtitle1" component="p" fontWeight={600}>{exp.company}</Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, minWidth: 0 }}>
+                    {exp.logo && <CompanyLogo source={exp.logo} company={exp.company} />}
+                    <Box sx={{ minWidth: 0, overflowWrap: 'anywhere' }}>
+                      <Typography variant="h5" component="h3" color="primary.main" fontWeight={700}>{exp.role}</Typography>
+                      <Typography variant="subtitle1" component="p" fontWeight={600}>{exp.company}</Typography>
+                    </Box>
                   </Box>
                   {exp.dates && <Chip label={exp.dates} size="small" sx={{ flexShrink: 0 }} />}
                 </Stack>
@@ -395,33 +412,11 @@ const ResumePage = ({ data }) => {
     <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
       <Container maxWidth="lg">
 
-        {/* Intro band */}
-        <Box
-          component={motion.div}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          sx={{ mb: { xs: 6, md: 9 } }}
-        >
-          <Box sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: { sm: 'center' },
-            flexDirection: { xs: 'column', sm: 'row' },
-            gap: 3,
-            mb: summary || stats.length ? 3 : 0,
-          }}>
-            <Typography variant="h2" component="h1" sx={{
-              fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 800,
-              background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 100%)`,
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>
-              Résumé
-            </Typography>
-            {(() => {
+        <PageIntro icon={Briefcase} eyebrow="Experience & skills" title="Résumé" description={summary}
+          action={(() => {
               const rawCv = resume?.cvDownload ?? '';
               if (!rawCv) return null;
-              const cvHref = rawCv === '/CV.pdf' ? defaultCV : withBase(rawCv);
+              const cvHref = resolveAsset(rawCv);
               return (
                 <Button
                   variant="contained"
@@ -439,30 +434,21 @@ const ResumePage = ({ data }) => {
                   Download CV
                 </Button>
               );
-            })()}
-          </Box>
-
-          {summary && (
-            <Typography variant="h6" component="p" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.8, maxWidth: '65ch' }}>
-              {summary}
-            </Typography>
-          )}
-
+            })()}>
           {stats.length > 0 && (
             <Stack
               direction="row"
               spacing={{ xs: 3, md: 5 }}
               useFlexGap
-              flexWrap="wrap"
               divider={<Divider orientation="vertical" flexItem />}
-              sx={{ mt: 4 }}
+              sx={{ mt: 4, flexWrap: 'wrap' }}
             >
               {stats.map((stat, i) => (
                 <StatItem key={i} value={stat.value} label={stat.label} />
               ))}
             </Stack>
           )}
-        </Box>
+        </PageIntro>
 
         {/* Sticky section nav + content */}
         <Box sx={{ display: 'flex', gap: { md: 6 }, alignItems: 'flex-start' }}>

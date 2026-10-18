@@ -3,7 +3,7 @@ import { Box, Typography, useTheme, useMediaQuery, IconButton, Tooltip } from '@
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, FileText, LayoutGrid, Mail, Sun, Moon, SunMoon } from 'lucide';
+import { Home, FileText, LayoutGrid, BookOpen, Mail, Sun, Moon, SunMoon } from 'lucide';
 import { ThemeContext } from '../context/ThemeContext';
 import AppIcon from './AppIcon';
 
@@ -12,6 +12,7 @@ const iconMap = {
   home: Home,
   resume: FileText,
   projects: LayoutGrid,
+  research: BookOpen,
   contact: Mail,
 };
 
@@ -27,7 +28,7 @@ const PREFERENCE_META = {
 
 const Navigation = ({ data }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { mode, preference, cyclePreference } = useContext(ThemeContext);
   const { Icon: ThemeIcon, label: themeLabel, nextLabel: themeNextLabel } = PREFERENCE_META[preference];
   const { menuItems } = data.navigation;
@@ -53,13 +54,13 @@ const Navigation = ({ data }) => {
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
-        padding: '8px 16px',
+        padding: { xs: '8px', md: '8px 12px' },
         borderRadius: '32px',
         background: mode === 'dark' ? 'rgba(18, 18, 20, 0.75)' : 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(16px)',
         border: mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(15, 23, 42, 0.1)',
         boxShadow: mode === 'dark' ? '0 8px 32px rgba(0, 0, 0, 0.5)' : '0 8px 32px rgba(15, 23, 42, 0.08)',
-        gap: { xs: 1, md: 2 },
+        gap: { xs: 0, sm: 1 },
       }}
     >
       {menuItems.map((item) => {
@@ -85,7 +86,7 @@ const Navigation = ({ data }) => {
               // page, and 8px padding around a 20px icon only reached 36x36.
               minWidth: 44,
               minHeight: 44,
-              padding: { xs: '8px', md: '10px 20px' },
+              padding: { xs: '8px', md: '10px 14px' },
               borderRadius: '24px',
               border: 'none',
               cursor: 'pointer',
@@ -138,7 +139,7 @@ const Navigation = ({ data }) => {
         ) : button;
       })}
 
-      <Box sx={{ width: '1px', height: '24px', background: theme.palette.divider, mx: 1 }} />
+      <Box sx={{ width: '1px', height: '24px', background: theme.palette.divider, mx: { xs: 0.5, sm: 1 } }} />
 
       <Tooltip title={`Theme: ${themeLabel}. Click for ${themeNextLabel}.`} arrow placement="top">
         <IconButton

@@ -2,28 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { Container, Typography, Box, Grid, Chip, Button, Stack, Divider, Dialog, IconButton, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, X, ChevronLeft, ChevronRight, ListFilter, User, Clock, Eye } from 'lucide';
+import { ExternalLink, X, ChevronLeft, ChevronRight, ListFilter, FolderOpen, User, Clock, Eye } from 'lucide';
 import { Github } from '../brandIcons';
 import AppIcon from '../AppIcon';
 import StatItem from '../StatItem';
-import { withBase } from '../../utils/withBase';
-import connect1 from '../../assets/projects/connect1.png';
-import connect2 from '../../assets/projects/connect2.png';
-import taskmanager1 from '../../assets/projects/taskmanager1.png';
+import PageIntro from '../PageIntro';
+import { resolveAsset } from '../../utils/assets';
 
 const MAX_CARD_TECH = 5;
-
-// Hashed imports for default template screenshots (Vite handles base + hash).
-// Custom screenshots from JSON fall back to withBase so /my.png respects BASE_URL.
-const screenshotMap = {
-  '/projects/connect1.png': connect1,
-  '/projects/connect2.png': connect2,
-  '/projects/taskmanager1.png': taskmanager1,
-  'projects/connect1.png': connect1,
-  'projects/connect2.png': connect2,
-  'projects/taskmanager1.png': taskmanager1,
-};
-const resolveScreenshot = (src) => screenshotMap[src] ?? withBase(src);
 
 const isGithubLink = (link) => typeof link === 'string' && link.includes('github.com');
 
@@ -92,7 +78,7 @@ const ProjectCard = ({ project, onOpen }) => {
             sx={{ position: 'relative', height: 230, overflow: 'hidden', cursor: 'pointer' }}
           >
             <img
-              src={resolveScreenshot(screenshots[0])}
+              src={resolveAsset(screenshots[0])}
               alt={`${name} screenshot`}
               loading="lazy"
               width="600"
@@ -217,7 +203,7 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
             minHeight: { xs: 240, md: 520 },
           }}>
             <img
-              src={resolveScreenshot(screenshots[index])}
+              src={resolveAsset(screenshots[index])}
               alt={`${project.name} screenshot ${index + 1}`}
               style={{ width: '100%', height: '100%', maxHeight: '82vh', objectFit: 'contain', display: 'block' }}
             />
@@ -356,39 +342,22 @@ const ProjectsPage = ({ data }) => {
     <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
       <Container maxWidth="lg">
 
-        {/* Intro band */}
-        <Box
-          component={motion.div}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          sx={{ mb: { xs: 5, md: 7 } }}
-        >
-          <Typography variant="h2" component="h1" sx={{
-            fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 800, mb: 2,
-            background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 100%)`,
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          }}>
-            Featured Projects
-          </Typography>
-          <Typography variant="h6" component="p" sx={{ fontWeight: 400, color: 'text.secondary', maxWidth: '60ch' }}>
-            Selected projects and the technologies behind them.
-          </Typography>
+        <PageIntro icon={FolderOpen} eyebrow="Builds & experiments" title="Featured Projects"
+          description="Selected projects and the technologies behind them.">
           {stats.length > 0 && (
             <Stack
               direction="row"
               spacing={{ xs: 3, md: 5 }}
               useFlexGap
-              flexWrap="wrap"
               divider={<Divider orientation="vertical" flexItem />}
-              sx={{ mt: 4 }}
+              sx={{ mt: 4, flexWrap: 'wrap' }}
             >
               {stats.map((stat, i) => (
                 <StatItem key={i} value={stat.value} label={stat.label} />
               ))}
             </Stack>
           )}
-        </Box>
+        </PageIntro>
 
         {/* Filter */}
         {allTechnologies.length > 1 && (
