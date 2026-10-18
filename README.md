@@ -190,7 +190,8 @@ This builds the site and publishes `build/` to the `gh-pages` branch using the
 from a sub-path (`https://<user>.github.io/<repo>/` rather than a user page),
 set `base: '/<repo>/'` in `vite.config.js` (or `VITE_BASE='/<repo>/'`)
 and set `pathSegmentsToKeep = 1` in `public/404.html` so direct page links
-return to the correct app path.
+return to the correct app path. The included demo workflow configures this
+fallback automatically for its repository sub-path.
 
 ### Netlify / Vercel
 Simply connect your GitHub repository and these services will automatically build and deploy your portfolio.

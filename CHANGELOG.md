@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   company logos, and research resources, including deployment sub-paths.
 
 ### Fixed
+- Direct page links in the GitHub Pages demo preserve the repository sub-path.
 - Home portrait glow no longer causes horizontal overflow at narrow widths.
 - Header statistics wrap correctly with the installed MUI layout API.
 

@@ -32,6 +32,8 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE: /awesome-portfolio-page-react/
+      - name: Configure demo SPA fallback
+        run: sed -i 's/var pathSegmentsToKeep = 0;/var pathSegmentsToKeep = 1;/' build/404.html
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
