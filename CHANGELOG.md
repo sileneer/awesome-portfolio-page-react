@@ -11,16 +11,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Research and publications page with featured work, year groups, explicit statuses,
   abstracts, citation copying, resource links, research projects, and optional Home preview.
 - Optional company logos on experience entries, with a fallback for failed images.
+- Design-system layer: `src/theme/tokens.js` (radii, type, motion, touch targets,
+  button heights, icon sizes, page spacing), `src/theme/variants.js` (shared card,
+  hover, CTA-gradient and focus-ring styles) and `src/theme/index.js` (the theme body,
+  moved out of `App.jsx`).
+- Shared UI primitives in `src/components/ui/`: `Label`, `IconTile`, `EmptyState`,
+  `InPageNav` (with scrollspy), `StatBand`, `AvailabilityDot`, `FilterBar` and
+  `FilterSelect`.
 
 ### Changed
 - Shared page-introduction and eyebrow styling across all five pages.
 - Centralized asset discovery and URL resolution for portraits, CVs, project images,
   company logos, and research resources, including deployment sub-paths.
+- Unified the page-title, section-title, icon, button, overline, empty-state,
+  in-page-navigation, stat-band, card-surface, hover-lift and focus-ring scales
+  across all pages.
+- The bottom safe area for the fixed navigation dock is now defined in one place,
+  and the vestigial 96px top padding on interior pages is gone.
 
 ### Fixed
 - Direct page links in the GitHub Pages demo preserve the repository sub-path.
 - Home portrait glow no longer causes horizontal overflow at narrow widths.
 - Header statistics wrap correctly with the installed MUI layout API.
+- Secondary text now renders at the intended muted contrast. MUI v9 matches only
+  the `textPrimary`/`textSecondary` colour variants, so `color="text.secondary"`
+  was silently ignored and 39 call sites site-wide kept full primary contrast;
+  all of them now express the colour through `sx`.
+- The Home hero subtitle's accent colour applies as intended, for the same reason.
+- Primary call-to-action buttons stay legible in dark mode: the gradient now stays
+  within one colour family, instead of putting dark text on the far end of a
+  two-hue gradient at roughly 2.4:1.
+- `variant="outlined"` chips are genuinely transparent instead of inheriting the
+  filled chip background.
+- React no longer logs unknown-prop warnings: the `alignItems` and `flexWrap`
+  props that leaked to the DOM now live in `sx`.
+- Touch targets below 44px were raised across the project filter chips, credential
+  links, contact details and in-page navigation.
+- `npm run lint` no longer fails for contributors who have the gitignored `plans/`
+  or agent folders on disk.
 
 ## [2.3.0] - 2026-08-30
 
