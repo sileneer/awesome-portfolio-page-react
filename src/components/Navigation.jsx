@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, FileText, LayoutGrid, BookOpen, Mail, Sun, Moon, SunMoon } from 'lucide';
 import { ThemeContext } from '../context/ThemeContext';
 import AppIcon from './AppIcon';
+import { radius, iconSize, touchTarget } from '../theme/tokens';
 
 // Icon *data* from lucide, rendered through AppIcon/morphicons — see AGENT.md.
 const iconMap = {
@@ -55,7 +56,7 @@ const Navigation = ({ data }) => {
         display: 'flex',
         alignItems: 'center',
         padding: { xs: '8px', md: '8px 12px' },
-        borderRadius: '32px',
+        borderRadius: radius.dock,
         background: mode === 'dark' ? 'rgba(18, 18, 20, 0.75)' : 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(16px)',
         border: mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(15, 23, 42, 0.1)',
@@ -84,31 +85,38 @@ const Navigation = ({ data }) => {
               gap: 1,
               // 44x44 floor: on mobile these icons are the only navigation on the
               // page, and 8px padding around a 20px icon only reached 36x36.
-              minWidth: 44,
-              minHeight: 44,
+              minWidth: touchTarget,
+              minHeight: touchTarget,
               padding: { xs: '8px', md: '10px 14px' },
-              borderRadius: '24px',
+              borderRadius: radius.xl,
               border: 'none',
               cursor: 'pointer',
+              // A raw <button> does not inherit the page font; without this any
+              // plain text added here would fall back to the UA font.
+              font: 'inherit',
               background: isActive
                 ? alpha(theme.palette.primary.main, 0.08)
                 : 'transparent',
               color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
               transition: 'background-color 0.2s ease, color 0.2s ease',
-              outline: 'none',
               position: 'relative',
               '&:hover': {
                 color: theme.palette.primary.main,
                 background: mode === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(15,23,42,0.04)',
               },
-              '&:focus-visible': {
-                boxShadow: `0 0 0 2px ${theme.palette.primary.main}`,
-              },
             }}
           >
-            <AppIcon icon={Icon} size={20} />
+            <AppIcon icon={Icon} size={iconSize.control} />
             {!isMobile && (
-              <Typography variant="button" sx={{ fontWeight: isActive ? 700 : 500 }}>
+              <Typography
+                variant="body2"
+                component="span"
+                sx={{
+                  fontFamily: '"Outfit", sans-serif',
+                  fontWeight: isActive ? 700 : 500,
+                  lineHeight: 1.4,
+                }}
+              >
                 {label}
               </Typography>
             )}
@@ -146,13 +154,12 @@ const Navigation = ({ data }) => {
           onClick={cyclePreference}
           aria-label={`Theme: ${themeLabel}. Switch to ${themeNextLabel}.`}
           sx={{
-            width: 44,
-            height: 44,
+            width: touchTarget,
+            height: touchTarget,
             color: theme.palette.text.primary,
-            '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
           }}
         >
-          <AppIcon icon={ThemeIcon} size={20} />
+          <AppIcon icon={ThemeIcon} size={iconSize.control} />
         </IconButton>
       </Tooltip>
     </Box>

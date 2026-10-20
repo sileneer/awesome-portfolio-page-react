@@ -1,32 +1,42 @@
 import React, { useMemo, useState } from 'react';
-import { Container, Typography, Box, Grid, Chip, Button, Stack, Divider, Dialog, IconButton, useTheme } from '@mui/material';
+import { Container, Typography, Box, Grid, Chip, Button, Stack, Dialog, IconButton, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, X, ChevronLeft, ChevronRight, ListFilter, FolderOpen, User, Clock, Eye } from 'lucide';
 import { Github } from '../brandIcons';
 import AppIcon from '../AppIcon';
-import StatItem from '../StatItem';
+import StatBand from '../ui/StatBand';
+import EmptyState from '../ui/EmptyState';
+import FilterBar from '../ui/FilterBar';
 import PageIntro from '../PageIntro';
 import { resolveAsset } from '../../utils/assets';
+import { cardSurface, cardHover, gradientCta } from '../../theme/variants';
+import { radius, fontSize, iconSize, touchTarget, buttonHeight, pagePaddingTop } from '../../theme/tokens';
 
 const MAX_CARD_TECH = 5;
 
 const isGithubLink = (link) => typeof link === 'string' && link.includes('github.com');
 
+// The one chip style for technology tags.
+const techChipSx = (theme) => ({
+  color: theme.palette.primary.main,
+  borderColor: alpha(theme.palette.primary.main, 0.4),
+});
+
 // Role · duration meta row, shared by the card and the detail dialog.
 const ProjectMeta = ({ role, duration, sx }) => {
   if (!role && !duration) return null;
   return (
-    <Stack direction="row" spacing={2.5} useFlexGap flexWrap="wrap" sx={{ color: 'text.secondary', ...sx }}>
+    <Stack direction="row" spacing={2.5} useFlexGap sx={{ flexWrap: 'wrap', color: 'text.secondary', ...sx }}>
       {role && (
-        <Stack direction="row" spacing={0.5} alignItems="center">
-          <AppIcon icon={User} size={20} />
+        <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+          <AppIcon icon={User} size={iconSize.control} />
           <Typography variant="body2" fontWeight={600}>{role}</Typography>
         </Stack>
       )}
       {duration && (
-        <Stack direction="row" spacing={0.5} alignItems="center">
-          <AppIcon icon={Clock} size={20} />
+        <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+          <AppIcon icon={Clock} size={iconSize.control} />
           <Typography variant="body2">{duration}</Typography>
         </Stack>
       )}
@@ -47,25 +57,20 @@ const ProjectCard = ({ project, onOpen }) => {
   return (
     <Box
       component={motion.div}
-      whileHover={{ y: -6 }}
       sx={{ height: '100%' }}
     >
-      <Box sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 4,
-        overflow: 'hidden',
-        background: theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.85)' : 'rgba(255, 255, 255, 0.9)',
-        border: `1px solid ${theme.palette.divider}`,
-        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-        '&:hover': {
-          borderColor: theme.palette.secondary.main,
-          boxShadow: `0 12px 28px ${alpha(theme.palette.secondary.main, 0.18)}`,
-        },
-        '&:hover .project-media img': { transform: 'scale(1.05)' },
-        '&:hover .project-overlay': { opacity: 1 },
-      }}>
+      <Box
+        sx={{
+          ...cardSurface(theme),
+          ...cardHover(theme, theme.palette.secondary.main),
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          '&:hover .project-media img': { transform: 'scale(1.05)' },
+          '&:hover .project-overlay': { opacity: 1 },
+        }}
+      >
         {screenshots.length > 0 && (
           <Box
             className="project-media"
@@ -81,8 +86,6 @@ const ProjectCard = ({ project, onOpen }) => {
               src={resolveAsset(screenshots[0])}
               alt={`${name} screenshot`}
               loading="lazy"
-              width="600"
-              height="230"
               style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
             />
             <Box
@@ -96,7 +99,7 @@ const ProjectCard = ({ project, onOpen }) => {
                 opacity: 0, transition: 'opacity 0.3s ease', pointerEvents: 'none',
               }}
             >
-              <AppIcon icon={Eye} size={20} /> View details
+              <AppIcon icon={Eye} size={iconSize.control} /> View details
             </Box>
             {screenshots.length > 1 && (
               <Chip
@@ -113,8 +116,8 @@ const ProjectCard = ({ project, onOpen }) => {
           <ProjectMeta role={project?.role} duration={project?.duration} sx={{ mb: 2 }} />
           <Typography
             variant="body1"
-            color="text.secondary"
             sx={{
+              color: 'text.secondary',
               mb: 3, flexGrow: 1,
               // Clamp only when the image can open the modal for the full text;
               // otherwise show everything so nothing is unreachable.
@@ -133,7 +136,7 @@ const ProjectCard = ({ project, onOpen }) => {
                 label={tech}
                 size="small"
                 variant="outlined"
-                sx={{ color: theme.palette.primary.main, borderColor: alpha(theme.palette.primary.main, 0.4) }}
+                sx={techChipSx(theme)}
               />
             ))}
             {extraTech > 0 && (
@@ -146,12 +149,17 @@ const ProjectCard = ({ project, onOpen }) => {
               <Button
                 variant="outlined"
                 size="small"
-                startIcon={<AppIcon icon={isGithubLink(link) ? Github : ExternalLink} size={20} />}
+                startIcon={<AppIcon icon={isGithubLink(link) ? Github : ExternalLink} size={iconSize.control} />}
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${isGithubLink(link) ? 'View source code' : 'Open live demo'} of ${name} in a new tab`}
-                sx={{ borderColor: theme.palette.divider, color: theme.palette.text.primary, '&:hover': { borderColor: theme.palette.text.primary } }}
+                sx={{
+                  minHeight: touchTarget,
+                  borderColor: theme.palette.divider,
+                  color: theme.palette.text.primary,
+                  '&:hover': { borderColor: theme.palette.text.primary },
+                }}
               >
                 {isGithubLink(link) ? 'View Code' : 'Live Demo'}
               </Button>
@@ -181,7 +189,7 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
       onKeyDown={onKeyDown}
       aria-labelledby="project-dialog-title"
       TransitionProps={{ onExited }}
-      PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden', position: 'relative', width: '100%', m: { xs: 2, md: 4 } } }}
+      PaperProps={{ sx: { borderRadius: radius.lg, overflow: 'hidden', position: 'relative', width: '100%', m: { xs: 2, md: 4 } } }}
     >
       <IconButton
         onClick={onClose}
@@ -192,7 +200,7 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
           '&:hover': { backgroundColor: theme.palette.error.main },
         }}
       >
-        <AppIcon icon={X} size={24} />
+        <AppIcon icon={X} size={iconSize.heading} />
       </IconButton>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
@@ -214,16 +222,16 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
                   aria-label="Previous screenshot"
                   sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.6)', color: '#fff', '&:hover': { backgroundColor: theme.palette.primary.main } }}
                 >
-                  <AppIcon icon={ChevronLeft} size={24} />
+                  <AppIcon icon={ChevronLeft} size={iconSize.heading} />
                 </IconButton>
                 <IconButton
                   onClick={onNext}
                   aria-label="Next screenshot"
                   sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.6)', color: '#fff', '&:hover': { backgroundColor: theme.palette.primary.main } }}
                 >
-                  <AppIcon icon={ChevronRight} size={24} />
+                  <AppIcon icon={ChevronRight} size={iconSize.heading} />
                 </IconButton>
-                <Box sx={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', px: 1.5, py: 0.5, borderRadius: 4, backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>
+                <Box sx={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', px: 1.5, py: 0.5, borderRadius: radius.sm, backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>
                   {index + 1} / {screenshots.length}
                 </Box>
               </>
@@ -237,18 +245,18 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
           maxHeight: { md: '82vh' }, overflowY: 'auto',
         }}>
           <Box>
-            <Typography id="project-dialog-title" variant="h4" component="h2" fontWeight={800} sx={{ mb: 1 }}>
+            <Typography id="project-dialog-title" variant="h4" component="h2" fontWeight={800} sx={{ mb: 1, fontSize: fontSize.sectionTitle }}>
               {project.name}
             </Typography>
             <ProjectMeta role={project.role} duration={project.duration} />
           </Box>
 
-          <Typography variant="body1" color="text.secondary">{project.description}</Typography>
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>{project.description}</Typography>
 
           {technologies.length > 0 && (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
               {technologies.map((tech, i) => (
-                <Chip key={i} label={tech} size="small" variant="outlined" sx={{ color: theme.palette.primary.main, borderColor: alpha(theme.palette.primary.main, 0.4) }} />
+                <Chip key={i} label={tech} size="small" variant="outlined" sx={techChipSx(theme)} />
               ))}
             </Box>
           )}
@@ -256,15 +264,15 @@ const ProjectDialog = ({ project, index, open, onClose, onExited, onNext, onPrev
           {link && (
             <Button
               variant="contained"
-              startIcon={<AppIcon icon={isGithubLink(link) ? Github : ExternalLink} size={20} />}
+              startIcon={<AppIcon icon={isGithubLink(link) ? Github : ExternalLink} size={iconSize.control} />}
               href={link}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${isGithubLink(link) ? 'View source code' : 'Open live demo'} of ${project.name} in a new tab`}
               sx={{
+                ...gradientCta(theme),
                 alignSelf: 'flex-start', mt: 'auto',
-                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                color: theme.palette.getContrastText(theme.palette.primary.main),
+                minHeight: buttonHeight.lg,
                 px: 3,
               }}
             >
@@ -339,33 +347,19 @@ const ProjectsPage = ({ data }) => {
   if (techCount > 0) stats.push({ value: techCount, label: techCount === 1 ? 'Technology' : 'Technologies' });
 
   return (
-    <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
+    <Box sx={{ pt: pagePaddingTop }}>
       <Container maxWidth="lg">
 
         <PageIntro icon={FolderOpen} eyebrow="Builds & experiments" title="Featured Projects"
           description="Selected projects and the technologies behind them.">
           {stats.length > 0 && (
-            <Stack
-              direction="row"
-              spacing={{ xs: 3, md: 5 }}
-              useFlexGap
-              divider={<Divider orientation="vertical" flexItem />}
-              sx={{ mt: 4, flexWrap: 'wrap' }}
-            >
-              {stats.map((stat, i) => (
-                <StatItem key={i} value={stat.value} label={stat.label} />
-              ))}
-            </Stack>
+            <StatBand items={stats} sx={{ mt: 4 }} />
           )}
         </PageIntro>
 
         {/* Filter */}
         {allTechnologies.length > 1 && (
-          <Box sx={{ mb: 4 }}>
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2, color: 'text.secondary' }}>
-              <AppIcon icon={ListFilter} size={20} />
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>Filter by technology</Typography>
-            </Stack>
+          <FilterBar icon={ListFilter} label="Filter by technology" sx={{ mb: 4 }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }} role="group" aria-label="Project technology filters">
               {allTechnologies.map((tech) => {
                 const isActive = activeFilter === tech;
@@ -377,6 +371,7 @@ const ProjectsPage = ({ data }) => {
                     onClick={() => setActiveFilter(tech)}
                     aria-pressed={isActive}
                     sx={{
+                      minHeight: touchTarget,
                       fontWeight: isActive ? 700 : 500,
                       color: isActive ? theme.palette.getContrastText(theme.palette.primary.main) : theme.palette.text.primary,
                       background: isActive ? theme.palette.primary.main : undefined,
@@ -388,15 +383,15 @@ const ProjectsPage = ({ data }) => {
               })}
             </Box>
             {activeFilter !== 'All' && (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mt: 2 }}>
                 Showing {filteredProjects.length} of {projects.length} projects
               </Typography>
             )}
-          </Box>
+          </FilterBar>
         )}
 
         {filteredProjects.length === 0 ? (
-          <Typography color="text.secondary">No projects match this filter.</Typography>
+          <EmptyState>No projects match this filter.</EmptyState>
         ) : (
           <Grid container spacing={4} component={motion.div} layout>
             <AnimatePresence mode="popLayout">

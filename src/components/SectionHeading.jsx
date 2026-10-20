@@ -1,22 +1,26 @@
 import React from 'react';
-import { Box, Stack, Typography, useTheme } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+import { Stack, Typography, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
-import AppIcon from './AppIcon';
+import IconTile from './ui/IconTile';
+import { fontSize } from '../theme/tokens';
 
-// Shared section heading used across pages: an accented icon chip beside a
+// Shared section heading used across pages: an accented icon tile beside a
 // gradient-clipped heading. Renders a real <h2> (override via `component`) so
 // the page keeps a clean h1 → h2 → h3 outline.
-//   size="lg" — page-level section headers (Résumé, Projects)
-//   size="sm" — in-card sub-section headers (Contact columns)
-const SIZES = {
-  lg: { fontSize: { xs: '1.6rem', md: '2rem' }, mb: 4 },
-  sm: { fontSize: { xs: '1.3rem', md: '1.55rem' }, mb: 3 },
+//
+// Two roles, one component:
+//   variant="section" — a page-level section (Résumé, Research)
+//   variant="panel"   — a sub-section inside a card (Contact columns)
+// The role picks the size from the shared type scale; the heading level is
+// always h2 unless `component` says otherwise.
+const VARIANTS = {
+  section: { fontSize: fontSize.sectionTitle, mb: 4 },
+  panel: { fontSize: fontSize.panelTitle, mb: 3 },
 };
 
-const SectionHeading = ({ icon: Icon, children, size = 'lg', component = 'h2' }) => {
+const SectionHeading = ({ icon: Icon, children, variant = 'section', component = 'h2' }) => {
   const theme = useTheme();
-  const { fontSize, mb } = SIZES[size] ?? SIZES.lg;
+  const { fontSize, mb } = VARIANTS[variant] ?? VARIANTS.section;
   return (
     <Stack
       component={motion.div}
@@ -29,12 +33,7 @@ const SectionHeading = ({ icon: Icon, children, size = 'lg', component = 'h2' })
       sx={{ mb, alignItems: 'center' }}
     >
       {Icon && (
-        <Box aria-hidden="true" sx={{
-          display: 'inline-flex', p: 1, borderRadius: 2,
-          color: theme.palette.primary.main, background: alpha(theme.palette.primary.main, 0.1),
-        }}>
-          <AppIcon icon={Icon} size={24} />
-        </Box>
+        <IconTile icon={Icon} color={theme.palette.primary.main} size="sm" />
       )}
       <Typography variant="h3" component={component} sx={{
         fontWeight: 800, fontSize,

@@ -1,6 +1,10 @@
 /* Fonts are linked from index.html, not @import-ed here — an @import inside the
    bundled CSS is invisible to the preload scanner and serialises the request
-   chain behind the JS bundle. */
+   chain behind the JS bundle.
+
+   The font stack itself lives in the MUI theme (src/theme/index.js). Keeping
+   a second copy here meant the two fallbacks could drift apart, so the body
+   rule only handles the margins and font smoothing. */
 
 html {
   overflow-y: scroll;
@@ -19,9 +23,6 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -7,8 +7,12 @@ import { Github, Linkedin } from '../brandIcons';
 import AppIcon from '../AppIcon';
 import ResearchPreview from '../ResearchPreview';
 import { PageEyebrow } from '../PageIntro';
+import Label from '../ui/Label';
+import AvailabilityDot from '../ui/AvailabilityDot';
 import { yearsOfExperience } from '../../utils/experience';
 import { resolveAsset } from '../../utils/assets';
+import { cardSurface, cardHover, gradientCta } from '../../theme/variants';
+import { radius, fontSize, iconSize, buttonHeight } from '../../theme/tokens';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -40,9 +44,6 @@ const HomePage = ({ data }) => {
   const skillsCount = Array.isArray(data?.resume?.skills) ? data.resume.skills.length : 0;
   const projectsCount = Array.isArray(data?.projects) ? data.projects.length : 0;
 
-  const primarySoft = alpha(theme.palette.primary.main, 0.1);
-  const secondarySoft = alpha(theme.palette.secondary.main, 0.1);
-
   const withPlus = (n) => `${n}${n > 0 ? '+' : ''}`;
 
   const stats = useMemo(() => [
@@ -51,26 +52,20 @@ const HomePage = ({ data }) => {
       label: 'Years Experience',
       icon: Briefcase,
       color: theme.palette.primary.main,
-      bg: primarySoft,
-      glow: theme.palette.primary.main,
     },
     {
       value: withPlus(projectsCount),
       label: 'Projects Completed',
       icon: FolderOpen,
       color: theme.palette.secondary.main,
-      bg: secondarySoft,
-      glow: theme.palette.secondary.main,
     },
     {
       value: withPlus(skillsCount),
       label: 'Technologies Mastered',
       icon: Lightbulb,
       color: theme.palette.primary.main,
-      bg: primarySoft,
-      glow: theme.palette.primary.main,
     },
-  ], [yearsExperience, projectsCount, skillsCount, theme, primarySoft, secondarySoft]);
+  ], [yearsExperience, projectsCount, skillsCount, theme]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -103,7 +98,7 @@ const HomePage = ({ data }) => {
   };
 
   return (
-    <Box sx={{ pb: 8 }}>
+    <Box>
       <Box sx={{
         minHeight: '100dvh',
         overflowX: 'clip',
@@ -134,13 +129,13 @@ const HomePage = ({ data }) => {
                 </motion.div>
 
                 <motion.div variants={textVariants}>
-                  <Typography variant="h4" component="p" color="secondary.light" sx={{ mb: 4, fontWeight: 600 }}>
+                  <Typography variant="h4" component="p" sx={{ color: 'secondary.light', mb: 4, fontWeight: 600 }}>
                     {title}
                   </Typography>
                 </motion.div>
 
                 <motion.div variants={textVariants}>
-                  <Typography variant="h6" component="p" color="text.secondary" sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 6, maxWidth: 650, lineHeight: 1.8 }}>
+                  <Typography variant="h6" component="p" sx={{ color: 'text.secondary', fontWeight: 400, fontSize: '1.2rem', mb: 6, maxWidth: 650, lineHeight: 1.8 }}>
                     {bio}
                   </Typography>
                 </motion.div>
@@ -150,17 +145,15 @@ const HomePage = ({ data }) => {
                     {linkedin && (
                       <Button
                         variant="contained"
-                        startIcon={<AppIcon icon={Linkedin} size={20} />}
+                        startIcon={<AppIcon icon={Linkedin} size={iconSize.control} />}
                         href={linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Open LinkedIn profile in a new tab"
                         sx={{
-                          py: 1.5, px: 4, fontSize: '1.1rem',
-                          background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                          color: theme.palette.getContrastText(theme.palette.primary.main),
-                          boxShadow: `0 8px 20px ${alpha(theme.palette.primary.main, 0.25)}`,
-                          '&:hover': { boxShadow: `0 8px 30px ${alpha(theme.palette.primary.main, 0.4)}` },
+                          ...gradientCta(theme),
+                          minHeight: buttonHeight.lg,
+                          py: 1, px: 4, fontSize: '1rem',
                         }}
                       >
                         LinkedIn
@@ -169,14 +162,15 @@ const HomePage = ({ data }) => {
                     {github && (
                       <Button
                         variant="outlined"
-                        startIcon={<AppIcon icon={Github} size={20} />}
+                        startIcon={<AppIcon icon={Github} size={iconSize.control} />}
                         href={github}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Open GitHub profile in a new tab"
                         sx={{
-                          py: 1.5, px: 4, fontSize: '1.1rem',
-                          borderColor: theme.palette.text.primary,
+                          minHeight: buttonHeight.lg,
+                          py: 1, px: 4, fontSize: '1rem',
+                          borderColor: theme.palette.divider,
                           color: theme.palette.text.primary,
                           '&:hover': { borderColor: theme.palette.primary.main, color: theme.palette.primary.main },
                         }}
@@ -222,22 +216,12 @@ const HomePage = ({ data }) => {
                     position: 'absolute', top: 20, right: 0,
                     display: 'flex', alignItems: 'center', gap: 1,
                     background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.85)',
-                    px: 2, py: 1, borderRadius: 4, backdropFilter: 'blur(10px)',
+                    px: 2, py: 1, borderRadius: radius.lg, backdropFilter: 'blur(10px)',
                     border: `1px solid ${theme.palette.divider}`,
                     zIndex: 2, transform: 'translateZ(50px)',
                   }}>
-                    <Box
-                      component={motion.span}
-                      animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      sx={{
-                        width: 10, height: 10, borderRadius: '50%',
-                        backgroundColor: 'success.main',
-                        boxShadow: (t) => `0 0 10px ${t.palette.success.main}`,
-                        display: 'inline-block',
-                      }}
-                    />
-                    <Typography variant="caption" fontWeight={700}>Available</Typography>
+                    <AvailabilityDot size={10} />
+                    <Label component="span" color="text.primary">Available</Label>
                   </Box>
 
                   <Avatar
@@ -263,96 +247,73 @@ const HomePage = ({ data }) => {
 
       <Container maxWidth="lg" sx={{ mt: { xs: -4, md: -8 }, position: 'relative', zIndex: 10 }}>
         <Grid container spacing={3} sx={{ alignItems: 'stretch' }}>
-          {stats.map((stat, i) => {
-            const IconComponent = stat.icon;
-            return (
-              <Grid key={stat.label} size={{ xs: 12, md: 4 }}>
-                <Card
-                  component={motion.div}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-100px' }}
-                  variants={cardVariants}
-                  whileHover={{
-                    y: -8,
-                    boxShadow: theme.palette.mode === 'dark' 
-                      ? `0 16px 36px ${alpha(stat.glow, 0.15)}` 
-                      : `0 16px 36px ${alpha(stat.glow, 0.08)}`,
-                    borderColor: alpha(stat.color, 0.35),
-                  }}
-                  sx={{
-                    p: { xs: 3, md: 4 },
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    borderRadius: 4,
-                    background: theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.45)' : 'rgba(255, 255, 255, 0.7)',
-                    backdropFilter: 'blur(16px)',
-                    border: theme.palette.mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(15, 23, 42, 0.06)',
-                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
-                    '&:hover .icon-container': {
-                      transform: 'scale(1.1) rotate(5deg)',
-                      background: alpha(stat.color, 0.25),
-                      boxShadow: `0 0 20px ${alpha(stat.color, 0.4)}`,
-                    },
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, width: '100%' }}>
-                    <Box
-                      className="icon-container"
+          {stats.map((stat, i) => (
+            <Grid key={stat.label} size={{ xs: 12, md: 4 }}>
+              <Card
+                component={motion.div}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-100px' }}
+                variants={cardVariants}
+                sx={{
+                  ...cardSurface(theme),
+                  ...cardHover(theme, stat.color),
+                  p: { xs: 3, md: 4 },
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  // The icon reacts to the whole card being hovered.
+                  '&:hover [data-stat-icon]': {
+                    transform: 'scale(1.1) rotate(5deg)',
+                    background: alpha(stat.color, 0.25),
+                    boxShadow: `0 0 20px ${alpha(stat.color, 0.4)}`,
+                  },
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, width: '100%' }}>
+                  <Box
+                    data-stat-icon
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 56,
+                      height: 56,
+                      borderRadius: radius.md,
+                      background: alpha(stat.color, 0.1),
+                      color: stat.color,
+                      flexShrink: 0,
+                      border: `1px solid ${alpha(stat.color, 0.2)}`,
+                      boxShadow: `0 4px 12px ${alpha(stat.color, 0.05)}`,
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  >
+                    <AppIcon icon={stat.icon} size={iconSize.tile} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      component="p"
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 56,
-                        height: 56,
-                        borderRadius: '16px',
-                        background: stat.bg,
-                        color: stat.color,
-                        flexShrink: 0,
-                        border: `1px solid ${alpha(stat.color, 0.2)}`,
-                        boxShadow: `0 4px 12px ${alpha(stat.color, 0.05)}`,
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        fontFamily: '"Outfit", sans-serif',
+                        fontWeight: 900,
+                        fontSize: fontSize.display,
+                        background: `linear-gradient(135deg, ${stat.color} 0%, ${alpha(stat.color, 0.85)} 100%)`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        textShadow: theme.palette.mode === 'dark' ? `0 0 25px ${alpha(stat.color, 0.25)}` : 'none',
+                        lineHeight: 1.1,
+                        mb: 0.5,
                       }}
                     >
-                      <AppIcon icon={IconComponent} size={28} />
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="h3"
-                        component="p"
-                        fontWeight={900}
-                        sx={{
-                          fontFamily: '"Outfit", sans-serif',
-                          background: `linear-gradient(135deg, ${stat.color} 0%, ${alpha(stat.color, 0.85)} 100%)`,
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          textShadow: theme.palette.mode === 'dark' ? `0 0 25px ${alpha(stat.color, 0.25)}` : 'none',
-                          lineHeight: 1.1,
-                          mb: 0.5,
-                        }}
-                      >
-                        {stat.value}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        component="p"
-                        fontWeight={600}
-                        sx={{
-                          color: theme.palette.text.primary,
-                          opacity: 0.9,
-                          letterSpacing: '0.01em',
-                        }}
-                      >
-                        {stat.label}
-                      </Typography>
-                    </Box>
+                      {stat.value}
+                    </Typography>
+                    <Label component="p" color="text.primary" sx={{ opacity: 0.9 }}>{stat.label}</Label>
                   </Box>
-                </Card>
-              </Grid>
-            );
-          })}
+                </Box>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       </Container>
       <ResearchPreview research={data?.research} path={data?.navigation?.menuItems?.find((item) => item.component === 'ResearchPage')?.path} />

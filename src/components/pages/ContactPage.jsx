@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Container, Typography, Box, Card, Grid, Button, useTheme, Link,
-  Snackbar, Alert, IconButton, Tooltip, Stack, Avatar, Divider,
+  Container, Box, Card, Grid, Button, useTheme, Link,
+  Snackbar, Alert, IconButton, Tooltip, Stack, Divider,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
@@ -10,6 +10,11 @@ import { Linkedin, Github, Twitter, Facebook } from '../brandIcons';
 import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
 import PageIntro from '../PageIntro';
+import StatBand from '../ui/StatBand';
+import Label from '../ui/Label';
+import AvailabilityDot from '../ui/AvailabilityDot';
+import { gradientCta } from '../../theme/variants';
+import { radius, iconSize, touchTarget, buttonHeight, pagePaddingTop } from '../../theme/tokens';
 
 // A single tappable contact method: icon tile, label, value (as a mailto/tel
 // link), and a copy-to-clipboard button. Used for email, alternate email, phone.
@@ -18,27 +23,36 @@ const ContactMethod = ({ icon, accent, label, value, href, onCopy, copyLabel }) 
   return (
     <Stack
       direction="row"
-      alignItems="center"
       spacing={2}
       sx={{
+        alignItems: 'center',
         p: 1.5,
-        borderRadius: 3,
+        borderRadius: radius.lg,
         transition: 'background 0.2s ease',
         '&:hover': { background: alpha(accent, 0.06) },
       }}
     >
-      <Avatar sx={{ bgcolor: alpha(accent, 0.12), color: accent, width: 48, height: 48, flexShrink: 0 }}>
-        <AppIcon icon={icon} size={24} />
-      </Avatar>
+      <Box
+        aria-hidden="true"
+        sx={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 48, height: 48, flexShrink: 0,
+          borderRadius: radius.md,
+          background: alpha(accent, 0.12),
+          color: accent,
+        }}
+      >
+        <AppIcon icon={icon} size={iconSize.heading} />
+      </Box>
       <Box sx={{ minWidth: 0, flex: 1 }}>
-        <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>
-          {label}
-        </Typography>
+        <Label component="span" sx={{ display: 'block' }}>{label}</Label>
         <Link
           href={href}
           title={value}
           sx={{
-            display: 'block',
+            display: 'flex',
+            alignItems: 'center',
+            minHeight: touchTarget,
             fontWeight: 700,
             color: theme.palette.text.primary,
             textDecoration: 'none',
@@ -56,9 +70,9 @@ const ContactMethod = ({ icon, accent, label, value, href, onCopy, copyLabel }) 
           <IconButton
             onClick={onCopy}
             aria-label={copyLabel}
-            sx={{ flexShrink: 0, color: 'text.secondary', '&:hover': { color: accent } }}
+            sx={{ flexShrink: 0, width: touchTarget, height: touchTarget, color: 'text.secondary', '&:hover': { color: accent } }}
           >
-            <AppIcon icon={Copy} size={20} />
+            <AppIcon icon={Copy} size={iconSize.control} />
           </IconButton>
         </Tooltip>
       )}
@@ -75,9 +89,6 @@ const ContactPage = ({ data }) => {
 
   const responseTime = contact.responseTime || 'Within 24 hours';
   const hasLocation = !!personalInfo.location;
-  // Stat strip cell count drives the per-cell Grid size. Always at least 2.
-  const statCells = 1 + (hasLocation ? 1 : 0) + 1;
-  const statColSize = statCells === 3 ? 4 : 6;
 
   const socialLinks = [
     { name: 'LinkedIn', url: personalInfo.linkedin, icon: Linkedin, color: '#0077b5' },
@@ -120,34 +131,37 @@ const ContactPage = ({ data }) => {
     setSnackbar((s) => ({ ...s, open: false }));
   };
 
-  const primarySoft = alpha(theme.palette.primary.main, 0.1);
-  const secondarySoft = alpha(theme.palette.secondary.main, 0.1);
-
-  // Pulsing-dot icon tile — parallel to the Schedule / LocationOn tiles in
-  // cells 1 and 2 of the stat strip.
-  const availabilityTile = (
-    <Box sx={{
-      p: 2, borderRadius: 3,
-      background: alpha(theme.palette.success.main, 0.12),
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      width: 64, height: 64,
-    }}>
-      <Box
-        component={motion.span}
-        animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        sx={{
-          width: 16, height: 16, borderRadius: '50%',
-          backgroundColor: 'success.main',
-          boxShadow: (t) => `0 0 12px ${t.palette.success.main}`,
-          display: 'inline-block',
-        }}
-      />
+  // The status tile mirrors the "Available" badge on the Home portrait — one
+  // indicator, one look, in both places.
+  const statusTile = (
+    <Box
+      aria-hidden="true"
+      sx={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: 64, height: 64, flexShrink: 0,
+        borderRadius: radius.md,
+        background: alpha(theme.palette.success.main, 0.12),
+      }}
+    >
+      <AvailabilityDot size={16} />
     </Box>
   );
 
+  const statItems = [
+    {
+      icon: Clock,
+      accent: theme.palette.primary.main,
+      label: 'Typical reply',
+      value: responseTime,
+    },
+    ...(hasLocation
+      ? [{ icon: MapPin, accent: theme.palette.secondary.main, label: 'Location', value: personalInfo.location }]
+      : []),
+    { icon: null, accent: theme.palette.success.main, label: 'Status', value: 'Available', tile: statusTile },
+  ];
+
   return (
-    <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
+    <Box sx={{ pt: pagePaddingTop }}>
       <Container maxWidth="lg">
 
         <PageIntro icon={MessageCircle} eyebrow="Connect & collaborate" title="Let's Connect"
@@ -155,66 +169,19 @@ const ContactPage = ({ data }) => {
 
         {/* ---------- Stat strip ---------- */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.35 }}>
-          <Card sx={{ p: { xs: 3, md: 4 }, borderRadius: 4, mb: 5 }}>
-            <Grid container spacing={3} sx={{ alignItems: 'center' }}>
-
-              <Grid size={{ xs: 12, md: statColSize }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, justifyContent: { xs: 'flex-start', md: 'center' } }}>
-                  <Box sx={{ p: 2, borderRadius: 3, background: primarySoft, color: 'primary.main', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <AppIcon icon={Clock} size={32} />
-                  </Box>
-                  <Box sx={{ minWidth: 0 }}>
-                    <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Typical reply</Typography>
-                    <Typography variant="h6" component="p" fontWeight={800} color="text.primary">{responseTime}</Typography>
-                  </Box>
-                </Box>
-              </Grid>
-
-              {hasLocation && (
-                <Grid
-                  size={{ xs: 12, md: statColSize }}
-                  sx={{
-                    borderLeft: { md: `1px solid ${theme.palette.divider}` },
-                    borderRight: { md: `1px solid ${theme.palette.divider}` },
-                    borderTop: { xs: `1px solid ${theme.palette.divider}`, md: 'none' },
-                    borderBottom: { xs: `1px solid ${theme.palette.divider}`, md: 'none' },
-                    py: { xs: 2, md: 0 },
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, justifyContent: { xs: 'flex-start', md: 'center' } }}>
-                    <Box sx={{ p: 2, borderRadius: 3, background: secondarySoft, color: 'secondary.main', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <AppIcon icon={MapPin} size={32} />
-                    </Box>
-                    <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Location</Typography>
-                      <Typography variant="h6" component="p" fontWeight={800} color="text.primary">{personalInfo.location}</Typography>
-                    </Box>
-                  </Box>
-                </Grid>
-              )}
-
-              <Grid size={{ xs: 12, md: statColSize }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, justifyContent: { xs: 'flex-start', md: 'center' } }}>
-                  {availabilityTile}
-                  <Box sx={{ minWidth: 0 }}>
-                    <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5, fontWeight: 700, lineHeight: 1.2 }}>Status</Typography>
-                    <Typography variant="h6" component="p" fontWeight={800} color="text.primary">Available</Typography>
-                  </Box>
-                </Box>
-              </Grid>
-
-            </Grid>
+          <Card sx={{ p: { xs: 3, md: 4 }, borderRadius: radius.lg, mb: 5 }}>
+            <StatBand items={statItems} divided={false} />
           </Card>
         </motion.div>
 
         {/* ---------- Contact card ---------- */}
         <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.5 }}>
-          <Card sx={{ borderRadius: 4, p: { xs: 3, md: 5 } }}>
+          <Card sx={{ borderRadius: radius.lg, p: { xs: 3, md: 5 } }}>
             <Grid container spacing={{ xs: 4, md: 5 }}>
 
               {/* Direct contact methods */}
               <Grid size={{ xs: 12, md: hasSocial ? 7 : 12 }}>
-                <SectionHeading icon={Contact} size="sm">Reach me directly</SectionHeading>
+                <SectionHeading icon={Contact} variant="panel">Reach me directly</SectionHeading>
                 <Stack spacing={0.5} divider={<Divider flexItem sx={{ my: 0.5 }} />}>
                   {methods.map((m) => (
                     <ContactMethod
@@ -232,15 +199,15 @@ const ContactPage = ({ data }) => {
                 {personalInfo.email && (
                   <Button
                     variant="contained"
-                    startIcon={<AppIcon icon={Send} size={20} />}
+                    startIcon={<AppIcon icon={Send} size={iconSize.control} />}
                     href={`mailto:${personalInfo.email}`}
                     aria-label={`Open your email client to send a message to ${personalInfo.email}`}
                     sx={{
+                      ...gradientCta(theme),
                       mt: 3,
+                      minHeight: buttonHeight.lg,
                       px: 4, py: 1.25,
                       fontWeight: 700,
-                      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                      color: theme.palette.getContrastText(theme.palette.primary.main),
                       '&:hover': { boxShadow: `0 0 20px ${alpha(theme.palette.primary.main, 0.4)}` },
                     }}
                   >
@@ -260,7 +227,7 @@ const ContactPage = ({ data }) => {
                     pl: { md: 5 },
                   }}
                 >
-                  <SectionHeading icon={Globe} size="sm">Find me online</SectionHeading>
+                  <SectionHeading icon={Globe} variant="panel">Find me online</SectionHeading>
                   <Stack spacing={1}>
                     {socialLinks.map((social) => (
                       <Button
@@ -268,12 +235,13 @@ const ContactPage = ({ data }) => {
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        startIcon={<AppIcon icon={social.icon} size={20} />}
+                        startIcon={<AppIcon icon={social.icon} size={iconSize.control} />}
                         aria-label={`Open ${social.name} profile in a new tab`}
                         sx={{
                           justifyContent: 'flex-start',
-                          px: 2, py: 1.25,
-                          borderRadius: 2,
+                          minHeight: buttonHeight.md,
+                          px: 2, py: 0.75,
+                          borderRadius: radius.sm,
                           fontWeight: 600,
                           color: theme.palette.text.primary,
                           border: `1px solid ${theme.palette.divider}`,
@@ -284,7 +252,6 @@ const ContactPage = ({ data }) => {
                             background: alpha(social.color, 0.06),
                             boxShadow: `0 0 14px ${alpha(social.color, 0.25)}`,
                           },
-                          '&:focus-visible': { boxShadow: `0 0 0 2px ${theme.palette.primary.main}` },
                         }}
                       >
                         {social.name}

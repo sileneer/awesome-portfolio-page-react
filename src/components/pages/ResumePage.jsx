@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Container, Typography, Box, Button, Card, CardContent, Chip, Stack, Grid, Link, Divider, useTheme } from '@mui/material';
+import React, { useState, useMemo } from 'react';
+import { Container, Typography, Box, Button, Card, CardContent, Chip, Stack, Grid, Link, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import {
@@ -18,99 +18,21 @@ import {
 } from 'lucide';
 import AppIcon from '../AppIcon';
 import SectionHeading from '../SectionHeading';
-import StatItem from '../StatItem';
+import StatBand from '../ui/StatBand';
+import Label from '../ui/Label';
+import InPageNav from '../ui/InPageNav';
 import PageIntro from '../PageIntro';
 import { yearsOfExperience } from '../../utils/experience';
 import { resolveAsset } from '../../utils/assets';
+import { cardHover, gradientCta } from '../../theme/variants';
+import { radius, iconSize, touchTarget, buttonHeight, sectionGap, pagePaddingTop } from '../../theme/tokens';
 
 // Shared entrance choreography: one stagger container reveals its children in
-// sequence (30–60ms apart) instead of every element animating independently.
+// sequence instead of every element animating independently.
 const staggerContainer = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
 const staggerItem = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
-};
-
-// Tracks which section is currently in the upper-middle of the viewport so the
-// side nav can highlight it (scrollspy). No-ops gracefully without an
-// IntersectionObserver (e.g. jsdom) — the first section stays active.
-const useActiveSection = (ids) => {
-  const [active, setActive] = useState(ids[0] ?? '');
-  const key = ids.join('|');
-  useEffect(() => {
-    if (!ids.length || typeof IntersectionObserver === 'undefined') return undefined;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActive(visible[0].target.id);
-      },
-      { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-  return active;
-};
-
-// No `behavior` here on purpose: omitting it inherits `html { scroll-behavior }`
-// from index.css, which already flips to `auto` under prefers-reduced-motion.
-const scrollToSection = (e, id) => {
-  const el = document.getElementById(id);
-  if (!el) return;
-  e.preventDefault();
-  el.scrollIntoView({ block: 'start' });
-  if (window.history?.replaceState) window.history.replaceState(null, '', `#${id}`);
-};
-
-// Sticky in-page navigation (desktop only). Anchors keep the page deep-linkable
-// and keyboard-navigable; the active item gets an accent bar + tint.
-const SectionNav = ({ sections, activeId, sx }) => {
-  const theme = useTheme();
-  return (
-    <Box component="nav" aria-label="Résumé sections" sx={sx}>
-      <Stack spacing={0.5}>
-        {sections.map(({ id, label, icon: Icon }) => {
-          const active = id === activeId;
-          return (
-            <Link
-              key={id}
-              href={`#${id}`}
-              onClick={(e) => scrollToSection(e, id)}
-              aria-current={active ? 'true' : undefined}
-              underline="none"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1.25,
-                px: 1.5,
-                py: 1,
-                borderRadius: 2,
-                fontSize: '0.9rem',
-                fontWeight: active ? 700 : 500,
-                color: active ? theme.palette.primary.main : theme.palette.text.secondary,
-                borderLeft: `2px solid ${active ? theme.palette.primary.main : 'transparent'}`,
-                background: active ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                transition: 'color 0.2s ease, background 0.2s ease, border-color 0.2s ease',
-                '&:hover': {
-                  color: theme.palette.primary.main,
-                  background: alpha(theme.palette.primary.main, 0.06),
-                },
-              }}
-            >
-              <AppIcon icon={Icon} size={18} />
-              {label}
-            </Link>
-          );
-        })}
-      </Stack>
-    </Box>
-  );
 };
 
 // Anchor target + consistent vertical rhythm wrapper for each résumé section.
@@ -118,7 +40,7 @@ const Section = ({ id, icon, title, children }) => (
   <Box
     component="section"
     id={id}
-    sx={{ scrollMarginTop: { xs: '80px', md: '104px' }, mb: { xs: 7, md: 10 }, '&:last-of-type': { mb: 0 } }}
+    sx={{ scrollMarginTop: { xs: '80px', md: '104px' }, mb: sectionGap, '&:last-of-type': { mb: 0 } }}
   >
     <SectionHeading icon={icon}>{title}</SectionHeading>
     {children}
@@ -130,7 +52,7 @@ const LabeledChips = ({ label, items, sx }) => {
   if (!Array.isArray(items) || items.length === 0) return null;
   return (
     <Box sx={sx}>
-      <Typography variant="overline" color="text.secondary">{label}</Typography>
+      <Label component="p">{label}</Label>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5 }}>
         {items.map((item, i) => (
           <Chip key={i} label={item} size="small" variant="outlined" />
@@ -139,16 +61,6 @@ const LabeledChips = ({ label, items, sx }) => {
     </Box>
   );
 };
-
-const cardHoverSx = (theme, accent) => ({
-  height: '100%',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
-  '&:hover': {
-    borderColor: accent,
-    boxShadow: `0 8px 24px ${alpha(accent, 0.18)}`,
-    transform: 'translateY(-2px)',
-  },
-});
 
 // One unified badge style for the tag-cloud sections (Skills, Languages,
 // Interests) so they read as a single consistent system: a softly primary-tinted
@@ -175,9 +87,9 @@ const CompanyLogo = ({ source, company }) => {
   const [failedSource, setFailedSource] = useState(null);
   const url = resolveAsset(source);
   return (
-    <Box sx={{ width: 48, height: 48, flexShrink: 0, border: 1, borderColor: 'divider', borderRadius: 2,
+    <Box sx={{ width: 48, height: 48, flexShrink: 0, border: 1, borderColor: 'divider', borderRadius: radius.sm,
       overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'action.hover', color: 'primary.main' }}>
-      {failedSource === url ? <AppIcon icon={Building2} size={24} /> : (
+      {failedSource === url ? <AppIcon icon={Building2} size={iconSize.heading} /> : (
         <Box component="img" src={url} alt={`${company} logo`} width={48} height={48} loading="lazy" decoding="async"
           onError={() => setFailedSource(url)} sx={{ width: '100%', height: '100%', objectFit: 'contain', p: 0.75, bgcolor: '#fff' }} />
       )}
@@ -234,7 +146,7 @@ const ExperienceTimeline = ({ experience }) => {
                 zIndex: 1,
               }}
             />
-            <Card sx={cardHoverSx(theme, theme.palette.primary.main)}>
+            <Card sx={{ ...cardHover(theme, theme.palette.primary.main) }}>
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 <Stack
                   direction={{ xs: 'column', sm: 'row' }}
@@ -244,31 +156,31 @@ const ExperienceTimeline = ({ experience }) => {
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, minWidth: 0 }}>
                     {exp.logo && <CompanyLogo source={exp.logo} company={exp.company} />}
                     <Box sx={{ minWidth: 0, overflowWrap: 'anywhere' }}>
-                      <Typography variant="h5" component="h3" color="primary.main" fontWeight={700}>{exp.role}</Typography>
+                      <Typography variant="h5" component="h3" sx={{ color: 'primary.main', fontWeight: 700 }}>{exp.role}</Typography>
                       <Typography variant="subtitle1" component="p" fontWeight={600}>{exp.company}</Typography>
                     </Box>
                   </Box>
                   {exp.dates && <Chip label={exp.dates} size="small" sx={{ flexShrink: 0 }} />}
                 </Stack>
                 {exp.location && (
-                  <Stack direction="row" spacing={0.5} alignItems="center" sx={{ color: 'text.secondary', mb: 2 }}>
-                    <AppIcon icon={MapPin} size={16} />
+                  <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center', color: 'text.secondary', mb: 2 }}>
+                    <AppIcon icon={MapPin} size={iconSize.inline} />
                     <Typography variant="body2">{exp.location}</Typography>
                   </Stack>
                 )}
-                <Typography variant="body1" color="text.secondary" sx={{ mb: achievements.length ? 2 : 0, maxWidth: '68ch' }}>
+                <Typography variant="body1" sx={{ color: 'text.secondary', mb: achievements.length ? 2 : 0, maxWidth: '68ch' }}>
                   {exp.description}
                 </Typography>
                 {achievements.length > 0 && (
                   <Box sx={{ mb: technologies.length ? 2 : 0 }}>
                     {achievements.map((achievement, i) => (
-                      <Stack key={i} direction="row" spacing={1} alignItems="flex-start" sx={{ mb: 1 }}>
+                      <Stack key={i} direction="row" spacing={1} sx={{ alignItems: 'flex-start', mb: 1 }}>
                         <AppIcon
                           icon={CircleCheck}
-                          size={18}
+                          size={iconSize.inline}
                           style={{ color: theme.palette.primary.main, marginTop: 3, flexShrink: 0 }}
                         />
-                        <Typography variant="body2" color="text.secondary">{achievement}</Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{achievement}</Typography>
                       </Stack>
                     ))}
                   </Box>
@@ -297,16 +209,16 @@ const EducationCard = ({ edu }) => {
   const hasActivities = Array.isArray(edu?.extracurriculars) && edu.extracurriculars.length > 0;
 
   return (
-    <Card sx={cardHoverSx(theme, theme.palette.secondary.main)}>
-      <CardContent sx={{ p: 4 }}>
-        <Typography variant="h5" component="h3" color="secondary.main" fontWeight={700} mb={1}>{edu?.degree}</Typography>
+    <Card sx={{ ...cardHover(theme, theme.palette.secondary.main) }}>
+      <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+        <Typography variant="h5" component="h3" sx={{ color: 'secondary.main', fontWeight: 700, mb: 1 }}>{edu?.degree}</Typography>
         {subtitle && <Typography variant="subtitle1" component="p" fontWeight={600} mb={2}>{subtitle}</Typography>}
-        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 2 }}>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 2 }}>
           {edu?.dates && <Chip label={edu.dates} size="small" />}
           {edu?.gpa && <Chip label={`GPA: ${edu.gpa}`} size="small" color="secondary" variant="outlined" />}
         </Stack>
         {edu?.description && (
-          <Typography variant="body2" color="text.secondary" mb={2}>{edu.description}</Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>{edu.description}</Typography>
         )}
         <LabeledChips label="Coursework" items={edu?.coursework} sx={{ mb: hasActivities ? 2 : 0 }} />
         <LabeledChips label="Activities" items={edu?.extracurriculars} />
@@ -334,10 +246,10 @@ const CredentialGrid = ({ items, icon: Icon }) => {
         const certificateLink = typeof item === 'object' ? (item?.certificateLink ?? '') : '';
         return (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`${title}-${index}`} component={motion.div} variants={staggerItem}>
-            <Card sx={cardHoverSx(theme, theme.palette.primary.main)}>
+            <Card sx={{ ...cardHover(theme, theme.palette.primary.main) }}>
               <CardContent sx={{ p: 3, display: 'flex', alignItems: 'flex-start', gap: 2 }}>
                 <Box aria-hidden="true" sx={{ color: theme.palette.primary.main, display: 'inline-flex', mt: '2px' }}>
-                  <AppIcon icon={Icon} size={24} />
+                  <AppIcon icon={Icon} size={iconSize.heading} />
                 </Box>
                 <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                   <Typography variant="subtitle1" component="p" fontWeight={700}>{title}</Typography>
@@ -351,13 +263,13 @@ const CredentialGrid = ({ items, icon: Icon }) => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: 0.5,
-                        mt: 0.5,
+                        minHeight: touchTarget,
                         fontSize: '0.875rem',
                         fontWeight: 600,
                         color: theme.palette.primary.main,
                       }}
                     >
-                      View credential <AppIcon icon={ExternalLink} size={16} />
+                      View credential <AppIcon icon={ExternalLink} size={iconSize.inline} />
                     </Link>
                   )}
                 </Box>
@@ -395,9 +307,6 @@ const ResumePage = ({ data }) => {
     return list;
   }, [experience.length, education.length, skills.length, languages.length, certifications.length, awards.length, interests.length]);
 
-  const sectionIds = useMemo(() => sections.map((s) => s.id), [sections]);
-  const activeId = useActiveSection(sectionIds);
-
   const stats = useMemo(() => {
     const list = [];
     const years = yearsOfExperience(experience);
@@ -409,7 +318,7 @@ const ResumePage = ({ data }) => {
   }, [experience, skills.length, certifications.length]);
 
   return (
-    <Box sx={{ minHeight: '100dvh', pt: { xs: 10, md: 12 }, pb: 8 }}>
+    <Box sx={{ pt: pagePaddingTop }}>
       <Container maxWidth="lg">
 
         <PageIntro icon={Briefcase} eyebrow="Experience & skills" title="Résumé" description={summary}
@@ -420,14 +329,14 @@ const ResumePage = ({ data }) => {
               return (
                 <Button
                   variant="contained"
-                  startIcon={<AppIcon icon={Download} size={20} />}
+                  startIcon={<AppIcon icon={Download} size={iconSize.control} />}
                   href={cvHref}
                   download
                   aria-label="Download CV as PDF"
                   sx={{
+                    ...gradientCta(theme),
                     flexShrink: 0,
-                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                    color: theme.palette.getContrastText(theme.palette.primary.main),
+                    minHeight: buttonHeight.lg,
                     px: 4, py: 1.5,
                   }}
                 >
@@ -436,26 +345,16 @@ const ResumePage = ({ data }) => {
               );
             })()}>
           {stats.length > 0 && (
-            <Stack
-              direction="row"
-              spacing={{ xs: 3, md: 5 }}
-              useFlexGap
-              divider={<Divider orientation="vertical" flexItem />}
-              sx={{ mt: 4, flexWrap: 'wrap' }}
-            >
-              {stats.map((stat, i) => (
-                <StatItem key={i} value={stat.value} label={stat.label} />
-              ))}
-            </Stack>
+            <StatBand items={stats} sx={{ mt: 4 }} />
           )}
         </PageIntro>
 
         {/* Sticky section nav + content */}
         <Box sx={{ display: 'flex', gap: { md: 6 }, alignItems: 'flex-start' }}>
           {sections.length > 1 && (
-            <SectionNav
-              sections={sections}
-              activeId={activeId}
+            <InPageNav
+              items={sections}
+              ariaLabel="Résumé sections"
               sx={{
                 display: { xs: 'none', md: 'block' },
                 position: 'sticky',
