@@ -4,7 +4,12 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
-  { ignores: ['build'] },
+  {
+    // `plans/` holds gitignored scratch (plans, measurement scripts) and the
+    // agent/tool folders are gitignored too. None of them ship, so linting
+    // them only breaks `npm run lint` for whoever has them on disk.
+    ignores: ['build', 'plans', '.claude', '.remember', '.superpowers', '.idea', '.vscode'],
+  },
   {
     files: ['**/*.{js,jsx,mjs}'],
     languageOptions: {
